@@ -16,7 +16,7 @@ configurations {
     }
 }
 
-가repositories {
+repositories {
     mavenCentral()
 }
 
