@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://nys:1234@127.0.0.1:27017/logindemo
+      authentication-database: admin
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 195757371436-t9lqvlimk2n6t5fdmamoup2ft0p9cfv9.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpirationMsec: 864000000
+  cors:
+    allowedOrigins: http://localhost:3000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
