@@ -1,0 +1,20 @@
+version: '3.1'
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tmaxrobo
+      MONGO_INITDB_ROOT_PASSWORD: tmaxrobo
+      MONGO_INITDB_DATABASE: ra
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo-data:/data/db
+    networks:
+      - ra-net
+networks:
+  ra-net:
+    name: ra-net
+    driver: bridge

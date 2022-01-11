@@ -2,14 +2,22 @@
 
 ## Pre-requisites
 * JDK 8+
-* Docker
+* docker
+* docker compose
 
-## 실행
-**도커로 실행**
+##  애플리케이션 실행
+
+**몽고 디비 실행**
+``` bash
+docker-compose up -d
+```
+
+**애플리케이션 실행**
 ```bash
 ./gradlew assemble docker dockerRun
 ```
-**도커 컨테이너 중지**
+
+**애플리케이션 중지**
 ```bash
 ./gradlew dockerStop
 ```
