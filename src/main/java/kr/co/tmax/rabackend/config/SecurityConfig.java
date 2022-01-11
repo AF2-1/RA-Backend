@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/**/*.js",
             // uri
             "/auth/**",
-            "/oauth2/**"
+            "/oauth2/**",
+            "/api/**"
     };
 
     @Bean

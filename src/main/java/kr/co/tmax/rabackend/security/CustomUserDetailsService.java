@@ -1,8 +1,8 @@
 package kr.co.tmax.rabackend.security;
 
-import kr.co.tmax.rabackend.domain.User;
+import kr.co.tmax.rabackend.domain.user.User;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
-import kr.co.tmax.rabackend.repository.UserRepository;
+import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

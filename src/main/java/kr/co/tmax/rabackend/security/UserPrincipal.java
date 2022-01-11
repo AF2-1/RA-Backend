@@ -1,6 +1,6 @@
 package kr.co.tmax.rabackend.security;
 
-import kr.co.tmax.rabackend.domain.User;
+import kr.co.tmax.rabackend.domain.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

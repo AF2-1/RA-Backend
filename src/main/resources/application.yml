@@ -1,7 +1,11 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://nys:1234@127.0.0.1:27017/logindemo
+      host: 127.0.0.1
+      port: 27017
+      database: ra
+      username: tmaxrobo
+      password: tmaxrobo
       authentication-database: admin
   security:
     oauth2:
