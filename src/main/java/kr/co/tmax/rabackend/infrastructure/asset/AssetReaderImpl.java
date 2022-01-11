@@ -22,13 +22,12 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
-    public List<Asset> findAssetByName(String name) {
+    public List<Asset> findByName(String name) {
         return assetRepository.findByName(name);
     }
 
     @Override
-    public Asset findAssetByTicker(String ticker) {
-       return assetRepository.findByTicker(ticker)
-                .orElseThrow(() -> new ResourceNotFoundException("asset", "ticker", ticker));
+    public List<Asset> findByTicker(String ticker) {
+        return assetRepository.findByTicker(ticker);
     }
 }
