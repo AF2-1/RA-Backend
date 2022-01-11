@@ -1,7 +1,6 @@
 package kr.co.tmax.rabackend.interfaces.asset;
 
 import kr.co.tmax.rabackend.common.CommonResponse;
-import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,20 +22,20 @@ public class AssetController {
     private final AssetService assetService;
 
     @GetMapping("/assets")
-    public CommonResponse findAssetByTicker(@RequestParam(required = false) String ticker,
-                                            @RequestParam(required = false) String name) {
+    public CommonResponse findAsset(@RequestParam(required = false) String ticker,
+                                    @RequestParam(required = false) String name) {
         log.info("ticker:{} name:{}", ticker, name);
 
         if (StringUtils.hasText(name)) {
             List<AssetDto> result = assetService.findAssetByName(name)
                     .stream().map(AssetDto::new).collect(Collectors.toList());
-
             return CommonResponse.success("이름 조회 성공", result);
         }
 
         if (StringUtils.hasText(ticker)) {
-            AssetDto assetDto = new AssetDto(assetService.findAssetByTicker(ticker));
-            return CommonResponse.success("티커 조회 성공", assetDto);
+            List<AssetDto> result = assetService.findAssetByTicker(ticker)
+                    .stream().map(AssetDto::new).collect(Collectors.toList());
+            return CommonResponse.success("티커 조회 성공", result);
         }
 
         List<AssetDto> result = assetService.findAll()
