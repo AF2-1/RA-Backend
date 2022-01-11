@@ -52,4 +52,6 @@ dockerRun {
     image imageName
     ports '8080:8080'
     clean true
+    daemonize true
+    arguments '--network=ra-net'
 }
