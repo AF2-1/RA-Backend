@@ -1,8 +1,8 @@
 package kr.co.tmax.rabackend.security.oauth2;
 
-import kr.co.tmax.rabackend.domain.User;
+import kr.co.tmax.rabackend.domain.user.User;
 import kr.co.tmax.rabackend.exception.OAuth2AuthenticationProcessingException;
-import kr.co.tmax.rabackend.repository.UserRepository;
+import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
 import kr.co.tmax.rabackend.security.UserPrincipal;
 import kr.co.tmax.rabackend.security.oauth2.user.OAuth2UserInfo;
 import kr.co.tmax.rabackend.security.oauth2.user.OAuth2UserInfoFactory;

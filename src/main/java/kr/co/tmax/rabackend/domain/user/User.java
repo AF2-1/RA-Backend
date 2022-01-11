@@ -1,4 +1,4 @@
-package kr.co.tmax.rabackend.domain;
+package kr.co.tmax.rabackend.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.co.tmax.rabackend.security.oauth2.AuthProvider;

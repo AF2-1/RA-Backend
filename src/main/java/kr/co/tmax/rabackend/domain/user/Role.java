@@ -1,4 +1,4 @@
-package kr.co.tmax.rabackend.domain;
+package kr.co.tmax.rabackend.domain.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

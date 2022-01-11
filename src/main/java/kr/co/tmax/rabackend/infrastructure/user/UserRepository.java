@@ -1,7 +1,7 @@
-package kr.co.tmax.rabackend.repository;
+package kr.co.tmax.rabackend.infrastructure.user;
 
 
-import kr.co.tmax.rabackend.domain.User;
+import kr.co.tmax.rabackend.domain.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
