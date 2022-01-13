@@ -37,3 +37,4 @@ out/
 .vscode/
 
 mongo-data
+src/main/resources/application-local.yml
