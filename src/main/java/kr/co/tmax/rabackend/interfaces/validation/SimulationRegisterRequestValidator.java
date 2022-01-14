@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.List;
@@ -26,6 +25,7 @@ public class SimulationRegisterRequestValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        log.debug("{}.{}() is called", this.getClass().getSimpleName(), "validate");
         log.debug("strategies: {}", appProperties.getSimulation().getStrategies());
         RegisterSimulationRequest request = (RegisterSimulationRequest) target;
 

@@ -30,8 +30,7 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public CommonResponse onBindException(BindException bindException, Locale locale) {
-        return CommonResponse.fail("잘못", ValidationResult.create(bindException, messageSource, locale));
+        log.error(bindException.getMessage());
+        return CommonResponse.fail("잘못된 파라미터", ValidationResult.create(bindException, messageSource, locale));
     }
-
-
 }
