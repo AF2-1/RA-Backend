@@ -12,8 +12,8 @@ public class SimulationService {
 
     private final SimulationStore simulationStore;
 
-    public Simulation registerSimulation(String userId, RegisterSimulationRequest request) {
-        Simulation simulation = request.toEntity(userId);
+    public Simulation registerSimulation(RegisterSimulationRequest request) {
+        Simulation simulation = request.toEntity();
         // todo: 시뮬레이션의 전략 별로 AI 서버로 요청보내기
         return simulationStore.store(simulation);
     }

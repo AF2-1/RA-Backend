@@ -14,6 +14,7 @@ public class SimulationDto {
     @Setter
     @ToString
     public static class RegisterSimulationRequest {
+        private String userId;
         private List<String> assets;
         private int rebalancingPeriod;
         private LocalDate startDate;

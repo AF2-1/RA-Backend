@@ -17,13 +17,14 @@ public class SimulationCommand {
     @ToString
     @NoArgsConstructor
     public static class RegisterSimulationRequest {
+        private String userId;
         private List<String> assets;
         private int rebalancingPeriod;
         private LocalDate startDate;
         private LocalDate endDate;
         private List<String> strategies;
 
-        public Simulation toEntity(String userId) {
+        public Simulation toEntity() {
             return Simulation.builder()
                     .userId(userId)
                     .assets(assets)

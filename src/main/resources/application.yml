@@ -1,4 +1,6 @@
 spring:
+  messages:
+    basename: errors
   data:
     mongodb:
       host: mongodb
@@ -29,3 +31,15 @@ app:
       - http://localhost:3000/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
+  simulation:
+    strategies:
+      - PPO
+      - EW
+      - GMV
+      - MDP
+      - MVO
+      - RP
+      - IV
+      - BL
+      - KOSPI
+      - S&P500
