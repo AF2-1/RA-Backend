@@ -38,23 +38,19 @@ public class SimulationRegisterRequestValidator implements Validator {
             errors.rejectValue("strategies", "bad.request", null, null);
     }
 
-    private boolean checkDuplicatedSimulation() {
-        // todo: 해당 유저가 중복되는 시뮬레이션 이미 요청했는지 체크 중복되는게 있다면 false 아니면 true
-        return true;
+    private void checkDuplicatedSimulation() {
+        // todo: 해당 유저가 중복되는 시뮬레이션 이미 요청했는지 체크 중복되는게 있다면 error 담기
     }
 
-    private boolean checkConcurrentSimulation() {
-        // todo: 현재 유저가 이미 진행중인 시뮬레이션이 있으면 false 없으면 true
-        return true;
+    private void checkConcurrentSimulation() {
+        // todo: 현재 유저가 이미 진행중인 시뮬레이션이 있다면 error 담기
     }
 
-    private boolean checkValidAsset() {
-        // todo: 유효한 자산인지 체크 유효하면 true 아니면 false
-        return true;
+    private void checkValidAsset() {
+        // todo: 유효한 자산인지 체크 유효하지 않다면 error 담기
     }
 
-    private boolean checkValidDate() {
-        // todo: 시작일과 종료일이 유효한지 체크 유효하면 true 아니면 false
-        return true;
+    private void checkValidDate() {
+        // todo: 시작일과 종료일이 유효한지 않다면 error 담기
     }
 }
