@@ -19,4 +19,11 @@ public class CommonResponse<T> {
                 .data(data)
                 .build();
     }
+
+    public static <T> CommonResponse<T> fail(String message, T data) {
+        return (CommonResponse<T>) CommonResponse.builder()
+                .message(message)
+                .data(data)
+                .build();
+    }
 }

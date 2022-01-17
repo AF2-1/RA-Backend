@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Document
+@Document(collection = "users")
 public class User {
 
     @Id
@@ -19,19 +19,17 @@ public class User {
     private String email;
     private String imageUrl;
     private Role role;
-    @JsonIgnore
-    private String password;
     private AuthProvider provider;
-    private Boolean emailVerified = false;
+    private Boolean emailVerified;
     private String providerId;
 
     @Builder
-    public User(String name, String email, String imageUrl, Role role, String password, AuthProvider provider, Boolean emailVerified, String providerId) {
+    public User(String id, String name, String email, String imageUrl, Role role, AuthProvider provider, Boolean emailVerified, String providerId) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;
         this.role = role;
-        this.password = password;
         this.provider = provider;
         this.emailVerified = emailVerified;
         this.providerId = providerId;

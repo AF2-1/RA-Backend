@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -47,7 +48,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
 
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             User newUser = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
             return UserPrincipal.create(newUser, oAuth2User.getAttributes());
         }
@@ -70,6 +71,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User newUser = User.builder()
+                .id(UUID.randomUUID().toString())
                 .provider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
                 .providerId(oAuth2UserInfo.getId())
                 .email(oAuth2UserInfo.getEmail())
