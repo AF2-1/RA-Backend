@@ -21,6 +21,7 @@ public class AppConfig {
     public WebClient webClient() {
         return WebClient.builder()
                 .baseUrl(appProperties.getAi().getUrl())
+                .defaultHeader("Host", appProperties.getAi().getHost())
                 .build();
     }
 }

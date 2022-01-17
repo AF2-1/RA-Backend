@@ -1,6 +1,5 @@
 package kr.co.tmax.rabackend.interfaces.simulation;
 
-import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -24,23 +23,33 @@ public class SimulationDto {
     @Getter
     @Setter
     @ToString
-    @Builder
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class RegisterStrategyRequest {
         private String strategy;
-        private List<String> assetList;
         private int rebalancingLen;
+        private List<String> assetList;
         private LocalDate startDate;
         private LocalDate endDate;
         private String callbackUrl;
-        private boolean indexRequest = false;
+        private boolean indexRequest;
+
+        @Builder
+        public RegisterStrategyRequest(String strategy, int rebalancingLen, List<String> assetList, LocalDate startDate, LocalDate endDate, String callbackUrl) {
+            this.strategy = strategy;
+            this.rebalancingLen = rebalancingLen;
+            this.assetList = assetList;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.callbackUrl = callbackUrl;
+            this.indexRequest = false;
+        }
     }
 
     @Getter
-    @Builder
+    @Setter
     @ToString
-    public static class RegisterResponse {
-
-        private final String itemToken;
+    @NoArgsConstructor
+    public static class RegisterStrategyResponse {
+        private String response;
     }
 }
