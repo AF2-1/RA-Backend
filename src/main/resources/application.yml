@@ -43,3 +43,5 @@ app:
       - BL
       - KOSPI
       - S&P500
+  ai:
+    url: http://192.168.154.50:9001/v2/models/triton-mms/infer

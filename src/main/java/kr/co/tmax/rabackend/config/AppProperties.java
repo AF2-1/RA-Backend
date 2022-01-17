@@ -11,6 +11,7 @@ import java.util.Set;
 public class AppProperties {
     private final Auth auth = new Auth();
     private final Simulation simulation = new Simulation();
+    private final Ai ai = new Ai();
 
     @Setter
     @Getter
@@ -23,5 +24,11 @@ public class AppProperties {
     @Getter
     public static class Simulation {
         private Set<String> strategies;
+    }
+
+    @Setter
+    @Getter
+    public static class Ai {
+        private String url;
     }
 }
