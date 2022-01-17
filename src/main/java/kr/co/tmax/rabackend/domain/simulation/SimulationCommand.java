@@ -25,7 +25,7 @@ public class SimulationCommand {
         private List<String> strategies;
 
         public Simulation toEntity() {
-            return Simulation.builder()
+            return Simulation.createBuilder()
                     .userId(userId)
                     .assets(assets)
                     .strategies(strategies.stream().map(Strategy::new).collect(Collectors.toList()))
