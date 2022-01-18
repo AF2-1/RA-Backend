@@ -47,4 +47,11 @@ public class SimulationCommand {
         private String userId;
         private String simulationId;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class DeleteSimulationRequest {
+        private String userId;
+        private String simulationId;
+    }
 }

@@ -101,4 +101,13 @@ public class SimulationController {
         SimulationDto.GetSimulationResponse getSimulationResponse = SimulationDto.GetSimulationResponse.create(simulation);
         return ResponseEntity.ok(CommonResponse.success("시뮬레이션 단건 조회", getSimulationResponse));
     }
+
+    @DeleteMapping("users/{userId}/simulations/{simulationId}")
+    public ResponseEntity<CommonResponse> deleteSimulation(@PathVariable String userId,
+                                                        @PathVariable String simulationId) {
+
+        SimulationCommand.DeleteSimulationRequest command = new SimulationCommand.DeleteSimulationRequest(userId, simulationId);
+        simulationService.deleteSimulation(command);
+        return ResponseEntity.ok(CommonResponse.success("시뮬레이션 삭제 완료", null));
+    }
 }

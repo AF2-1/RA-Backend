@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.domain.simulation;
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.srategy.Strategy;
+import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -71,5 +73,15 @@ public class SimulationService {
     public Simulation getSimulation(GetSimulationRequest command) {
         return simulationReader.findByUserIdAndSimulationId(command.getUserId(), command.getSimulationId())
                 .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
+    }
+
+    public void deleteSimulation(DeleteSimulationRequest command) {
+        Simulation simulation = simulationReader.findById(command.getSimulationId())
+                .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
+
+        if(!simulation.getUserId().equals(command.getUserId()))
+            throw new BadRequestException("simulation의 소유자만 삭제가 가능합니다");
+
+        simulationStore.delete(simulation);
     }
 }
