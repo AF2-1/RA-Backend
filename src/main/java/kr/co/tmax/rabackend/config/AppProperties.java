@@ -30,5 +30,8 @@ public class AppProperties {
     @Getter
     public static class Ai {
         private String url;
+        private String path;
+        private String host;
+        private String callBackUrl;
     }
 }
