@@ -17,4 +17,9 @@ public class SimulationStoreImpl implements SimulationStore {
     public Simulation store(Simulation simulation) {
         return simulationRepository.save(simulation);
     }
+
+    @Override
+    public void delete(Simulation simulation) {
+        simulationRepository.delete(simulation);
+    }
 }
