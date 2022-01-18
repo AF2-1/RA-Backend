@@ -1,6 +1,7 @@
 package kr.co.tmax.rabackend.infrastructure.simulation;
 
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
+import kr.co.tmax.rabackend.domain.simulation.SimulationReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,15 +12,17 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SimulationReaderImpl {
+public class SimulationReaderImpl implements SimulationReader {
 
     private final SimulationRepository simulationRepository;
 
-    public Optional<Simulation> findById(String id) {
-        return simulationRepository.findById(id);
+    @Override
+    public Optional<Simulation> findById(String simulationId) {
+        return simulationRepository.findBySimulationId(simulationId);
     }
 
-//    public List<Simulation> findByStrategy(String name) {
-//        return simulationRepository.findByStrategy(name);
-//    }
+    @Override
+    public List<Simulation> findByUserId(String userId) {
+        return simulationRepository.findByUserId(userId);
+    }
 }

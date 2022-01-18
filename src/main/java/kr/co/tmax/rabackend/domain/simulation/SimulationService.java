@@ -10,12 +10,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class SimulationService {
 
     private final SimulationStore simulationStore;
+    private final SimulationReader simulationReader;
     private final WebClient webClient;
     private final AppProperties appProperties;
 
@@ -40,14 +43,13 @@ public class SimulationService {
     }
 
     private SimulationDto.RegisterStrategyResponse executeRequest(SimulationDto.RegisterStrategyRequest requestBody) {
-        SimulationDto.RegisterStrategyResponse response = webClient.post()
+        return webClient.post()
                 .uri(appProperties.getAi().getPath())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(SimulationDto.RegisterStrategyResponse.class)
                 .block();
-        return response;
     }
 
     private SimulationDto.RegisterStrategyRequest createRequest(Simulation simulation, Strategy strategy) {
@@ -59,5 +61,9 @@ public class SimulationService {
                 .endDate(simulation.getEndDate())
                 .callbackUrl(appProperties.getAi().getCallBackUrl())
                 .build();
+    }
+
+    public List<Simulation> getSimulations(GetSimulationsRequest command) {
+        return simulationReader.findByUserId(command.getUserId());
     }
 }

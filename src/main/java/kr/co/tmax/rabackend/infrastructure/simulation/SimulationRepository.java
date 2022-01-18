@@ -8,5 +8,7 @@ import java.util.Optional;
 
 public interface SimulationRepository extends MongoRepository<Simulation, String> {
 
-    Optional<Simulation> findById(String id);
+    Optional<Simulation> findBySimulationId(String id);
+
+    List<Simulation> findByUserId(String userId);
 }

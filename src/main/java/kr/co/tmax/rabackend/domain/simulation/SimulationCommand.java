@@ -1,10 +1,7 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.domain.srategy.Strategy;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,5 +31,13 @@ public class SimulationCommand {
                     .rebalancingPeriod(rebalancingPeriod)
                     .build();
         }
+    }
+
+    @Setter
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    public static class GetSimulationsRequest {
+        private String userId;
     }
 }
