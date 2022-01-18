@@ -40,4 +40,11 @@ public class SimulationCommand {
     public static class GetSimulationsRequest {
         private String userId;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class GetSimulationRequest {
+        private String userId;
+        private String simulationId;
+    }
 }

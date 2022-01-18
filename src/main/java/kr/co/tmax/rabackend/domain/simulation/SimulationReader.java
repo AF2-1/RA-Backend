@@ -6,4 +6,5 @@ import java.util.Optional;
 public interface SimulationReader {
     Optional<Simulation> findById(String simulationId);
     List<Simulation>  findByUserId(String userId);
+    Optional<Simulation> findByUserIdAndSimulationId(String userId, String simulationId);
 }

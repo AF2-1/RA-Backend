@@ -87,4 +87,18 @@ public class SimulationController {
         return ResponseEntity.accepted()
                 .body(CommonResponse.success("시뮬레이션 목록 확인(진행중인 시뮬레이션이 있습니다)", getSimulationsResponse));
     }
+
+    @GetMapping("users/{userId}/simulations/{simulationId}")
+    public ResponseEntity<CommonResponse> getSimulation(@PathVariable String userId,
+                                                        @PathVariable String simulationId) {
+        // command로 변환
+        SimulationCommand.GetSimulationRequest command = new SimulationCommand.GetSimulationRequest(userId, simulationId);
+
+        // command를 가지고 service 요청 Simulation 단건 조회
+        Simulation simulation = simulationService.getSimulation(command);
+
+        // 응답 만들기
+        SimulationDto.GetSimulationResponse getSimulationResponse = SimulationDto.GetSimulationResponse.create(simulation);
+        return ResponseEntity.ok(CommonResponse.success("시뮬레이션 단건 조회", getSimulationResponse));
+    }
 }
