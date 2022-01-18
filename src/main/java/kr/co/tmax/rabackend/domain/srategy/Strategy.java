@@ -10,6 +10,11 @@ import lombok.ToString;
 public class Strategy {
     private String name;
     private boolean done;
+    // todo: 아래 필드 구체화 필요
+    private Object inferenceResults;
+    private Object evaluationResults;
+    private Object dailyPfWeights;
+    private Object dailyPfValues;
 
     public Strategy(String name) {
         this.name = name;
