@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.domain.simulation;
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.srategy.Strategy;
+import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,5 +66,10 @@ public class SimulationService {
 
     public List<Simulation> getSimulations(GetSimulationsRequest command) {
         return simulationReader.findByUserId(command.getUserId());
+    }
+
+    public Simulation getSimulation(GetSimulationRequest command) {
+        return simulationReader.findByUserIdAndSimulationId(command.getUserId(), command.getSimulationId())
+                .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
     }
 }

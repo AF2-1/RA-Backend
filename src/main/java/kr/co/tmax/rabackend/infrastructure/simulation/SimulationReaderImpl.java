@@ -25,4 +25,9 @@ public class SimulationReaderImpl implements SimulationReader {
     public List<Simulation> findByUserId(String userId) {
         return simulationRepository.findByUserId(userId);
     }
+
+    @Override
+    public Optional<Simulation> findByUserIdAndSimulationId(String userId, String simulationId) {
+        return simulationRepository.findByUserIdAndSimulationId(userId, simulationId);
+    }
 }
