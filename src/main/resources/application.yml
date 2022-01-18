@@ -3,12 +3,12 @@ spring:
     basename: errors
   data:
     mongodb:
-      host: localhost
+      host: mongodb
       port: 27017
       database: ra
-#      username: tmaxrobo
-#      password: tmaxrobo
-#      authentication-database: admin
+      username: tmaxrobo
+      password: tmaxrobo
+      authentication-database: admin
   security:
     oauth2:
       client:
@@ -33,15 +33,17 @@ app:
       - myiosapp://oauth2/redirect
   simulation:
     strategies:
-      - PPO
-      - EW
-      - GMV
-      - MDP
-      - MVO
-      - RP
-      - IV
-      - BL
-      - KOSPI
-      - S&P500
+      - ppo
+      - ew
+      - gmv
+      - mdp
+      - mvo
+      - rp
+      - iv
+      - bl
+      - kospi
+      - s&p500
   ai:
-    url: http://192.168.154.50:9001/v2/models/triton-mms/infer
+    url: http://192.168.154.50:9001
+    host: triton-mms.kserve-test.example.com
+    callBackUrl: http://192.168.155.91:8080/simulation/callback

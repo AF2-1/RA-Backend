@@ -1,6 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
-import kr.co.tmax.rabackend.domain.srategy.Strategy;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

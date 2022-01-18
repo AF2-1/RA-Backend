@@ -1,6 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
-import kr.co.tmax.rabackend.domain.srategy.Strategy;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -39,7 +39,7 @@ public class Simulation {
         this.strategies = strategies;
     }
 
-    @Builder(builderClassName = "updateBuilder", builderMethodName = "updateBuilder")
+    @Builder(builderClassName = "doneStrategy", builderMethodName = "doneStrategy")
     public Simulation(String simulationId, String userId, List<String> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate, List<Strategy> strategies) {
         this.simulationId = simulationId;
         this.isDone = false;
