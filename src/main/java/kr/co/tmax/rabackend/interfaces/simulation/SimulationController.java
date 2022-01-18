@@ -1,8 +1,8 @@
 package kr.co.tmax.rabackend.interfaces.simulation;
 
 import kr.co.tmax.rabackend.common.CommonResponse;
-import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
-import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.domain.simulation.*;
+import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.interfaces.validation.SimulationRegisterRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,8 @@ import java.net.URI;
 @RestController
 public class SimulationController {
 
+    private final SimulationRead simulationRead;
+    private final SimulationStore simulationStore;
     private final SimulationService simulationService;
     private final ModelMapper modelMapper;
     private final SimulationRegisterRequestValidator simulationRegisterRequestValidator;
@@ -50,5 +52,20 @@ public class SimulationController {
                 .path(String.format("/users/%s/simulations", userId))
                 .build().toUri();
         return ResponseEntity.created(location).body(commonResponse);
+    }
+
+    @PostMapping("/simulation/callback")
+    public void update(@RequestParam String simulationId,
+                       @RequestParam String strategyName) {
+
+        System.out.println("\"hi\" = " + "hi");
+
+        Simulation simulation = simulationRead.findById(simulationId).orElseThrow(() ->
+                new ResourceNotFoundException("Simulation", "simulationId", simulationId));
+
+        simulation.update(simulationId, strategyName);
+        simulationStore.store(simulation);
+
+        log.info("simulation: {} ", simulation);
     }
 }

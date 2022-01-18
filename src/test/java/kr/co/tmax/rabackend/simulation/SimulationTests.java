@@ -4,7 +4,7 @@ import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.infrastructure.asset.AssetReaderImpl;
-import kr.co.tmax.rabackend.infrastructure.simulation.SimulationReaderImpl;
+import kr.co.tmax.rabackend.infrastructure.simulation.SimulationReadImpl;
 import kr.co.tmax.rabackend.infrastructure.simulation.SimulationStoreImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Optional;
 class SimulationTests {
 
     @Autowired
-    SimulationReaderImpl simulationReader;
+    SimulationReadImpl simulationReader;
 
     @Autowired
     SimulationStoreImpl simulationStore;
@@ -53,73 +53,12 @@ class SimulationTests {
     }
 
     @Test
-    void 특정전략완료업데이트() {
-        String id = "a6b38f21-9a2d-43a8-ac76-5b9c2e5b238b";
-        String name = "PPO";
-        Optional<Simulation> byId = simulationReader.findById(id);
-        List<Strategy> s = byId.map(Simulation::getStrategies).orElse(null);
-        String simulationId = byId.map(Simulation::getSimulationId).orElse(null);
-        String userId = byId.map(Simulation::getUserId).orElse(null);
-        List<String> assets = byId.map(Simulation::getAssets).orElse(null);
-        LocalDate startDate = byId.map(Simulation::getStartDate).orElse(null);
-        LocalDate endDate = byId.map(Simulation::getEndDate).orElse(null);
-        Simulation build = null;
-        int reb = byId.map(Simulation::getRebalancingPeriod).orElse(null);
-        for (int i = 0; i < s.size(); i++) {
-            if (s.get(i).getName().equals(name)) {
-                s.get(i).setDone(true);
-                build = Simulation.doneStrategy().simulationId(simulationId).userId(userId).rebalancingPeriod(reb).strategies(s).startDate(startDate).endDate(endDate)
-                        .assets(assets).build();
-                System.out.println("build = " + build);
-                simulationStore.store(build); // update
-            }
-        }
-        System.out.println("s = " + s);
-    }
-
-    @Test
-    void 전략모두완료시_시뮬레이션업데이트() {
-        String id = "28c6523f-a015-4802-be34-a6d738972f2f";
-        String name = "PPO";
-        String name1 = "EW";
-        int cnt = 0;
-        Optional<Simulation> byId = simulationReader.findById(id);
-        List<Strategy> s = byId.map(Simulation::getStrategies).orElse(null);
-        String simulationId = byId.map(Simulation::getSimulationId).orElse(null);
-        String userId = byId.map(Simulation::getUserId).orElse(null);
-        List<String> assets = byId.map(Simulation::getAssets).orElse(null);
-        LocalDate startDate = byId.map(Simulation::getStartDate).orElse(null);
-        LocalDate endDate = byId.map(Simulation::getEndDate).orElse(null);
-        Simulation build = null;
-        int reb = byId.map(Simulation::getRebalancingPeriod).orElse(null);
-        for (int i = 0; i < s.size(); i++) {
-            if (s.get(i).getName().equals(name)) {
-                s.get(i).setDone(true);
-                cnt++;
-                build = Simulation.doneStrategy().simulationId(simulationId).userId(userId).rebalancingPeriod(reb).strategies(s).startDate(startDate).endDate(endDate)
-                        .assets(assets).build();
-                System.out.println("build = " + build);
-
-                simulationStore.store(build); // update
-            }
-        }
-
-        for (int i = 0; i < s.size(); i++) {
-            if (s.get(i).getName().equals(name1)) {
-                s.get(i).setDone(true);
-                cnt++;
-                build = Simulation.doneStrategy().simulationId(simulationId).userId(userId).rebalancingPeriod(reb).strategies(s).startDate(startDate).endDate(endDate)
-                        .assets(assets).build();
-                System.out.println("build = " + build);
-                if (cnt == s.size()) {
-                    Simulation build1 = Simulation.doneSimulation().isDone(true).simulationId(simulationId).userId(userId).rebalancingPeriod(reb).strategies(s)
-                            .startDate(startDate).endDate(endDate).assets(assets).build();
-                    System.out.println("build1 = " + build1);
-                    simulationStore.store(build1);
-                }
-//                simulationStore.store(build); // update
-            }
-        }
-        System.out.println("s = " + s);
+    void 전략완료시_시뮬레이션업데이트() throws Exception {
+        String id = "301a5396-20bb-4e9d-9182-764f683e8750";
+        String name = "ppo";
+        String name1 = "ew";
+        Simulation simulation = simulationReader.findById(id).orElseThrow(() -> new Exception());
+        simulation.update(id, name1);
+        simulationStore.store(simulation); // update
     }
 }
