@@ -2,6 +2,7 @@ package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
+import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,4 +32,11 @@ public class SimulationService {
         return;
     }
 
+    public void updateSimulation(String simulationId, String strategyName) {
+        Simulation simulation = simulationRead.findById(simulationId).orElseThrow(() ->
+                new ResourceNotFoundException("Simulation", "simulationId", simulationId));
+
+        simulation.update(simulationId, strategyName);
+        simulationStore.store(simulation);
+    }
 }

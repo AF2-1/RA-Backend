@@ -58,14 +58,6 @@ public class SimulationController {
     public void update(@RequestParam String simulationId,
                        @RequestParam String strategyName) {
 
-        System.out.println("\"hi\" = " + "hi");
-
-        Simulation simulation = simulationRead.findById(simulationId).orElseThrow(() ->
-                new ResourceNotFoundException("Simulation", "simulationId", simulationId));
-
-        simulation.update(simulationId, strategyName);
-        simulationStore.store(simulation);
-
-        log.info("simulation: {} ", simulation);
+        simulationService.updateSimulation(simulationId, strategyName);
     }
 }
