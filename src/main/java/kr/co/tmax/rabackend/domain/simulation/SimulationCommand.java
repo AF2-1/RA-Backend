@@ -1,10 +1,7 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,5 +33,27 @@ public class SimulationCommand {
                     .cnt(0)
                     .build();
         }
+    }
+
+    @Setter
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    public static class GetSimulationsRequest {
+        private String userId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class GetSimulationRequest {
+        private String userId;
+        private String simulationId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class DeleteSimulationRequest {
+        private String userId;
+        private String simulationId;
     }
 }
