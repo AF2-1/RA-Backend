@@ -110,4 +110,11 @@ public class SimulationController {
         simulationService.deleteSimulation(command);
         return ResponseEntity.ok(CommonResponse.success("시뮬레이션 삭제 완료", null));
     }
+
+    @PostMapping("/simulation/callback")
+    public void update(@RequestParam String simulationId,
+                       @RequestParam String strategyName) {
+
+        simulationService.updateSimulation(simulationId, strategyName);
+    }
 }

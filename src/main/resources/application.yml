@@ -3,7 +3,7 @@ spring:
     basename: errors
   data:
     mongodb:
-      host: mongodb
+      host: mongodb #localhost mongodb
       port: 27017
       database: ra
       username: tmaxrobo

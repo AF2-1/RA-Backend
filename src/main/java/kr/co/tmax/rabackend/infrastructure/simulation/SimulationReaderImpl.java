@@ -2,6 +2,7 @@ package kr.co.tmax.rabackend.infrastructure.simulation;
 
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationReader;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 public class SimulationReaderImpl implements SimulationReader {
-
     private final SimulationRepository simulationRepository;
 
     @Override

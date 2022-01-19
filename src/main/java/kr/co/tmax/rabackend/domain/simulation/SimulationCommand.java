@@ -15,6 +15,7 @@ public class SimulationCommand {
     @NoArgsConstructor
     public static class RegisterSimulationRequest {
         private String userId;
+        private int cnt;
         private List<String> assets;
         private int rebalancingPeriod;
         private LocalDate startDate;
@@ -22,13 +23,14 @@ public class SimulationCommand {
         private List<String> strategies;
 
         public Simulation toEntity() {
-            return Simulation.createBuilder()
+            return Simulation.builder()
                     .userId(userId)
                     .assets(assets)
                     .strategies(strategies.stream().map(Strategy::new).collect(Collectors.toList()))
                     .startDate(startDate)
                     .endDate(endDate)
                     .rebalancingPeriod(rebalancingPeriod)
+                    .cnt(0)
                     .build();
         }
     }

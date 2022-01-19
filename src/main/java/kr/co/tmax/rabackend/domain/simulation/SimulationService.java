@@ -1,8 +1,10 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.config.AppProperties;
-import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
-import kr.co.tmax.rabackend.domain.srategy.Strategy;
+import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.GetSimulationRequest;
+import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.GetSimulationsRequest;
+import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.RegisterSimulationRequest;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -75,7 +76,7 @@ public class SimulationService {
                 .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
     }
 
-    public void deleteSimulation(DeleteSimulationRequest command) {
+    public void deleteSimulation(SimulationCommand.DeleteSimulationRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId())
                 .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
 
@@ -83,5 +84,13 @@ public class SimulationService {
             throw new BadRequestException("simulation의 소유자만 삭제가 가능합니다");
 
         simulationStore.delete(simulation);
+    }
+
+    public void updateSimulation(String simulationId, String strategyName) {
+        Simulation simulation = simulationReader.findById(simulationId).orElseThrow(() ->
+                new ResourceNotFoundException("Simulation", "simulationId", simulationId));
+
+        simulation.update(simulationId, strategyName);
+        simulationStore.store(simulation);
     }
 }

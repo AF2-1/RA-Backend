@@ -1,7 +1,7 @@
 package kr.co.tmax.rabackend.interfaces.simulation;
 
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
-import kr.co.tmax.rabackend.domain.srategy.Strategy;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.*;
 
 import java.time.LocalDate;
