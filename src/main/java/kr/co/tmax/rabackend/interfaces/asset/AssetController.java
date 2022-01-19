@@ -29,18 +29,18 @@ public class AssetController {
         if (StringUtils.hasText(name)) {
             List<AssetDto> result = assetService.findAssetByName(name)
                     .stream().map(AssetDto::new).collect(Collectors.toList());
-            return CommonResponse.success("이름 조회 성공", result);
+            return CommonResponse.withMessageAndData("이름으로 자산 조회 성공", result);
         }
 
         if (StringUtils.hasText(ticker)) {
             List<AssetDto> result = assetService.findAssetByTicker(ticker)
                     .stream().map(AssetDto::new).collect(Collectors.toList());
-            return CommonResponse.success("티커 조회 성공", result);
+            return CommonResponse.withMessageAndData("티커로 자산 조회 성공", result);
         }
 
         List<AssetDto> result = assetService.findAll()
                 .stream().map(AssetDto::new).collect(Collectors.toList());
 
-        return CommonResponse.success("전체 조회 성공", result);
+        return CommonResponse.withMessageAndData("전체 자산 조회 성공", result);
     }
 }

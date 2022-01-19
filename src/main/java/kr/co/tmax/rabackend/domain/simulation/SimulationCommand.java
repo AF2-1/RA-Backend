@@ -56,4 +56,11 @@ public class SimulationCommand {
         private String userId;
         private String simulationId;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class UpdateSimulationRequest {
+        private String simulationId;
+        private String strategyName;
+    }
 }

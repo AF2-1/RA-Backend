@@ -2,15 +2,14 @@ package kr.co.tmax.rabackend.simulation;
 
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
+import kr.co.tmax.rabackend.domain.simulation.SimulationReader;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.infrastructure.asset.AssetReaderImpl;
-import kr.co.tmax.rabackend.infrastructure.simulation.SimulationReadImpl;
 import kr.co.tmax.rabackend.infrastructure.simulation.SimulationStoreImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +17,7 @@ import java.util.Optional;
 class SimulationTests {
 
     @Autowired
-    SimulationReadImpl simulationReader;
+    SimulationReader simulationReader;
 
     @Autowired
     SimulationStoreImpl simulationStore;
@@ -58,7 +57,7 @@ class SimulationTests {
         String name = "ppo";
         String name1 = "ew";
         Simulation simulation = simulationReader.findById(id).orElseThrow(() -> new Exception());
-        simulation.update(id, name1);
+        simulation.update(name1);
         simulationStore.store(simulation); // update
     }
 }

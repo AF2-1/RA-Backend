@@ -20,4 +20,8 @@ public class Strategy {
         this.name = name;
         this.done = false;
     }
+
+    public void complete(){
+        this.done = true;
+    }
 }
