@@ -1,4 +1,4 @@
-package kr.co.tmax.rabackend.domain.srategy;
+package kr.co.tmax.rabackend.domain.strategy;
 
 import lombok.Getter;
 import lombok.Setter;
