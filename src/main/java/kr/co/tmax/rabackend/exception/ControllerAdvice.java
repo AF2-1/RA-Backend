@@ -24,27 +24,27 @@ public class ControllerAdvice {
     @ExceptionHandler(value = Exception.class)
     public CommonResponse onException(Exception e) {
         log.error(e.getMessage());
-        return CommonResponse.fail("시스템 에러", null);
+        return CommonResponse.withMessage("시스템 에러");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public CommonResponse onBindException(BindException e, Locale locale) {
         log.error(e.getMessage());
-        return CommonResponse.fail("잘못된 요청", ValidationResult.create(e, messageSource, locale));
+        return CommonResponse.withMessageAndData("잘못된 요청", ValidationResult.create(e, messageSource, locale));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public CommonResponse onBadRequestException(BadRequestException e) {
         log.error(e.getMessage());
-        return CommonResponse.fail("잘못된 요청: " + e.getMessage(), null);
+        return CommonResponse.withMessage("잘못된 요청: " + e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     public CommonResponse onResourceNotFoundException(ResourceNotFoundException e) {
         log.error(e.getMessage());
-        return CommonResponse.fail("잘못된 요청: " + e.getMessage(), null);
+        return CommonResponse.withMessage("잘못된 요청: " + e.getMessage());
     }
 }

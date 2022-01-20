@@ -1,13 +1,12 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.config.AppProperties;
-import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.GetSimulationRequest;
-import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.GetSimulationsRequest;
-import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.RegisterSimulationRequest;
+import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -28,7 +27,7 @@ public class SimulationService {
 
     public Simulation registerSimulation(RegisterSimulationRequest request) {
         Simulation initSimulation = request.toEntity();
-        requestAA(initSimulation);
+//        requestAA(initSimulation);
         return simulationStore.store(initSimulation);
     }
 
@@ -39,14 +38,14 @@ public class SimulationService {
     private void requestAA(Simulation simulation) {
         // todo: AI 서버에서 실패 응답이 온 경우 예외를 던져 Simulation이 DB에 저장되는 것을 막아야한다.
         simulation.getStrategies().forEach(strategy -> {
-            SimulationDto.RegisterStrategyRequest requestBody = createRequest(simulation, strategy);
+            RegisterStrategyRequest requestBody = createRequest(simulation, strategy);
             SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
             log.debug("simulationId: {} strategyName: {} AI response:{}",
                     simulation.getSimulationId(), strategy.getName(), response.toString());
         });
     }
 
-    private SimulationDto.RegisterStrategyResponse executeRequest(SimulationDto.RegisterStrategyRequest requestBody) {
+    private SimulationDto.RegisterStrategyResponse executeRequest(RegisterStrategyRequest requestBody) {
         return webClient.post()
                 .uri(appProperties.getAi().getPath())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -56,8 +55,8 @@ public class SimulationService {
                 .block();
     }
 
-    private SimulationDto.RegisterStrategyRequest createRequest(Simulation simulation, Strategy strategy) {
-        return SimulationDto.RegisterStrategyRequest.builder()
+    private RegisterStrategyRequest createRequest(Simulation simulation, Strategy strategy) {
+        return RegisterStrategyRequest.builder()
                 .strategy(strategy.getName())
                 .rebalancingLen(simulation.getRebalancingPeriod())
                 .assetList(simulation.getAssets())
@@ -76,7 +75,7 @@ public class SimulationService {
                 .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
     }
 
-    public void deleteSimulation(SimulationCommand.DeleteSimulationRequest command) {
+    public void deleteSimulation(DeleteSimulationRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId())
                 .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
 
@@ -86,11 +85,11 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    public void updateSimulation(String simulationId, String strategyName) {
-        Simulation simulation = simulationReader.findById(simulationId).orElseThrow(() ->
-                new ResourceNotFoundException("Simulation", "simulationId", simulationId));
+    public void updateSimulation(UpdateSimulationRequest command) {
+        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
+                new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-        simulation.update(simulationId, strategyName);
+        simulation.update(command.getStrategyName());
         simulationStore.store(simulation);
     }
 }

@@ -1,11 +1,13 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,17 +47,16 @@ public class Simulation {
         this.cnt = cnt;
     }
 
-    @Transactional
-    public void update(String simulationId, String strategyName) {
-        for (int i = 0; i < strategies.size(); i++) {
-            if (strategies.get(i).getName().equals(strategyName) && !strategies.get(i).isDone()) {
-                strategies.get(i).setDone(true);
-                cnt++;
-            }
-            if (cnt == strategies.size()) {
-                isDone = true;
-                break;
-            }
+    public void update(String strategyName) {
+        for (Strategy strategy : strategies) {
+            if (!strategy.getName().equals(strategyName))
+                continue;
+            strategy.complete();
+            cnt++;
+        }
+
+        if (cnt == strategies.size()) {
+            isDone = true;
         }
     }
 }
