@@ -8,6 +8,7 @@ import kr.co.tmax.rabackend.interfaces.validation.SimulationRegisterRequestValid
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api/v1/")
 @Slf4j
@@ -46,9 +46,10 @@ public class SimulationController {
         SimulationCommand.RegisterSimulationRequest command = modelMapper.map(request, SimulationCommand.RegisterSimulationRequest.class);
         simulationService.registerSimulation(command);
 
-        CommonResponse commonResponse = CommonResponse.withMessage("시뮬레이션 생성 요청 확인");
-        URI location = getLocation(userId, uriComponentsBuilder);
-        return ResponseEntity.created(location).body(commonResponse);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .location(getLocation(userId, uriComponentsBuilder))
+                .body(CommonResponse.withMessage("시뮬레이션 생성 요청 확인"));
     }
 
     private URI getLocation(String userId, UriComponentsBuilder uriComponentsBuilder) {
@@ -62,20 +63,15 @@ public class SimulationController {
         SimulationCommand.GetSimulationsRequest command = new SimulationCommand.GetSimulationsRequest(userId);
         List<Simulation> simulations = simulationService.getSimulations(command);
 
-        List<SimulationDto.GetSimulationResponse> getSimulationResponses = simulations.stream()
-                .map(SimulationDto.GetSimulationResponse::create)
-                .collect(Collectors.toList());
-
-        SimulationDto.GetSimulationsResponse getSimulationsResponse = SimulationDto.GetSimulationsResponse.builder()
-                .userId(userId)
-                .simulations(getSimulationResponses)
-                .build();
+        SimulationDto.GetSimulationsResponse getSimulationsResponse = SimulationDto.GetSimulationsResponse.create(userId, simulations);
 
         if (isSimulationsDone(simulations))
             return ResponseEntity
-                    .ok(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(모든 시뮬레이션이 완료되었습니다)", getSimulationsResponse));
+                    .status(HttpStatus.OK)
+                    .body(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(모든 시뮬레이션이 완료되었습니다)", getSimulationsResponse));
 
-        return ResponseEntity.accepted()
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
                 .body(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(진행중인 시뮬레이션이 있습니다)", getSimulationsResponse));
     }
 
@@ -91,7 +87,9 @@ public class SimulationController {
         SimulationCommand.GetSimulationRequest command = new SimulationCommand.GetSimulationRequest(userId, simulationId);
         Simulation simulation = simulationService.getSimulation(command);
         SimulationDto.GetSimulationResponse getSimulationResponse = SimulationDto.GetSimulationResponse.create(simulation);
-        return ResponseEntity.ok(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", getSimulationResponse));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", getSimulationResponse));
     }
 
     @DeleteMapping("users/{userId}/simulations/{simulationId}")
@@ -99,7 +97,9 @@ public class SimulationController {
                                                            @PathVariable String simulationId) {
         SimulationCommand.DeleteSimulationRequest command = new SimulationCommand.DeleteSimulationRequest(userId, simulationId);
         simulationService.deleteSimulation(command);
-        return ResponseEntity.ok(CommonResponse.withMessage("시뮬레이션 삭제 완료"));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessage("시뮬레이션 삭제 완료"));
     }
 
     @PostMapping("/simulation/callback")

@@ -65,6 +65,19 @@ public class SimulationDto {
     public static class GetSimulationsResponse {
         private String userId;
         private List<GetSimulationResponse> simulations;
+
+        public static GetSimulationsResponse create(String userId, List<Simulation> simulations) {
+            List<SimulationDto.GetSimulationResponse> getSimulationResponses = simulations.stream()
+                    .map(SimulationDto.GetSimulationResponse::create)
+                    .collect(Collectors.toList());
+
+            SimulationDto.GetSimulationsResponse getSimulationsResponse = SimulationDto.GetSimulationsResponse.builder()
+                    .userId(userId)
+                    .simulations(getSimulationResponses)
+                    .build();
+
+            return getSimulationsResponse;
+        }
     }
 
     @Builder
