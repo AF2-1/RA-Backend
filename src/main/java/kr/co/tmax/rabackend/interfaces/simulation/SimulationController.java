@@ -105,6 +105,8 @@ public class SimulationController {
     @PostMapping("/simulation/callback")
     public void updateSimulation(@RequestParam String simulationId,
                                  @RequestParam String strategyName) {
+        log.info("[ callback arrived ] simulationId: {}, strategyName: {}", simulationId, strategyName);
+
         SimulationCommand.UpdateSimulationRequest command = new SimulationCommand.UpdateSimulationRequest(simulationId, strategyName);
         simulationService.updateSimulation(command);
     }

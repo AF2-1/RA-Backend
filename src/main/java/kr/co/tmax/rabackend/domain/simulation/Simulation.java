@@ -49,12 +49,11 @@ public class Simulation {
 
     public void update(String strategyName) {
         for (Strategy strategy : strategies) {
-            if (!strategy.getName().equals(strategyName))
-                continue;
-            strategy.complete();
-            cnt++;
+            if (strategy.getName().equals(strategyName) && strategy.isDone()==false) {
+                strategy.complete();
+                cnt++;
+            }
         }
-
         if (cnt == strategies.size()) {
             isDone = true;
         }
