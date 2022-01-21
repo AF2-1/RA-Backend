@@ -63,16 +63,16 @@ public class SimulationController {
         SimulationCommand.GetSimulationsRequest command = new SimulationCommand.GetSimulationsRequest(userId);
         List<Simulation> simulations = simulationService.getSimulations(command);
 
-        SimulationDto.GetSimulationsResponse getSimulationsResponse = SimulationDto.GetSimulationsResponse.create(userId, simulations);
+        SimulationDto.SimulationsResponse simulationsResponse = SimulationDto.SimulationsResponse.create(userId, simulations);
 
         if (isSimulationsDone(simulations))
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(모든 시뮬레이션이 완료되었습니다)", getSimulationsResponse));
+                    .body(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(모든 시뮬레이션이 완료되었습니다)", simulationsResponse));
 
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
-                .body(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(진행중인 시뮬레이션이 있습니다)", getSimulationsResponse));
+                .body(CommonResponse.withMessageAndData("시뮬레이션 목록 확인(진행중인 시뮬레이션이 있습니다)", simulationsResponse));
     }
 
     private boolean isSimulationsDone(List<Simulation> simulations) {
@@ -86,10 +86,10 @@ public class SimulationController {
                                                         @PathVariable String simulationId) {
         SimulationCommand.GetSimulationRequest command = new SimulationCommand.GetSimulationRequest(userId, simulationId);
         Simulation simulation = simulationService.getSimulation(command);
-        SimulationDto.GetSimulationResponse getSimulationResponse = SimulationDto.GetSimulationResponse.create(simulation);
+        SimulationDto.SimulationResponse simulationResponse = SimulationDto.SimulationResponse.create(simulation);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", getSimulationResponse));
+                .body(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", simulationResponse));
     }
 
     @DeleteMapping("users/{userId}/simulations/{simulationId}")

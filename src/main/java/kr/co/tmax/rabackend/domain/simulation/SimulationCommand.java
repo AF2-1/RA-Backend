@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
+import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.*;
 
@@ -22,7 +23,7 @@ public class SimulationCommand {
         private LocalDate endDate;
         private List<String> strategies;
 
-        public Simulation toEntity() {
+        public Simulation createWith(List<Asset> assets) {
             return Simulation.builder()
                     .userId(userId)
                     .assets(assets)
