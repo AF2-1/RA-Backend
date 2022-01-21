@@ -1,5 +1,7 @@
 package kr.co.tmax.rabackend.interfaces.simulation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.*;
@@ -69,16 +71,16 @@ public class SimulationDto {
     @Setter
     @ToString
     @AllArgsConstructor
-    public static class GetSimulationsResponse {
+    public static class SimulationsResponse {
         private String userId;
-        private List<GetSimulationResponse> simulations;
+        private List<SimpleSimulationResponse> simulations;
 
-        public static GetSimulationsResponse create(String userId, List<Simulation> simulations) {
-            List<SimulationDto.GetSimulationResponse> getSimulationResponses = simulations.stream()
-                    .map(SimulationDto.GetSimulationResponse::create)
+        public static SimulationsResponse create(String userId, List<Simulation> simulations) {
+            List<SimpleSimulationResponse> getSimulationResponses = simulations.stream()
+                    .map(SimpleSimulationResponse::create)
                     .collect(Collectors.toList());
 
-            SimulationDto.GetSimulationsResponse getSimulationsResponse = SimulationDto.GetSimulationsResponse.builder()
+            SimulationsResponse getSimulationsResponse = SimulationsResponse.builder()
                     .userId(userId)
                     .simulations(getSimulationResponses)
                     .build();
@@ -92,24 +94,29 @@ public class SimulationDto {
     @Setter
     @ToString
     @AllArgsConstructor
-    public static class GetSimulationResponse {
+    public static class SimpleSimulationResponse {
         private String simulationId;
         private List<String> assets;
         private LocalDate startDate;
         private LocalDate endDate;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createdDatetime;
         private int rebalancingPeriod;
         private boolean isDone;
-        private List<GetStrategyResponse> strategies;
+        private List<SimpleStrategyResponse> strategies;
 
-        public static GetSimulationResponse create(Simulation simulation) {
-            List<SimulationDto.GetStrategyResponse> strategies = simulation.getStrategies().stream()
-                    .map(SimulationDto.GetStrategyResponse::create)
+        public static SimpleSimulationResponse create(Simulation simulation) {
+            List<SimpleStrategyResponse> strategies = simulation.getStrategies().stream()
+                    .map(SimpleStrategyResponse::create)
                     .collect(Collectors.toList());
 
-            return GetSimulationResponse.builder()
+            List<String> assets = simulation.getAssets().stream()
+                    .map(Asset::getName)
+                    .collect(Collectors.toList());
+
+            return SimpleSimulationResponse.builder()
                     .simulationId(simulation.getSimulationId())
-                    .assets(simulation.getAssets())
+                    .assets(assets)
                     .isDone(simulation.isDone())
                     .rebalancingPeriod(simulation.getRebalancingPeriod())
                     .startDate(simulation.getStartDate())
@@ -125,7 +132,61 @@ public class SimulationDto {
     @Setter
     @ToString
     @AllArgsConstructor
-    public static class GetStrategyResponse {
+    public static class SimulationResponse {
+        private String simulationId;
+        private List<AssetResponse> assets;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private LocalDateTime createdDatetime;
+        private int rebalancingPeriod;
+        private boolean isDone;
+        private List<StrategyResponse> strategies;
+
+        public static SimulationResponse create(Simulation simulation) {
+            List<StrategyResponse> strategies = simulation.getStrategies().stream()
+                    .map(StrategyResponse::create)
+                    .collect(Collectors.toList());
+
+            List<AssetResponse> assets = simulation.getAssets().stream()
+                    .map(AssetResponse::create)
+                    .collect(Collectors.toList());
+
+            return SimulationResponse.builder()
+                    .simulationId(simulation.getSimulationId())
+                    .assets(assets)
+                    .isDone(simulation.isDone())
+                    .rebalancingPeriod(simulation.getRebalancingPeriod())
+                    .startDate(simulation.getStartDate())
+                    .endDate(simulation.getEndDate())
+                    .createdDatetime(simulation.getCreatedDatetime())
+                    .strategies(strategies)
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    public static class SimpleStrategyResponse {
+        private String name;
+        private boolean done;
+
+        public static SimpleStrategyResponse create(Strategy strategy) {
+            return SimpleStrategyResponse.builder()
+                    .name(strategy.getName())
+                    .done(strategy.isDone())
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    public static class StrategyResponse {
         private String name;
         private boolean done;
         // todo: 아래 필드 구체화  필요
@@ -134,10 +195,27 @@ public class SimulationDto {
         private Object dailyPfWeights;
         private Object dailyPfValues;
 
-        public static GetStrategyResponse create(Strategy strategy) {
-            return GetStrategyResponse.builder()
+        public static StrategyResponse create(Strategy strategy) {
+            return StrategyResponse.builder()
                     .name(strategy.getName())
                     .done(strategy.isDone())
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    public static class AssetResponse {
+        private String name;
+        private String ticker;
+
+        public static AssetResponse create(Asset asset) {
+            return AssetResponse.builder()
+                    .name(asset.getName())
+                    .ticker(asset.getTicker())
                     .build();
         }
     }

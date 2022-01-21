@@ -1,6 +1,8 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.config.AppProperties;
+import kr.co.tmax.rabackend.domain.asset.Asset;
+import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.exception.BadRequestException;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,11 +25,14 @@ public class SimulationService {
 
     private final SimulationStore simulationStore;
     private final SimulationReader simulationReader;
+    private final AssetReader assetReader;
     private final WebClient webClient;
     private final AppProperties appProperties;
 
     public Simulation registerSimulation(RegisterSimulationRequest request) {
-        Simulation initSimulation = request.toEntity();
+        List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
+        assets.stream().forEach(System.out::println);
+        Simulation initSimulation = request.createWith(assets);
 //        requestAA(initSimulation);
         return simulationStore.store(initSimulation);
     }
@@ -59,7 +65,7 @@ public class SimulationService {
         return RegisterStrategyRequest.builder()
                 .strategy(strategy.getName())
                 .rebalancingLen(simulation.getRebalancingPeriod())
-                .assetList(simulation.getAssets())
+                .assetList(simulation.getAssets().stream().map(Asset::getName).collect(Collectors.toList()))
                 .startDate(simulation.getStartDate())
                 .endDate(simulation.getEndDate())
                 .callbackUrl(appProperties.getAi().getCallBackUrl())

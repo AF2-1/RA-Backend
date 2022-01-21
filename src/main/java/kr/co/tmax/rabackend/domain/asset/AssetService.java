@@ -17,11 +17,11 @@ public class AssetService {
         return assetReader.findAll();
     }
 
-    public List<Asset> findAssetByTicker(String ticker) {
-        return assetReader.findByTicker(ticker);
+    public List<Asset> searchByTicker(String ticker) {
+        return assetReader.searchByTicker(ticker);
     }
 
-    public List<Asset> findAssetByName(String name) {
-        return assetReader.findByName(name);
+    public List<Asset> searchByName(String name) {
+        return assetReader.searchByName(name);
     }
 }

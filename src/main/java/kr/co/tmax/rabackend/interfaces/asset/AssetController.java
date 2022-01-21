@@ -27,13 +27,13 @@ public class AssetController {
         log.info("ticker:{} name:{}", ticker, name);
 
         if (StringUtils.hasText(name)) {
-            List<AssetDto> result = assetService.findAssetByName(name)
+            List<AssetDto> result = assetService.searchByName(name)
                     .stream().map(AssetDto::new).collect(Collectors.toList());
             return CommonResponse.withMessageAndData("이름으로 자산 조회 성공", result);
         }
 
         if (StringUtils.hasText(ticker)) {
-            List<AssetDto> result = assetService.findAssetByTicker(ticker)
+            List<AssetDto> result = assetService.searchByTicker(ticker)
                     .stream().map(AssetDto::new).collect(Collectors.toList());
             return CommonResponse.withMessageAndData("티커로 자산 조회 성공", result);
         }

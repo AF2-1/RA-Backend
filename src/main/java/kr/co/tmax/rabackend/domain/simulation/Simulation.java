@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
+import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class Simulation {
     private String userId;
     private int cnt;
     private boolean isDone;
-    private List<String> assets;
+    private List<Asset> assets;
     private int rebalancingPeriod;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -33,7 +34,7 @@ public class Simulation {
     private List<Strategy> strategies;
 
     @Builder
-    public Simulation(String userId, List<String> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate, List<Strategy> strategies,
+    public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate, List<Strategy> strategies,
                       int cnt) {
         this.simulationId = UUID.randomUUID().toString();
         this.isDone = false;
