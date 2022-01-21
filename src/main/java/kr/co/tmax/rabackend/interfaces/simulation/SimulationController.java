@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.interfaces.simulation;
 
+import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
@@ -35,6 +36,7 @@ public class SimulationController {
         dataBinder.addValidators(simulationRegisterRequestValidator);
     }
 
+    @ApiOperation(value = "시뮬레이션 생성", notes = "시뮬레이션을 생성합니다")
     @PostMapping("/users/{userId}/simulations")
     public ResponseEntity<CommonResponse> registerSimulation(@PathVariable String userId,
                                                              @Validated @RequestBody SimulationDto.RegisterSimulationRequest request,
@@ -58,6 +60,7 @@ public class SimulationController {
                 .build().toUri();
     }
 
+    @ApiOperation(value = "시뮬레이션 목록 조회", notes = "시뮬레이션 목록을 조회합니다")
     @GetMapping("users/{userId}/simulations")
     public ResponseEntity<CommonResponse> getSimulations(@PathVariable String userId) {
         SimulationCommand.GetSimulationsRequest command = new SimulationCommand.GetSimulationsRequest(userId);
@@ -81,6 +84,7 @@ public class SimulationController {
                 .allMatch(Predicate.isEqual(true));
     }
 
+    @ApiOperation(value = "시뮬레이션 단건 조회", notes = "시뮬레이션을 조회합니다")
     @GetMapping("users/{userId}/simulations/{simulationId}")
     public ResponseEntity<CommonResponse> getSimulation(@PathVariable String userId,
                                                         @PathVariable String simulationId) {
@@ -92,6 +96,7 @@ public class SimulationController {
                 .body(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", simulationResponse));
     }
 
+    @ApiOperation(value = "시뮬레이션 삭제", notes = "시뮬레이션을 삭제합니다")
     @DeleteMapping("users/{userId}/simulations/{simulationId}")
     public ResponseEntity<CommonResponse> deleteSimulation(@PathVariable String userId,
                                                            @PathVariable String simulationId) {
@@ -102,6 +107,7 @@ public class SimulationController {
                 .body(CommonResponse.withMessage("시뮬레이션 삭제 완료"));
     }
 
+    @ApiOperation(value = "시뮬레이션 전략 완료", notes = "시뮬레이션의 전략을 완료 상태로 변경합니다")
     @PostMapping("/simulation/callback")
     public void updateSimulation(@RequestParam String simulationId,
                                  @RequestParam String strategyName) {

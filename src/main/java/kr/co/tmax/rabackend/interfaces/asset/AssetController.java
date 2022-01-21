@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.interfaces.asset;
 
+import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class AssetController {
 
     private final AssetService assetService;
 
+    @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
     public CommonResponse findAsset(@RequestParam(required = false) String ticker,
                                     @RequestParam(required = false) String name) {
