@@ -20,6 +20,9 @@ spring:
             scope:
               - email
               - profile
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 app:
   auth:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
