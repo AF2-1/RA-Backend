@@ -1,12 +1,12 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
-import kr.co.tmax.rabackend.domain.asset.Asset;
-import kr.co.tmax.rabackend.domain.strategy.Strategy;
+import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
+import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SimulationCommand {
 
@@ -22,18 +22,6 @@ public class SimulationCommand {
         private LocalDate startDate;
         private LocalDate endDate;
         private List<String> strategies;
-
-        public Simulation createWith(List<Asset> assets) {
-            return Simulation.builder()
-                    .userId(userId)
-                    .assets(assets)
-                    .strategies(strategies.stream().map(Strategy::new).collect(Collectors.toList()))
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .rebalancingPeriod(rebalancingPeriod)
-                    .cnt(0)
-                    .build();
-        }
     }
 
     @Setter
@@ -58,10 +46,15 @@ public class SimulationCommand {
         private String simulationId;
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     public static class UpdateSimulationRequest {
         private String simulationId;
         private String strategyName;
+        LocalDate trainedTime;
+        List<PortfolioWeight> rebalancingWeights;
+        List<PortfolioWeight> dailyWeights;
+        List<PortfolioValue> dailyValues;
     }
 }

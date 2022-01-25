@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,10 +30,10 @@ public class SimulationController {
     private final ModelMapper modelMapper;
     private final SimulationRegisterRequestValidator simulationRegisterRequestValidator;
 
-    @InitBinder
-    public void init(WebDataBinder dataBinder) {
-        dataBinder.addValidators(simulationRegisterRequestValidator);
-    }
+//    @InitBinder
+//    public void init(WebDataBinder dataBinder) {
+//        dataBinder.addValidators(simulationRegisterRequestValidator);
+//    }
 
     @ApiOperation(value = "시뮬레이션 생성", notes = "시뮬레이션을 생성합니다")
     @PostMapping("/users/{userId}/simulations")
@@ -110,10 +109,9 @@ public class SimulationController {
     @ApiOperation(value = "시뮬레이션 전략 완료", notes = "시뮬레이션의 전략을 완료 상태로 변경합니다")
     @PostMapping("/simulation/callback")
     public void updateSimulation(@RequestParam String simulationId,
-                                 @RequestParam String strategyName) {
-        log.info("[ callback arrived ] simulationId: {}, strategyName: {}", simulationId, strategyName);
-
-        SimulationCommand.UpdateSimulationRequest command = new SimulationCommand.UpdateSimulationRequest(simulationId, strategyName);
-        simulationService.updateSimulation(command);
+                                 @RequestParam String strategyName,
+                                 @RequestBody SimulationDto.UpdateSimulationRequest request) {
+        SimulationCommand.UpdateSimulationRequest command = request.toCommand(simulationId, strategyName);
+        simulationService.completeStrategy(command);
     }
 }
