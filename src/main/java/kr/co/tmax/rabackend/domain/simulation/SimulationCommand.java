@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
@@ -53,6 +54,7 @@ public class SimulationCommand {
         private String simulationId;
         private String strategyName;
         LocalDate trainedTime;
+        Strategy.EvaluationResults evaluationResults;
         List<PortfolioWeight> rebalancingWeights;
         List<PortfolioWeight> dailyWeights;
         List<PortfolioValue> dailyValues;

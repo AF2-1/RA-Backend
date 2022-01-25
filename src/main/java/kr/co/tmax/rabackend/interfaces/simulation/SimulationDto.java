@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
@@ -14,9 +15,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SimulationDto {
 
@@ -144,12 +145,10 @@ public class SimulationDto {
                     .map(SimpleSimulationResponse::create)
                     .collect(Collectors.toList());
 
-            SimulationsResponse getSimulationsResponse = SimulationsResponse.builder()
+            return SimulationsResponse.builder()
                     .userId(userId)
                     .simulations(getSimulationResponses)
                     .build();
-
-            return getSimulationsResponse;
         }
     }
 
@@ -212,7 +211,7 @@ public class SimulationDto {
             List<StrategyResponse> strategies = simulation.getStrategies()
                     .entrySet()
                     .stream()
-                    .map(stringStrategyEntry -> StrategyResponse.create())
+                    .map(strategyEntry -> StrategyResponse.create(strategyEntry.getKey(), strategyEntry.getValue()))
                     .collect(Collectors.toList());
 
             List<AssetResponse> assets = simulation.getAssets().stream()
@@ -258,15 +257,17 @@ public class SimulationDto {
         private String name;
         private boolean done;
         // todo: 아래 필드 구체화  필요
-        private Object inferenceResults;
-        private Object evaluationResults;
-        private Object dailyPfWeights;
-        private Object dailyPfValues;
+        private Strategy.EvaluationResults evaluationResults;
+        private List<PortfolioWeight> dailyPfWeights;
+        private List<PortfolioValue> dailyPfValues;
 
-        public static StrategyResponse create() {
+        public static StrategyResponse create(String strategyName, Strategy strategy) {
             return StrategyResponse.builder()
-                    .name("test")
-                    .done(false)
+                    .evaluationResults(strategy.getEvaluationResults())
+                    .name(strategyName)
+                    .dailyPfValues(strategy.getDailyValues())
+                    .done(strategy.isDone())
+                    .dailyPfWeights(strategy.getDailyWeights())
                     .build();
         }
     }
