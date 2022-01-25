@@ -11,6 +11,7 @@ import java.util.List;
 public class Strategy {
     private boolean done;
     private LocalDate trainedTime = null;
+    private EvaluationResults evaluationResults;
     private List<PortfolioWeight> rebalancingWeights = new ArrayList<>();
     private List<PortfolioWeight> dailyWeights = new ArrayList<>();
     private List<PortfolioValue> dailyValues = new ArrayList<>();
@@ -20,18 +21,23 @@ public class Strategy {
     }
 
     public void complete(LocalDate trainedTime,
+                         EvaluationResults evaluationResults,
                          List<PortfolioWeight> rebalancingWeights,
                          List<PortfolioWeight> dailyWeights,
                          List<PortfolioValue> dailyValues) {
         this.done = true;
         this.trainedTime = trainedTime;
+        this.evaluationResults = evaluationResults;
         this.rebalancingWeights = rebalancingWeights;
         this.dailyWeights = dailyWeights;
         this.dailyValues = dailyValues;
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
     public class EvaluationResults {
         private Double totalReturn;
         private Double volatility;
@@ -46,6 +52,7 @@ public class Strategy {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    @ToString
     public static class PortfolioWeight {
         private LocalDate date;
         private List<Double> weights;
@@ -60,6 +67,7 @@ public class Strategy {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    @ToString
     public static class PortfolioValue {
         private LocalDate date;
         private Double weight;
