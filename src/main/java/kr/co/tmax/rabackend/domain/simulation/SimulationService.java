@@ -31,9 +31,8 @@ public class SimulationService {
 
     public Simulation registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
-        assets.stream().forEach(System.out::println);
         Simulation initSimulation = request.createWith(assets);
-//        requestAA(initSimulation);
+        //requestAA(initSimulation);
         return simulationStore.store(initSimulation);
     }
 
