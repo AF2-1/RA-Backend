@@ -1,11 +1,8 @@
 package kr.co.tmax.rabackend.domain.strategy;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,26 +42,30 @@ public class Strategy {
         private Double turnOver;
     }
 
+    @Setter
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class PortfolioWeight {
-        private LocalDateTime date;
+        private LocalDate date;
         private List<Double> weights;
 
         public PortfolioWeight(String date, List<Double> weights) {
-            this.date = LocalDateTime.parse(date);
+            this.date = LocalDate.parse(date);
             this.weights = weights;
         }
     }
 
+    @Setter
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class PortfolioValue {
-        private LocalDateTime date;
+        private LocalDate date;
         private Double weight;
 
         public PortfolioValue(String date, Double weight) {
-            this.date = LocalDateTime.parse(date);
+            this.date = LocalDate.parse(date);
             this.weight = weight;
         }
     }

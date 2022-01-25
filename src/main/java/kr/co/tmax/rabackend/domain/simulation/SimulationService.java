@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -109,6 +108,7 @@ public class SimulationService {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
+        System.out.println(simulation);
         Map<String, Strategy> strategies = simulation.getStrategies();
         if (!strategies.containsKey(command.getStrategyName()))
             throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
@@ -121,5 +121,6 @@ public class SimulationService {
         strategy.complete(command.getTrainedTime(), command.getRebalancingWeights(), command.getDailyWeights(), command.getDailyValues());
         simulation.updateCnt();
         simulationStore.store(simulation);
+        System.out.println(simulation);
     }
 }
