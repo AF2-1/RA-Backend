@@ -3,7 +3,9 @@ package kr.co.tmax.rabackend.interfaces.simulation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
-import kr.co.tmax.rabackend.domain.strategy.Strategy;
+import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
+import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
+import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
 
 import javax.validation.constraints.Max;
@@ -13,6 +15,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SimulationDto {
@@ -55,6 +58,67 @@ public class SimulationDto {
             this.endDate = endDate;
             this.callbackUrl = callbackUrl;
             this.indexRequest = false;
+        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UpdateSimulationRequest {
+        private Model model;
+        private List<Double> recommendedPf;
+        private Map<String, List<Double>> inferenceResults;
+        private EvaluationResults evaluationResults;
+        private Map<String, List<Double>> dailyPfWeights;
+        private Map<String, Double> dailyPfValues;
+
+        public SimulationCommand.UpdateSimulationRequest toCommand(String simulationId, String strategyName) {
+            List<PortfolioWeight> rebalancingWeights = inferenceResults.entrySet()
+                    .stream()
+                    .map(inferenceResult -> new PortfolioWeight(inferenceResult.getKey(), inferenceResult.getValue()))
+                    .collect(Collectors.toList());
+
+            List<PortfolioWeight> dailyWeights = dailyPfWeights
+                    .entrySet()
+                    .stream()
+                    .map(dailyPfWeight -> new PortfolioWeight(dailyPfWeight.getKey(), dailyPfWeight.getValue()))
+                    .collect(Collectors.toList());
+
+            List<PortfolioValue> dailyValues = dailyPfValues
+                    .entrySet()
+                    .stream()
+                    .map(dailyPfValue -> new PortfolioValue(dailyPfValue.getKey(), dailyPfValue.getValue()))
+                    .collect(Collectors.toList());
+
+            return SimulationCommand.UpdateSimulationRequest.builder()
+                    .simulationId(simulationId)
+                    .strategyName(strategyName)
+                    .dailyValues(dailyValues)
+                    .dailyWeights(dailyWeights)
+                    .rebalancingWeights(rebalancingWeights)
+                    .trainedTime(model.getTrainedTime())
+                    .build();
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        public class Model {
+            private List<String> assets;
+            private LocalDate trainedTime;
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        public static class EvaluationResults {
+            private Double totalReturn;
+            private Double volatility;
+            private Double cagr;
+            private Double sharpeRatio;
+            private Double sortinoRatio;
+            private Double mdd;
+            private Double turnOver;
         }
     }
 
@@ -106,8 +170,10 @@ public class SimulationDto {
         private List<SimpleStrategyResponse> strategies;
 
         public static SimpleSimulationResponse create(Simulation simulation) {
-            List<SimpleStrategyResponse> strategies = simulation.getStrategies().stream()
-                    .map(SimpleStrategyResponse::create)
+            List<SimpleStrategyResponse> strategies = simulation.getStrategies()
+                    .entrySet()
+                    .stream()
+                    .map(strategyEntry -> SimpleStrategyResponse.create(strategyEntry.getKey(), strategyEntry.getValue().isDone()) )
                     .collect(Collectors.toList());
 
             List<String> assets = simulation.getAssets().stream()
@@ -143,8 +209,10 @@ public class SimulationDto {
         private List<StrategyResponse> strategies;
 
         public static SimulationResponse create(Simulation simulation) {
-            List<StrategyResponse> strategies = simulation.getStrategies().stream()
-                    .map(StrategyResponse::create)
+            List<StrategyResponse> strategies = simulation.getStrategies()
+                    .entrySet()
+                    .stream()
+                    .map(stringStrategyEntry -> StrategyResponse.create())
                     .collect(Collectors.toList());
 
             List<AssetResponse> assets = simulation.getAssets().stream()
@@ -173,10 +241,10 @@ public class SimulationDto {
         private String name;
         private boolean done;
 
-        public static SimpleStrategyResponse create(Strategy strategy) {
+        public static SimpleStrategyResponse create(String name, boolean isDone) {
             return SimpleStrategyResponse.builder()
-                    .name(strategy.getName())
-                    .done(strategy.isDone())
+                    .name(name)
+                    .done(isDone)
                     .build();
         }
     }
@@ -195,10 +263,10 @@ public class SimulationDto {
         private Object dailyPfWeights;
         private Object dailyPfValues;
 
-        public static StrategyResponse create(Strategy strategy) {
+        public static StrategyResponse create() {
             return StrategyResponse.builder()
-                    .name(strategy.getName())
-                    .done(strategy.isDone())
+                    .name("test")
+                    .done(false)
                     .build();
         }
     }

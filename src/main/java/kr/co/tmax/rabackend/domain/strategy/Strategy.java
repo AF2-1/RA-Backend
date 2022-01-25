@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,19 +12,25 @@ import java.util.List;
 @Getter
 @ToString
 public class Strategy {
-    private String name;
-    private boolean done = false;
-    private LocalDateTime trainedTime = null;
+    private boolean done;
+    private LocalDate trainedTime = null;
     private List<PortfolioWeight> rebalancingWeights = new ArrayList<>();
     private List<PortfolioWeight> dailyWeights = new ArrayList<>();
     private List<PortfolioValue> dailyValues = new ArrayList<>();
 
-    public Strategy(String name) {
-        this.name = name;
+    public Strategy() {
+        this.done = false;
     }
 
-    public void complete() {
+    public void complete(LocalDate trainedTime,
+                         List<PortfolioWeight> rebalancingWeights,
+                         List<PortfolioWeight> dailyWeights,
+                         List<PortfolioValue> dailyValues) {
         this.done = true;
+        this.trainedTime = trainedTime;
+        this.rebalancingWeights = rebalancingWeights;
+        this.dailyWeights = dailyWeights;
+        this.dailyValues = dailyValues;
     }
 
     @Getter
@@ -40,15 +47,25 @@ public class Strategy {
 
     @Getter
     @AllArgsConstructor
-    public class PortfolioWeight {
+    public static class PortfolioWeight {
         private LocalDateTime date;
         private List<Double> weights;
+
+        public PortfolioWeight(String date, List<Double> weights) {
+            this.date = LocalDateTime.parse(date);
+            this.weights = weights;
+        }
     }
 
     @Getter
     @AllArgsConstructor
-    public class PortfolioValue {
+    public static class PortfolioValue {
         private LocalDateTime date;
         private Double weight;
+
+        public PortfolioValue(String date, Double weight) {
+            this.date = LocalDateTime.parse(date);
+            this.weight = weight;
+        }
     }
 }

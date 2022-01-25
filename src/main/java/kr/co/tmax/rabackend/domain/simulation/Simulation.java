@@ -12,7 +12,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -31,32 +33,28 @@ public class Simulation {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDateTime createdDatetime;
-    private List<Strategy> strategies;
+    private Map<String, Strategy> strategies = new HashMap<>();
 
     @Builder
-    public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate, List<Strategy> strategies,
-                      int cnt) {
+    public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate) {
         this.simulationId = UUID.randomUUID().toString();
-        this.isDone = false;
-        this.createdDatetime = LocalDateTime.now();
         this.userId = userId;
+        this.isDone = false;
+        this.cnt = 0;
+        this.createdDatetime = LocalDateTime.now();
         this.assets = assets;
         this.rebalancingPeriod = rebalancingPeriod;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.strategies = strategies;
-        this.cnt = cnt;
     }
 
-    public void update(String strategyName) {
-        for (Strategy strategy : strategies) {
-            if (strategy.getName().equals(strategyName) && strategy.isDone()==false) {
-                strategy.complete();
-                cnt++;
-            }
-        }
-        if (cnt == strategies.size()) {
-            isDone = true;
-        }
+    public void addStrategy(String name, Strategy strategy) {
+        strategies.put(name, strategy);
+    }
+
+    public void updateCnt() {
+        cnt++;
+        if (cnt == strategies.size())
+            this.isDone = true;
     }
 }
