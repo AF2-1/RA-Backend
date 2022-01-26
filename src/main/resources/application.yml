@@ -48,5 +48,6 @@ app:
       - s&p500
   ai:
     url: http://192.168.154.50:9001
+    path: /v2/models/triton-mms/infer
     host: triton-mms.kserve-test.example.com
     callBackUrl: http://192.168.155.91:8080/simulation/callback

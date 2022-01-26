@@ -32,7 +32,8 @@ public class SimulationService {
 
     public Simulation registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
-
+        assets.add(new Asset());
+        log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()
                 .rebalancingPeriod(request.getRebalancingPeriod())
                 .userId(request.getUserId())
@@ -43,7 +44,7 @@ public class SimulationService {
 
         Map<String, Strategy> strategies = simulation.getStrategies();
         request.getStrategies().forEach(strategyName -> strategies.put(strategyName, new Strategy()));
-        //requestAA(initSimulation);
+        requestAA(simulation);
         return simulationStore.store(simulation);
     }
 
@@ -59,9 +60,30 @@ public class SimulationService {
                 .forEach(strategyName -> {
                     RegisterStrategyRequest requestBody = createRequest(simulation, strategyName);
                     SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
-                    log.debug("simulationId: {} strategyName: {} AI response:{}",
+                    log.debug("AI API Called | simulationId: {} strategyName: {} AI response:{}",
                             simulation.getSimulationId(), strategyName, response.toString());
                 });
+    }
+
+    private RegisterStrategyRequest createRequest(Simulation simulation, String strategyName) {
+        String callbackUrl = String.format("%s?simulationId=%s&strategyName=%s",
+                appProperties.getAi().getCallBackUrl(),
+                simulation.getSimulationId(),
+                strategyName);
+
+        RegisterStrategyRequest request = RegisterStrategyRequest.builder()
+                .strategy(strategyName)
+                .rebalancingLen(simulation.getRebalancingPeriod())
+                .assetList(simulation.getAssets().stream().map(Asset::getTicker).collect(Collectors.toList()))
+                .startDate(simulation.getStartDate())
+                .endDate(simulation.getEndDate())
+                .callbackUrl(callbackUrl)
+                .build();
+
+        log.debug("AI API request body: {}",request );
+
+        return request;
+
     }
 
     private SimulationDto.RegisterStrategyResponse executeRequest(RegisterStrategyRequest requestBody) {
@@ -72,17 +94,6 @@ public class SimulationService {
                 .retrieve()
                 .bodyToMono(SimulationDto.RegisterStrategyResponse.class)
                 .block();
-    }
-
-    private RegisterStrategyRequest createRequest(Simulation simulation, String strategyName) {
-        return RegisterStrategyRequest.builder()
-                .strategy(strategyName)
-                .rebalancingLen(simulation.getRebalancingPeriod())
-                .assetList(simulation.getAssets().stream().map(Asset::getName).collect(Collectors.toList()))
-                .startDate(simulation.getStartDate())
-                .endDate(simulation.getEndDate())
-                .callbackUrl(appProperties.getAi().getCallBackUrl())
-                .build();
     }
 
     public List<Simulation> getSimulations(GetSimulationsRequest command) {
@@ -108,7 +119,6 @@ public class SimulationService {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-        System.out.println(simulation);
         Map<String, Strategy> strategies = simulation.getStrategies();
         if (!strategies.containsKey(command.getStrategyName()))
             throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
@@ -121,6 +131,5 @@ public class SimulationService {
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRebalancingWeights(), command.getDailyWeights(), command.getDailyValues());
         simulation.updateCnt();
         simulationStore.store(simulation);
-        System.out.println(simulation);
     }
 }
