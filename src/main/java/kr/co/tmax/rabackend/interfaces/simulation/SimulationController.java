@@ -111,6 +111,7 @@ public class SimulationController {
     public void updateSimulation(@RequestParam String simulationId,
                                  @RequestParam String strategyName,
                                  @RequestBody SimulationDto.UpdateSimulationRequest request) {
+        log.debug("callback called | simulationId: {} strategyName: {}", simulationId, strategyName);
         SimulationCommand.UpdateSimulationRequest command = request.toCommand(simulationId, strategyName);
         simulationService.completeStrategy(command);
     }
