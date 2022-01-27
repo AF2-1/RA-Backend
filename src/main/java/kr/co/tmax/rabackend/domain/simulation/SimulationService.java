@@ -32,7 +32,6 @@ public class SimulationService {
 
     public Simulation registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
-        assets.add(new Asset());
         log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()
                 .rebalancingPeriod(request.getRebalancingPeriod())
@@ -115,7 +114,7 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    public void completeStrategy(UpdateSimulationRequest command) {
+    public void completeStrategy(CompleteStrategyRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 

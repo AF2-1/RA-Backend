@@ -1,4 +1,4 @@
-package kr.co.tmax.rabackend.interfaces.validation;
+package kr.co.tmax.rabackend.interfaces.simulation;
 
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterSimulationRequest;

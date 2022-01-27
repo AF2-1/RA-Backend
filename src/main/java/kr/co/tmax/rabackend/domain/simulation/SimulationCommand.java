@@ -48,11 +48,11 @@ public class SimulationCommand {
         private String simulationId;
     }
 
+    @ToString
     @Builder
     @Getter
     @AllArgsConstructor
-    @ToString
-    public static class UpdateSimulationRequest {
+    public static class CompleteStrategyRequest {
         private String simulationId;
         private String strategyName;
         LocalDate trainedTime;
