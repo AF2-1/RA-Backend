@@ -46,7 +46,9 @@ public class SimulationDto {
         private String strategy;
         private int rebalancingLen;
         private List<String> assetList;
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate startDate;
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate endDate;
         private String callbackUrl;
         private boolean indexRequest;
