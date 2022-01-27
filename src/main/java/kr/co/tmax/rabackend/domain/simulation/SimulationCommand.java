@@ -6,7 +6,6 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class SimulationCommand {
@@ -50,7 +49,7 @@ public class SimulationCommand {
     @Builder
     @Getter
     @AllArgsConstructor
-    public static class UpdateSimulationRequest {
+    public static class CompleteStrategyRequest {
         private String simulationId;
         private String strategyName;
         LocalDate trainedTime;

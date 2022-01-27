@@ -5,7 +5,6 @@ import kr.co.tmax.rabackend.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
-import kr.co.tmax.rabackend.interfaces.validation.SimulationRegisterRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,17 +29,13 @@ public class SimulationController {
     private final ModelMapper modelMapper;
     private final SimulationRegisterRequestValidator simulationRegisterRequestValidator;
 
-//    @InitBinder
-//    public void init(WebDataBinder dataBinder) {
-//        dataBinder.addValidators(simulationRegisterRequestValidator);
-//    }
-
     @ApiOperation(value = "시뮬레이션 생성", notes = "시뮬레이션을 생성합니다")
     @PostMapping("/users/{userId}/simulations")
     public ResponseEntity<CommonResponse> registerSimulation(@PathVariable String userId,
                                                              @Validated @RequestBody SimulationDto.RegisterSimulationRequest request,
                                                              BindingResult bindingResult,
                                                              UriComponentsBuilder uriComponentsBuilder) throws BindException {
+        simulationRegisterRequestValidator.validate(request, bindingResult);
         if (bindingResult.hasErrors())
             throw new BindException(bindingResult);
 
@@ -104,15 +99,5 @@ public class SimulationController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.withMessage("시뮬레이션 삭제 완료"));
-    }
-
-    @ApiOperation(value = "시뮬레이션 전략 완료", notes = "시뮬레이션의 전략을 완료 상태로 변경합니다")
-    @PostMapping("/simulation/callback")
-    public void updateSimulation(@RequestParam String simulationId,
-                                 @RequestParam String strategyName,
-                                 @RequestBody SimulationDto.UpdateSimulationRequest request) {
-        log.debug("callback called | simulationId: {} strategyName: {}", simulationId, strategyName);
-        SimulationCommand.UpdateSimulationRequest command = request.toCommand(simulationId, strategyName);
-        simulationService.completeStrategy(command);
     }
 }

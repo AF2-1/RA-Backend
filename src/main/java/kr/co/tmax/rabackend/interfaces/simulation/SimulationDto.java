@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SimulationDto {
 
@@ -65,7 +64,7 @@ public class SimulationDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class UpdateSimulationRequest {
+    public static class CompleteStrategyRequest {
         private Model model;
         private List<Double> recommendedPf;
         private Map<String, List<Double>> inferenceResults;
@@ -73,7 +72,7 @@ public class SimulationDto {
         private Map<String, List<Double>> dailyPfWeights;
         private Map<String, Double> dailyPfValues;
 
-        public SimulationCommand.UpdateSimulationRequest toCommand(String simulationId, String strategyName) {
+        public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
             List<PortfolioWeight> rebalancingWeights = inferenceResults.entrySet()
                     .stream()
                     .map(inferenceResult -> new PortfolioWeight(inferenceResult.getKey(), inferenceResult.getValue()))
@@ -91,7 +90,7 @@ public class SimulationDto {
                     .map(dailyPfValue -> new PortfolioValue(dailyPfValue.getKey(), dailyPfValue.getValue()))
                     .collect(Collectors.toList());
 
-            return SimulationCommand.UpdateSimulationRequest.builder()
+            return SimulationCommand.CompleteStrategyRequest.builder()
                     .simulationId(simulationId)
                     .strategyName(strategyName)
                     .dailyValues(dailyValues)
@@ -256,7 +255,6 @@ public class SimulationDto {
     public static class StrategyResponse {
         private String name;
         private boolean done;
-        // todo: 아래 필드 구체화  필요
         private Strategy.EvaluationResults evaluationResults;
         private List<PortfolioWeight> dailyPfWeights;
         private List<PortfolioValue> dailyPfValues;

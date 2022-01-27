@@ -115,7 +115,7 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    public void completeStrategy(UpdateSimulationRequest command) {
+    public void completeStrategy(CompleteStrategyRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
