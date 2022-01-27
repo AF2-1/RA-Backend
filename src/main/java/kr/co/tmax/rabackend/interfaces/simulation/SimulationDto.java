@@ -8,6 +8,7 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
+import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SimulationDto {
 
@@ -73,6 +75,10 @@ public class SimulationDto {
         private Map<String, Double> dailyPfValues;
 
         public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
+
+            ModelMapper modelMapper = new ModelMapper();
+            Strategy.EvaluationResults result = modelMapper.map(evaluationResults, Strategy.EvaluationResults.class);
+
             List<PortfolioWeight> rebalancingWeights = inferenceResults.entrySet()
                     .stream()
                     .map(inferenceResult -> new PortfolioWeight(inferenceResult.getKey(), inferenceResult.getValue()))
@@ -91,6 +97,7 @@ public class SimulationDto {
                     .collect(Collectors.toList());
 
             return SimulationCommand.CompleteStrategyRequest.builder()
+                    .evaluationResults(result)
                     .simulationId(simulationId)
                     .strategyName(strategyName)
                     .dailyValues(dailyValues)
@@ -118,7 +125,7 @@ public class SimulationDto {
             private Double sharpeRatio;
             private Double sortinoRatio;
             private Double mdd;
-            private Double turnOver;
+            private Double turnover;
         }
     }
 
@@ -255,6 +262,7 @@ public class SimulationDto {
     public static class StrategyResponse {
         private String name;
         private boolean done;
+        // todo: 아래 필드 구체화  필요
         private Strategy.EvaluationResults evaluationResults;
         private List<PortfolioWeight> dailyPfWeights;
         private List<PortfolioValue> dailyPfValues;

@@ -11,7 +11,7 @@ import java.util.List;
 public class Strategy {
     private boolean done;
     private LocalDate trainedTime = null;
-    private EvaluationResults evaluationResults;
+    private EvaluationResults evaluationResults = new EvaluationResults();
     private List<PortfolioWeight> rebalancingWeights = new ArrayList<>();
     private List<PortfolioWeight> dailyWeights = new ArrayList<>();
     private List<PortfolioValue> dailyValues = new ArrayList<>();
@@ -38,14 +38,14 @@ public class Strategy {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public class EvaluationResults {
+    public static class EvaluationResults {
         private Double totalReturn;
         private Double volatility;
         private Double cagr;
         private Double sharpeRatio;
         private Double sortinoRatio;
         private Double mdd;
-        private Double turnOver;
+        private Double turnover;
     }
 
     @Setter
