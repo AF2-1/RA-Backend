@@ -51,3 +51,9 @@ app:
     path: /v2/models/triton-mms/infer
     host: triton-mms.kserve-test.example.com
     callBackUrl: http://192.168.156.91:8080/simulation/callback
+logging:
+  level:
+    kr:
+      co:
+        tmax:
+          rabackend: debug

@@ -32,7 +32,6 @@ public class SimulationService {
 
     public Simulation registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
-        assets.add(new Asset());
         log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()
                 .rebalancingPeriod(request.getRebalancingPeriod())
