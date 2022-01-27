@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.domain.simulation;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -50,6 +51,7 @@ public class SimulationCommand {
     @Builder
     @Getter
     @AllArgsConstructor
+    @ToString
     public static class UpdateSimulationRequest {
         private String simulationId;
         private String strategyName;
