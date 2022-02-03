@@ -12,6 +12,7 @@ public class Strategy {
     private boolean done;
     private LocalDate trainedTime = null;
     private EvaluationResults evaluationResults = new EvaluationResults();
+    private List<Double> recommendedPf = new ArrayList<>();
     private List<PortfolioWeight> rebalancingWeights = new ArrayList<>();
     private List<PortfolioWeight> dailyWeights = new ArrayList<>();
     private List<PortfolioValue> dailyValues = new ArrayList<>();
@@ -22,12 +23,14 @@ public class Strategy {
 
     public void complete(LocalDate trainedTime,
                          EvaluationResults evaluationResults,
+                         List<Double> recommendedPf,
                          List<PortfolioWeight> rebalancingWeights,
                          List<PortfolioWeight> dailyWeights,
                          List<PortfolioValue> dailyValues) {
         this.done = true;
         this.trainedTime = trainedTime;
         this.evaluationResults = evaluationResults;
+        this.recommendedPf = recommendedPf;
         this.rebalancingWeights = rebalancingWeights;
         this.dailyWeights = dailyWeights;
         this.dailyValues = dailyValues;

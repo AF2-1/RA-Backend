@@ -127,7 +127,7 @@ public class SimulationService {
         if (strategy.isDone())
             return;
 
-        strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRebalancingWeights(),
+        strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
 
         simulation.updateCnt();

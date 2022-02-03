@@ -56,6 +56,7 @@ public class SimulationCommand {
         private String simulationId;
         private String strategyName;
         LocalDate trainedTime;
+        List<Double> recommendedPf;
         Strategy.EvaluationResults evaluationResults;
         List<PortfolioWeight> rebalancingWeights;
         List<PortfolioWeight> dailyWeights;
