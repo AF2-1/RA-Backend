@@ -264,7 +264,7 @@ public class SimulationDto {
     public static class StrategyResponse {
         private String name;
         private boolean done;
-        // todo: 아래 필드 구체화  필요
+        private List<Double> recommendedPf;
         private Strategy.EvaluationResults evaluationResults;
         private List<PortfolioWeight> dailyPfWeights;
         private List<PortfolioValue> dailyPfValues;
@@ -273,6 +273,7 @@ public class SimulationDto {
             return StrategyResponse.builder()
                     .evaluationResults(strategy.getEvaluationResults())
                     .name(strategyName)
+                    .recommendedPf(strategy.getRecommendedPf())
                     .dailyPfValues(strategy.getDailyValues())
                     .done(strategy.isDone())
                     .dailyPfWeights(strategy.getDailyWeights())
