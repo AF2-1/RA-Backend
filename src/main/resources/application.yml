@@ -51,7 +51,7 @@ app:
     url: http://192.168.153.102:9001
     path: /v2/models/triton-mms/infer
     host: triton-mms.kserve-test.example.com
-    callBackUrl: http://192.168.156.91:8080/simulation/callback
+    callBackUrl: http://192.168.153.102:8080/api/v1/simulation/callback
 logging:
   level:
     kr:
