@@ -37,7 +37,7 @@ app:
       - myiosapp://oauth2/redirect
   simulation:
     strategies:
-      - ppo
+      - ppo-growth
       - ew
       - gmv
       - mdp
@@ -46,7 +46,7 @@ app:
       - iv
       - bl
       - kospi
-      - s&p500
+      - snp
   ai:
     url: http://192.168.153.102:9001
     path: /v2/models/triton-mms/infer
