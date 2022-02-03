@@ -100,6 +100,7 @@ public class SimulationDto {
 
             return SimulationCommand.CompleteStrategyRequest.builder()
                     .evaluationResults(result)
+                    .recommendedPf(recommendedPf)
                     .simulationId(simulationId)
                     .strategyName(strategyName)
                     .dailyValues(dailyValues)
