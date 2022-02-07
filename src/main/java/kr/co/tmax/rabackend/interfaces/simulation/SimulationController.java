@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.function.Predicate;
 
-@RequestMapping("/api/v1/")
+@RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -36,11 +36,15 @@ public class SimulationController {
                                                              BindingResult bindingResult,
                                                              UriComponentsBuilder uriComponentsBuilder) throws BindException {
         simulationRegisterRequestValidator.validate(request, bindingResult);
+
+        List<Simulation> simulations = simulationService.getSimulations(new SimulationCommand.GetSimulationsRequest(userId));
+
+
         if (bindingResult.hasErrors())
             throw new BindException(bindingResult);
 
         SimulationCommand.RegisterSimulationRequest command = modelMapper.map(request, SimulationCommand.RegisterSimulationRequest.class);
-        simulationService.registerSimulation(command);
+//        simulationService.registerSimulation(command);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -31,6 +31,11 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
+    public Asset searchByCertainTicker(String ticker) {
+        return assetRepository.searchByCertainTicker(ticker);
+    }
+
+    @Override
     public List<Asset> findByTickerIn(List<String> tickers) {
         return assetRepository.findByTickerIn(tickers);
     }

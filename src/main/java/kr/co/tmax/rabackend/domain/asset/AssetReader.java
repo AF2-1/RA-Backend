@@ -5,6 +5,8 @@ import java.util.List;
 public interface AssetReader {
     List<Asset> searchByTicker(String ticker);
 
+    Asset searchByCertainTicker(String ticker);
+
     List<Asset> searchByName(String name);
 
     List<Asset> findAll();

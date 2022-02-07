@@ -2,10 +2,12 @@ package kr.co.tmax.rabackend.interfaces.asset;
 
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class AssetDto {
     private String index;
     private String ticker;
