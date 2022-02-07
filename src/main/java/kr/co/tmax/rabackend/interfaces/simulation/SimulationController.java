@@ -38,13 +38,14 @@ public class SimulationController {
         simulationRegisterRequestValidator.validate(request, bindingResult);
 
         List<Simulation> simulations = simulationService.getSimulations(new SimulationCommand.GetSimulationsRequest(userId));
-
+        System.out.println("simulations = " + simulations);
+        simulationRegisterRequestValidator.checkConcurrentSimulation(simulations, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new BindException(bindingResult);
 
         SimulationCommand.RegisterSimulationRequest command = modelMapper.map(request, SimulationCommand.RegisterSimulationRequest.class);
-//        simulationService.registerSimulation(command);
+        simulationService.registerSimulation(command);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

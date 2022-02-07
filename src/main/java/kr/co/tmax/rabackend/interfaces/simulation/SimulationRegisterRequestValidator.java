@@ -40,6 +40,10 @@ public class SimulationRegisterRequestValidator implements Validator {
         RegisterSimulationRequest request = (RegisterSimulationRequest) target;
         checkValidStrategy(request.getStrategies(), errors);
         checkValidDate(request.getStartDate(), request.getEndDate(), request.getAssets(), errors);
+
+
+//        checkConcurrentSimulation(response.getSimulations(), errors);
+
     }
 
     private void checkValidStrategy(List<String> strategies, Errors errors) {
@@ -53,10 +57,10 @@ public class SimulationRegisterRequestValidator implements Validator {
 //        request.getAssets()
     }
 
-    private void checkConcurrentSimulation(List<Simulation> simulations, Errors errors) {
+    public void checkConcurrentSimulation(List<Simulation> simulations, Errors errors) {
         // todo: 현재 유저가 이미 진행중인 시뮬레이션이 있다면 error 담기
         if (simulations.stream().anyMatch(s -> !s.isDone()))
-            errors.rejectValue("simulation", "bad.request", null, "진행중인 시뮬레이션이 있습니다");
+            errors.rejectValue("strategies", "simulation.running", null, null);
     }
 
     private void checkValidAsset() {
@@ -65,16 +69,12 @@ public class SimulationRegisterRequestValidator implements Validator {
 
     private void checkValidDate(LocalDate startDate, LocalDate endDate, List<String> assets, Errors errors) {
         List<Asset> assetList = assets.stream().map(assetService::searchByCertainTicker).collect(Collectors.toList());
-        LocalDate validStartDate = LocalDate.from(assetList.stream().map(Asset::getStartDate).max(LocalDateTime::compareTo).orElseThrow(null));
-        LocalDate validEndDate = LocalDate.from(assetList.stream().map(Asset::getEndDate).min(LocalDateTime::compareTo).orElseThrow(null));
+        LocalDate validStartDate = LocalDate.from(assetList.stream().map(Asset::getStartDate)
+                .max(LocalDateTime::compareTo).orElseThrow(null));
+        LocalDate validEndDate = LocalDate.from(assetList.stream().map(Asset::getEndDate)
+                .min(LocalDateTime::compareTo).orElseThrow(null));
 
-        if(startDate.isBefore(validStartDate))
-            errors.rejectValue("startDate", "range.startDate", new Object[]{validStartDate}, null);
-
-        if(endDate.isAfter(validEndDate))
-            errors.rejectValue("endDate", "range.endDate", new Object[]{validEndDate}, null);
-
-        if(startDate.isAfter(endDate))
+        if(startDate.isAfter(endDate) || endDate.isAfter(validEndDate) || startDate.isBefore(validStartDate))
             errors.rejectValue("endDate", "range.period", new Object[]{validStartDate, validEndDate}, null);
     }
 }
