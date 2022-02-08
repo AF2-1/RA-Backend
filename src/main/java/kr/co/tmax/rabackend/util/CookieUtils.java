@@ -20,7 +20,6 @@ public class CookieUtils {
                 }
             }
         }
-
         return Optional.empty();
     }
 

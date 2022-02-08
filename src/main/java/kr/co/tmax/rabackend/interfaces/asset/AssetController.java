@@ -2,9 +2,11 @@ package kr.co.tmax.rabackend.interfaces.asset;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.common.CommonResponse;
+import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class AssetController {
 
     private final AssetService assetService;
+    private final ModelMapper modelMapper;
 
     @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
@@ -35,8 +38,8 @@ public class AssetController {
         }
 
         if (StringUtils.hasText(ticker)) {
-            List<AssetDto> result = assetService.searchByTicker(ticker)
-                    .stream().map(AssetDto::new).collect(Collectors.toList());
+            AssetDto result = modelMapper.map(assetService.searchBySuggestionTicker(ticker), AssetDto.class);
+            System.out.println("result = " + result);
             return CommonResponse.withMessageAndData("티커로 자산 조회 성공", result);
         }
 

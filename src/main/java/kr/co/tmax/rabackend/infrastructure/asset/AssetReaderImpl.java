@@ -26,7 +26,12 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
-    public List<Asset> searchByTicker(String ticker) {
+    public List<Asset> searchBySuggestionTicker(String ticker) {
+        return assetRepository.searchBySuggestionTicker(ticker);
+    }
+
+    @Override
+    public Asset searchByTicker(String ticker) {
         return assetRepository.searchByTicker(ticker);
     }
 
