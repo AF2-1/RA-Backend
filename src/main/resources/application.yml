@@ -45,7 +45,6 @@ app:
       - mvo
       - rp
       - iv
-      - bl
       - kospi
       - snp
   ai:

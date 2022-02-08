@@ -39,4 +39,9 @@ public class AssetReaderImpl implements AssetReader {
     public List<Asset> findByTickerIn(List<String> tickers) {
         return assetRepository.findByTickerIn(tickers);
     }
+
+    @Override
+    public boolean existsByTicker(String ticker) {
+        return assetRepository.existsByTicker(ticker);
+    }
 }
