@@ -38,7 +38,7 @@ public class AssetController {
         }
 
         if (StringUtils.hasText(ticker)) {
-            AssetDto result = modelMapper.map(assetService.searchByTicker(ticker), AssetDto.class);
+            AssetDto result = modelMapper.map(assetService.searchBySuggestionTicker(ticker), AssetDto.class);
             System.out.println("result = " + result);
             return CommonResponse.withMessageAndData("티커로 자산 조회 성공", result);
         }

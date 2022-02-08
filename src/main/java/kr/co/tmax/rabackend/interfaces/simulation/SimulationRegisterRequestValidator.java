@@ -16,6 +16,7 @@ import org.springframework.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,11 +40,8 @@ public class SimulationRegisterRequestValidator implements Validator {
         log.debug("strategies: {}", appProperties.getSimulation().getStrategies());
         RegisterSimulationRequest request = (RegisterSimulationRequest) target;
         checkValidStrategy(request.getStrategies(), errors);
+//        checkValidAsset(request.getAssets(), errors);
         checkValidDate(request.getStartDate(), request.getEndDate(), request.getAssets(), errors);
-
-
-//        checkConcurrentSimulation(response.getSimulations(), errors);
-
     }
 
     private void checkValidStrategy(List<String> strategies, Errors errors) {
@@ -63,18 +61,20 @@ public class SimulationRegisterRequestValidator implements Validator {
             errors.rejectValue("strategies", "simulation.running", null, null);
     }
 
-    private void checkValidAsset() {
-        // todo: 유효한 자산인지 체크 유효하지 않다면 error 담기
-    }
+//    private void checkValidAsset(List<String> assets, Errors errors) {
+//        // todo: 유효한 자산인지 체크 유효하지 않다면 error 담기
+//        if (assets.stream().map(assetService::searchByTicker).anyMatch(Objects::isNull))
+//            errors.rejectValue("assets", "bad.request", null, null);
+//    }
 
     private void checkValidDate(LocalDate startDate, LocalDate endDate, List<String> assets, Errors errors) {
-        List<Asset> assetList = assets.stream().map(assetService::searchByCertainTicker).collect(Collectors.toList());
+        List<Asset> assetList = assets.stream().map(assetService::searchByTicker).collect(Collectors.toList());
         LocalDate validStartDate = LocalDate.from(assetList.stream().map(Asset::getStartDate)
                 .max(LocalDateTime::compareTo).orElseThrow(null));
         LocalDate validEndDate = LocalDate.from(assetList.stream().map(Asset::getEndDate)
                 .min(LocalDateTime::compareTo).orElseThrow(null));
 
         if(startDate.isAfter(endDate) || endDate.isAfter(validEndDate) || startDate.isBefore(validStartDate))
-            errors.rejectValue("endDate", "range.period", new Object[]{validStartDate, validEndDate}, null);
+            errors.rejectValue("endDate", "bad.request", new Object[]{validStartDate, validEndDate}, null);
     }
 }
