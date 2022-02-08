@@ -28,8 +28,7 @@ app:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     tokenExpirationMsec: 864000000
   cors:
-    allowedOrigins: http://localhost:8080
-    allowedFront: http://192.168.0.4:8080
+    allowedOrigins: http://robo.tmax.co.kr:8888
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
@@ -38,6 +37,8 @@ app:
   simulation:
     strategies:
       - ppo-growth
+      - ppo-neutral
+      - ppo-stabble
       - ew
       - gmv
       - mdp
