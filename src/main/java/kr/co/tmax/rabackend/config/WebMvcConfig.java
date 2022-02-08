@@ -14,13 +14,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${app.cors.allowedOrigins}")
     private String[] allowedOrigins;
 
-    @Value("${app.cors.allowedFront}")
-    private String[] allowedFront;
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns(allowedOrigins)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

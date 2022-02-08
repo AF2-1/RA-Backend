@@ -35,8 +35,8 @@ public class SimulationController {
                                                              @Validated @RequestBody SimulationDto.RegisterSimulationRequest request,
                                                              BindingResult bindingResult,
                                                              UriComponentsBuilder uriComponentsBuilder) throws BindException {
-        List<Simulation> simulations = simulationService.getSimulations(new SimulationCommand.GetSimulationsRequest(userId));
 
+        List<Simulation> simulations = simulationService.getSimulations(new SimulationCommand.GetSimulationsRequest(userId));
         simulationRegisterRequestValidator.checkConcurrentSimulation(simulations, bindingResult);
         simulationRegisterRequestValidator.validate(request, bindingResult);
 
