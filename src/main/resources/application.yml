@@ -38,7 +38,7 @@ app:
     strategies:
       - ppo-growth
       - ppo-neutral
-      - ppo-stabble
+      - ppo-stable
       - ew
       - gmv
       - mdp
