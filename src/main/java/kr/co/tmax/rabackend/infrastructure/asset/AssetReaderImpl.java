@@ -22,7 +22,7 @@ public class AssetReaderImpl implements AssetReader {
 
     @Override
     public List<Asset> searchByName(String name) {
-        return assetRepository.searchByName(name);
+        return assetRepository.searchByNameIgnoreCase(name);
     }
 
     @Override
