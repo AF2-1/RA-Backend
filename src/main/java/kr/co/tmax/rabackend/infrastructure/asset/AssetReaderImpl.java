@@ -22,16 +22,11 @@ public class AssetReaderImpl implements AssetReader {
 
     @Override
     public List<Asset> searchByName(String name) {
-        return assetRepository.searchByNameIgnoreCase(name);
+        return assetRepository.searchByName(name);
     }
 
     @Override
-    public List<Asset> searchBySuggestionTicker(String ticker) {
-        return assetRepository.searchBySuggestionTicker(ticker);
-    }
-
-    @Override
-    public Asset searchByTicker(String ticker) {
+    public List<Asset> searchByTicker(String ticker) {
         return assetRepository.searchByTicker(ticker);
     }
 

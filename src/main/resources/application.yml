@@ -3,12 +3,12 @@ spring:
     basename: errors
   data:
     mongodb:
-      host: mongo
+      host: localhost
       port: 27017
       database: ra
-      username: tmaxrobo
-      password: tmaxrobo
-      authentication-database: admin
+#      username: tmaxrobo
+#      password: tmaxrobo
+#      authentication-database: admin
   security:
     oauth2:
       client:

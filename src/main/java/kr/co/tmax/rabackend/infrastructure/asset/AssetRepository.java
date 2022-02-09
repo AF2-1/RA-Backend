@@ -9,13 +9,11 @@ import java.util.List;
 
 public interface AssetRepository extends MongoRepository<Asset, String> {
 
-    Asset searchByTicker(String ticker);
-
     @Query("{ 'ticker' : { $regex: ?0, $options: 'i' } } }")
-    List<Asset> searchBySuggestionTicker(String ticker);
+    List<Asset> searchByTicker(String ticker);
 
     @Query("{ 'name' : { $regex: ?0, $options: 'i' } } }")
-    List<Asset> searchByNameIgnoreCase(String name);
+    List<Asset> searchByName(String name);
 
     List<Asset> findByTickerIn(List<String> tickers);
 
