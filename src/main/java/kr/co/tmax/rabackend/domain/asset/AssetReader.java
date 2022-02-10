@@ -12,5 +12,7 @@ public interface AssetReader {
 
     List<Asset> findByTickerIn(List<String> tickers);
 
+    Asset findByTicker(String ticker);
+
     boolean existsByTicker(String ticker);
 }

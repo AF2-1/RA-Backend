@@ -5,7 +5,6 @@ import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Slf4j
@@ -26,9 +25,12 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
-    public List<Asset> searchByTicker(String ticker) {
+    public List<Asset> searchByTicker(String ticker){
         return assetRepository.searchByTicker(ticker);
     }
+
+    @Override
+    public Asset findByTicker(String ticker) { return assetRepository.findByTicker(ticker); }
 
     @Override
     public List<Asset> findByTickerIn(List<String> tickers) {
