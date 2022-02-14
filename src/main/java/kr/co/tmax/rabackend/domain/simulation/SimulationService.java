@@ -115,7 +115,6 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
@@ -129,10 +128,13 @@ public class SimulationService {
         if (strategy.isDone())
             return;
 
+        log.info("Before complete Strategy {}", strategy);
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
+        log.info("After complete Strategy {}", strategy);
 
         simulation.updateCnt();
+        log.info("시뮬레이션 정보: {}", simulation);
         simulationStore.store(simulation);
     }
 }

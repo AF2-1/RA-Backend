@@ -1,6 +1,9 @@
 package kr.co.tmax.rabackend.domain.strategy;
 
 import lombok.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class Strategy {
         this.done = false;
     }
 
+    @Async
     public void complete(LocalDate trainedTime,
                          EvaluationResults evaluationResults,
                          List<Double> recommendedPf,

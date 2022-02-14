@@ -8,6 +8,7 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 public class SimulationDto {
 
     @Getter
@@ -77,7 +79,6 @@ public class SimulationDto {
         private Map<String, List<Double>> dailyPfWeights;
         private Map<String, Double> dailyPfValues;
 
-        @Transactional
         public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
 
             ModelMapper modelMapper = new ModelMapper();
@@ -99,6 +100,8 @@ public class SimulationDto {
                     .stream()
                     .map(dailyPfValue -> new PortfolioValue(dailyPfValue.getKey(), dailyPfValue.getValue()))
                     .collect(Collectors.toList());
+
+            log.info("toCommand 호출");
 
             return SimulationCommand.CompleteStrategyRequest.builder()
                     .evaluationResults(result)

@@ -9,6 +9,8 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -53,7 +55,7 @@ public class Simulation {
         strategies.put(name, strategy);
     }
 
-    @Transactional
+    @Async
     public void updateCnt() {
         cnt++;
         if (cnt == strategies.size())
