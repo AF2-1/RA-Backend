@@ -22,7 +22,6 @@ public class StrategyController {
 
     @ApiOperation(value = "시뮬레이션 전략 완료", notes = "시뮬레이션의 전략을 완료 상태로 변경합니다")
     @PostMapping("/simulation/callback")
-    @Transactional
     public void completeStrategy(@RequestParam String simulationId,
                                  @RequestParam String strategyName,
                                  @Validated @RequestBody SimulationDto.CompleteStrategyRequest request,

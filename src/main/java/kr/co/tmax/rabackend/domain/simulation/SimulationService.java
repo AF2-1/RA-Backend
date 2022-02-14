@@ -19,7 +19,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -128,7 +130,7 @@ public class SimulationService {
 
         Strategy strategy = strategies.get(command.getStrategyName());
 
-        if (strategy.isDone())
+        if (Objects.equals(strategy.getDone(), new AtomicBoolean(true)))
             return;
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
@@ -136,6 +138,6 @@ public class SimulationService {
 
         simulation.updateCnt();
         simulationStore.store(simulation);
-        log.info("strategy Name: {}, strategy Done: {} 업데이트", command.getStrategyName(), strategy.isDone());
+        log.info("strategy Name: {}, strategy Done: {} 업데이트", command.getStrategyName(), strategy.getDone());
     }
 }
