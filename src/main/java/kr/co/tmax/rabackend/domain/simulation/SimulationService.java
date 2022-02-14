@@ -136,6 +136,7 @@ public class SimulationService {
 
         simulation.updateCnt();
         simulationStore.store(simulation);
+
         log.info("strategy Name: {}, strategy Done: {} 업데이트", command.getStrategyName(), strategy.isDone());
     }
 }
