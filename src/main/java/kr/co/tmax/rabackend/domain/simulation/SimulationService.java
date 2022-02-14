@@ -19,7 +19,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -130,7 +129,7 @@ public class SimulationService {
 
         Strategy strategy = strategies.get(command.getStrategyName());
 
-        if (Objects.equals(strategy.getDone(), new AtomicBoolean(true)))
+        if (strategy.getDone().equals(new AtomicBoolean(true)))
             return;
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
