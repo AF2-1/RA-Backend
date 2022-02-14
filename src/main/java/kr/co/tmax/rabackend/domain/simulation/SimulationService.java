@@ -18,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -119,7 +120,8 @@ public class SimulationService {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-        Map<String, Strategy> strategies = simulation.getStrategies();
+        var strategies = new ConcurrentHashMap<String, Strategy>();
+        strategies = simulation.getStrategies();
         if (!strategies.containsKey(command.getStrategyName()))
             throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
 
