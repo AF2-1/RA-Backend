@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @ToString
@@ -36,7 +37,7 @@ public class Simulation {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDateTime createdDatetime;
-    private Map<String, Strategy> strategies = new HashMap<>();
+    private ConcurrentHashMap<String, Strategy> strategies = new ConcurrentHashMap<>();
 
     @Builder
     public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate) {
