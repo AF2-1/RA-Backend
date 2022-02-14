@@ -56,7 +56,6 @@ public class Simulation {
         strategies.put(name, strategy);
     }
 
-    @Async
     public void updateCnt() {
         cnt++;
         if (cnt == strategies.size())
