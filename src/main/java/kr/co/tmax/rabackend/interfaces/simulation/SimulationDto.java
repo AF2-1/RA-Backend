@@ -9,6 +9,7 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -76,6 +77,7 @@ public class SimulationDto {
         private Map<String, List<Double>> dailyPfWeights;
         private Map<String, Double> dailyPfValues;
 
+        @Transactional
         public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
 
             ModelMapper modelMapper = new ModelMapper();

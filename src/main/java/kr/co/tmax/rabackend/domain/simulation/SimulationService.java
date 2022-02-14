@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -114,6 +115,7 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
+    @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
