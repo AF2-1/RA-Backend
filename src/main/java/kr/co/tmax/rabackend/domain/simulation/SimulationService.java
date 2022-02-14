@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class SimulationService {
 
     private final SimulationStore simulationStore;
@@ -115,6 +116,7 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
+    @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
