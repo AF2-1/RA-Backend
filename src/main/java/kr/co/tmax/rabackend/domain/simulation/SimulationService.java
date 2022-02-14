@@ -132,10 +132,11 @@ public class SimulationService {
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
         log.info("After complete Strategy");
-        log.info("strategy Name: {}, strategy Done: {}", command.getStrategyName(), strategy.isDone());
 
         simulation.updateCnt();
         log.info("시뮬레이션 업데이트");
         simulationStore.store(simulation);
+        log.info("strategy Name: {}, strategy Done: {}", command.getStrategyName(), strategy.isDone());
+        log.info("해당 전략 필드 저장 시뮬레이션 디비에 저장 완료");
     }
 }
