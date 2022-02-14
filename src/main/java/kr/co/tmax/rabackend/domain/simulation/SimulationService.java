@@ -132,6 +132,7 @@ public class SimulationService {
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
         log.info("After complete Strategy");
+        log.info("strategy Name: {}, strategy Done: {}", command.getStrategyName(), strategy.isDone());
 
         simulation.updateCnt();
         log.info("시뮬레이션 업데이트");
