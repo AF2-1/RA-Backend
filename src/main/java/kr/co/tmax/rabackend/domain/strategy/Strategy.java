@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 @ToString
-@Async
 public class Strategy {
-    private boolean done;
+    private AtomicBoolean done;
     private LocalDate trainedTime = null;
     private EvaluationResults evaluationResults = new EvaluationResults();
     private List<Double> recommendedPf = new ArrayList<>();
@@ -22,7 +22,7 @@ public class Strategy {
     private List<PortfolioValue> dailyValues = new ArrayList<>();
 
     public Strategy() {
-        this.done = false;
+        this.done = new AtomicBoolean(false);
     }
 
     public void complete(LocalDate trainedTime,
@@ -31,7 +31,7 @@ public class Strategy {
                          List<PortfolioWeight> rebalancingWeights,
                          List<PortfolioWeight> dailyWeights,
                          List<PortfolioValue> dailyValues) {
-        this.done = true;
+        this.done = new AtomicBoolean(true);
         this.trainedTime = trainedTime;
         this.evaluationResults = evaluationResults;
         this.recommendedPf = recommendedPf;
