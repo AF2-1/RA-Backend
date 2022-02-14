@@ -134,7 +134,7 @@ public class SimulationService {
         log.info("After complete Strategy");
 
         simulation.updateCnt();
-        log.info("시뮬레이션 정보: {}", simulation);
+        log.info("시뮬레이션 업데이트");
         simulationStore.store(simulation);
     }
 }
