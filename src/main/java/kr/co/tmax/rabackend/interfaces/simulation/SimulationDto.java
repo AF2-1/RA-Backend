@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -188,7 +189,7 @@ public class SimulationDto {
             List<SimpleStrategyResponse> strategies = simulation.getStrategies()
                     .entrySet()
                     .stream()
-                    .map(strategyEntry -> SimpleStrategyResponse.create(strategyEntry.getKey(), strategyEntry.getValue().isDone()) )
+                    .map(strategyEntry -> SimpleStrategyResponse.create(strategyEntry.getKey(), strategyEntry.getValue().getDone()) )
                     .collect(Collectors.toList());
 
             List<String> assets = simulation.getAssets().stream()
@@ -254,9 +255,9 @@ public class SimulationDto {
     @AllArgsConstructor
     public static class SimpleStrategyResponse {
         private String name;
-        private boolean done;
+        private AtomicBoolean done;
 
-        public static SimpleStrategyResponse create(String name, boolean isDone) {
+        public static SimpleStrategyResponse create(String name, AtomicBoolean isDone) {
             return SimpleStrategyResponse.builder()
                     .name(name)
                     .done(isDone)
@@ -271,7 +272,7 @@ public class SimulationDto {
     @AllArgsConstructor
     public static class StrategyResponse {
         private String name;
-        private boolean done;
+        private AtomicBoolean done;
         private List<Double> recommendedPf;
         private Strategy.EvaluationResults evaluationResults;
         private List<PortfolioWeight> dailyPfWeights;
@@ -283,7 +284,7 @@ public class SimulationDto {
                     .name(strategyName)
                     .recommendedPf(strategy.getRecommendedPf())
                     .dailyPfValues(strategy.getDailyValues())
-                    .done(strategy.isDone())
+                    .done(strategy.getDone())
                     .dailyPfWeights(strategy.getDailyWeights())
                     .build();
         }
