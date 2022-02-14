@@ -12,6 +12,7 @@ import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategy
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -130,15 +131,11 @@ public class SimulationService {
         if (strategy.isDone())
             return;
 
-        log.info("Before complete Strategy");
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
-        log.info("After complete Strategy");
 
         simulation.updateCnt();
-        log.info("시뮬레이션 업데이트");
         simulationStore.store(simulation);
-        log.info("strategy Name: {}, strategy Done: {}", command.getStrategyName(), strategy.isDone());
-        log.info("해당 전략 필드 저장 시뮬레이션 디비에 저장 완료");
+        log.info("strategy Name: {}, strategy Done: {} 업데이트", command.getStrategyName(), strategy.isDone());
     }
 }

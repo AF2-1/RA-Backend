@@ -11,6 +11,7 @@ import java.util.List;
 
 @Getter
 @ToString
+@Async
 public class Strategy {
     private boolean done;
     private LocalDate trainedTime = null;
@@ -24,7 +25,6 @@ public class Strategy {
         this.done = false;
     }
 
-    @Async
     public void complete(LocalDate trainedTime,
                          EvaluationResults evaluationResults,
                          List<Double> recommendedPf,
