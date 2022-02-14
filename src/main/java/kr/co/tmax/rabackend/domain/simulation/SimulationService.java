@@ -128,13 +128,12 @@ public class SimulationService {
         if (strategy.isDone())
             return;
 
-        log.info("Before complete Strategy");
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
-        log.info("After complete Strategy");
 
         simulation.updateCnt();
-        log.info("시뮬레이션 업데이트");
+        log.info("전략 이름: {} 완료 여부: {}", command.getStrategyName(), strategy.isDone());
+
         simulationStore.store(simulation);
     }
 }
