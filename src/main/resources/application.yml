@@ -9,6 +9,19 @@ spring:
       username: tmaxrobo
       password: tmaxrobo
       authentication-database: admin
+      Connectiontimeoutms: 10000 # TCP connection timeout, MS
+      Readtimeoutms: 15000 # TCP read timeout, MS
+      Poolmaxwaittimes: 3000 # the waiting time of client blocking when no connection is available in the connection pool, in milliseconds
+      Connection maxidletimems: 60000
+      Connectionmaxlifetimems: 120000
+      Heartbeat frequency MS: 20000 # heartbeat detection sending frequency, unit: ms
+      Minheartbeat frequency MS: 8000 # minimum heartbeat detection sending frequency, in milliseconds
+      Heartbeat connection timeouts MS: 10000 # heartbeat detection TCP connection timeout, unit: ms
+      Heartbeat readtimeouts: 15000
+      Connectionsperhost: 100 # TCP connections per host
+      Minconnectionsperhost: 5 # minimum number of TCP connections per host
+      #The multiplier is used to calculate how many threads are allowed to block while waiting for available TCP connections. The algorithm is threadallowedtoblock for connection multiplier * connections perhost. The current configuration allows 10 * 20 threads to block
+      threadsAllowedToBlockForConnectionMultiplier: 10
   security:
     oauth2:
       client:
