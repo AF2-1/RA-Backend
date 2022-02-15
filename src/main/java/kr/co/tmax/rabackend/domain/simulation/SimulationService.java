@@ -12,9 +12,12 @@ import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategy
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -99,10 +102,15 @@ public class SimulationService {
     }
 
     private SimulationDto.RegisterStrategyResponse executeRequestSync(RegisterStrategyRequest requestBody) {
-        var request = new HttpEntity<>(requestBody);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("Host", appProperties.getAi().getHost());
+        var request = new HttpEntity<>(requestBody, headers);
+
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate
-                .exchange(appProperties.getAi().getPath(), HttpMethod.POST, request,
+                .exchange(appProperties.getAi().getPath() + appProperties.getAi().getPath(), HttpMethod.POST, request,
                 SimulationDto.RegisterStrategyResponse.class).getBody();
     }
 
