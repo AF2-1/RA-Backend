@@ -11,9 +11,11 @@ import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -59,7 +61,7 @@ public class SimulationService {
                 .keySet()
                 .forEach(strategyName -> {
                     RegisterStrategyRequest requestBody = createRequest(simulation, strategyName);
-                    SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
+                    SimulationDto.RegisterStrategyResponse response = executeRequestSync(requestBody);
                     log.debug("AI API Called | simulationId: {} strategyName: {} AI response:{}",
                             simulation.getSimulationId(), strategyName, response.toString());
                 });
@@ -96,6 +98,14 @@ public class SimulationService {
                 .block();
     }
 
+    private SimulationDto.RegisterStrategyResponse executeRequestSync(RegisterStrategyRequest requestBody) {
+        var request = new HttpEntity<>(requestBody);
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate
+                .exchange(appProperties.getAi().getPath(), HttpMethod.POST, request,
+                SimulationDto.RegisterStrategyResponse.class).getBody();
+    }
+
     public List<Simulation> getSimulations(GetSimulationsRequest command) {
         return simulationReader.findByUserId(command.getUserId());
     }
@@ -115,7 +125,6 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
         // todo dirty read
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
