@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableConfigurationProperties(AppProperties.class)
 @SpringBootApplication
-@EnableAsync
 public class RaBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(RaBackendApplication.class, args);

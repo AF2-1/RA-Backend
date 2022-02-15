@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
 public class SimulationService {
 
     private final SimulationStore simulationStore;
@@ -118,6 +117,7 @@ public class SimulationService {
 
     @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
+        // todo dirty read
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
                 new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
@@ -136,6 +136,7 @@ public class SimulationService {
         simulation.updateCnt();
         log.info("전략 이름: {} 완료 여부: {}", command.getStrategyName(), strategy.isDone());
 
+        //todo dirty read
         simulationStore.store(simulation);
     }
 }
