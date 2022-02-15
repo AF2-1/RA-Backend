@@ -109,9 +109,9 @@ public class SimulationService {
         var request = new HttpEntity<>(requestBody, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        log.info("uri: {}", appProperties.getAi().getPath() + appProperties.getAi().getPath());
+        log.info("uri: {}", appProperties.getAi().getUrl() + appProperties.getAi().getPath());
         return restTemplate
-                .exchange(appProperties.getAi().getPath() + appProperties.getAi().getPath(), HttpMethod.POST, request,
+                .exchange(appProperties.getAi().getUrl() + appProperties.getAi().getPath(), HttpMethod.POST, request,
                 SimulationDto.RegisterStrategyResponse.class).getBody();
     }
 
