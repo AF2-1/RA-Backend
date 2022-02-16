@@ -24,13 +24,13 @@ public class Strategy {
         this.done = false;
     }
 
-    @Async
+    // @Async
     public void complete(LocalDate trainedTime,
-                         EvaluationResults evaluationResults,
-                         List<Double> recommendedPf,
-                         List<PortfolioWeight> rebalancingWeights,
-                         List<PortfolioWeight> dailyWeights,
-                         List<PortfolioValue> dailyValues) {
+            EvaluationResults evaluationResults,
+            List<Double> recommendedPf,
+            List<PortfolioWeight> rebalancingWeights,
+            List<PortfolioWeight> dailyWeights,
+            List<PortfolioValue> dailyValues) {
         this.done = true;
         this.trainedTime = trainedTime;
         this.evaluationResults = evaluationResults;

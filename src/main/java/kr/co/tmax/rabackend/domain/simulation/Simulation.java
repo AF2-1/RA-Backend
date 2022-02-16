@@ -39,7 +39,8 @@ public class Simulation {
     private Map<String, Strategy> strategies = new HashMap<>();
 
     @Builder
-    public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate) {
+    public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate,
+            LocalDate endDate) {
         this.simulationId = UUID.randomUUID().toString();
         this.userId = userId;
         this.isDone = false;
@@ -55,7 +56,7 @@ public class Simulation {
         strategies.put(name, strategy);
     }
 
-    @Async
+    // @Async
     public void updateCnt() {
         cnt++;
         if (cnt == strategies.size())

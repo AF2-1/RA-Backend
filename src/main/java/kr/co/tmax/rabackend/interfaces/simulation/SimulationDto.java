@@ -32,13 +32,16 @@ public class SimulationDto {
     public static class RegisterSimulationRequest {
         @NotEmpty
         private String userId;
-        @NotEmpty @Size(min = 2, max = 10)
+        @NotEmpty
+        @Size(min = 2, max = 10)
         private List<String> assets;
-        @Min(1) @Max(365)
+        @Min(1)
+        @Max(365)
         private int rebalancingPeriod;
         private LocalDate startDate;
         private LocalDate endDate;
-        @NotEmpty @Size(max = 5)
+        @NotEmpty
+        @Size(max = 5)
         private List<String> strategies;
     }
 
@@ -58,7 +61,8 @@ public class SimulationDto {
         private boolean indexRequest;
 
         @Builder
-        public RegisterStrategyRequest(String strategy, int rebalancingLen, List<String> assetList, LocalDate startDate, LocalDate endDate, String callbackUrl) {
+        public RegisterStrategyRequest(String strategy, int rebalancingLen, List<String> assetList, LocalDate startDate,
+                LocalDate endDate, String callbackUrl) {
             this.strategy = strategy;
             this.rebalancingLen = rebalancingLen;
             this.assetList = assetList;
@@ -80,7 +84,7 @@ public class SimulationDto {
         private Map<String, List<Double>> dailyPfWeights;
         private Map<String, Double> dailyPfValues;
 
-        @Async
+        // @Async
         public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
 
             ModelMapper modelMapper = new ModelMapper();
@@ -188,7 +192,8 @@ public class SimulationDto {
             List<SimpleStrategyResponse> strategies = simulation.getStrategies()
                     .entrySet()
                     .stream()
-                    .map(strategyEntry -> SimpleStrategyResponse.create(strategyEntry.getKey(), strategyEntry.getValue().isDone()) )
+                    .map(strategyEntry -> SimpleStrategyResponse.create(strategyEntry.getKey(),
+                            strategyEntry.getValue().isDone()))
                     .collect(Collectors.toList());
 
             List<String> assets = simulation.getAssets().stream()

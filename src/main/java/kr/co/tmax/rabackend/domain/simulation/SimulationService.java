@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
+// @Transactional(readOnly = true)
 public class SimulationService {
 
     private final SimulationStore simulationStore;
@@ -32,7 +32,7 @@ public class SimulationService {
     private final WebClient webClient;
     private final AppProperties appProperties;
 
-    public Simulation registerSimulation(RegisterSimulationRequest request) {
+    public void registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
         log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()
@@ -45,12 +45,14 @@ public class SimulationService {
 
         Map<String, Strategy> strategies = simulation.getStrategies();
         request.getStrategies().forEach(strategyName -> strategies.put(strategyName, new Strategy()));
+        simulationStore.store(simulation);
         requestAA(simulation);
-        return simulationStore.store(simulation);
+        // return simulationStore.store(simulation);
     }
 
     /**
-     * request to Inference Server to get the weights from AA(Asset Allocation) Algo(Strategy)
+     * request to Inference Server to get the weights from AA(Asset Allocation)
+     * Algo(Strategy)
      *
      * @param simulation
      */
@@ -63,6 +65,12 @@ public class SimulationService {
                     SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
                     log.debug("AI API Called | simulationId: {} strategyName: {} AI response:{}",
                             simulation.getSimulationId(), strategyName, response.toString());
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+
+                    }
+
                 });
     }
 
@@ -81,7 +89,7 @@ public class SimulationService {
                 .callbackUrl(callbackUrl)
                 .build();
 
-        log.debug("AI API request body: {}",request );
+        log.debug("AI API request body: {}", request);
 
         return request;
 
@@ -103,12 +111,14 @@ public class SimulationService {
 
     public Simulation getSimulation(GetSimulationRequest command) {
         return simulationReader.findByUserIdAndSimulationId(command.getUserId(), command.getSimulationId())
-                .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
     }
 
     public void deleteSimulation(DeleteSimulationRequest command) {
         Simulation simulation = simulationReader.findById(command.getSimulationId())
-                .orElseThrow(() -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("simulation", "simulationId", command.getSimulationId()));
 
         if (!simulation.getUserId().equals(command.getUserId()))
             throw new BadRequestException("simulation의 소유자만 삭제가 가능합니다");
@@ -116,26 +126,33 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    @Transactional
+    // @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
-        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(() ->
-                new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
+        log.info("전략 이름: {} simulationReader.findById()", command.getStrategyName());
+        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
+                () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
+        log.info("전략 이름: {} simulation.getStrategies()", command.getStrategyName());
         Map<String, Strategy> strategies = simulation.getStrategies();
         if (!strategies.containsKey(command.getStrategyName()))
             throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
 
+        log.info("전략 이름: {} strategies.get()", command.getStrategyName());
         Strategy strategy = strategies.get(command.getStrategyName());
 
         if (strategy.isDone())
             return;
 
-        strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(), command.getRebalancingWeights(),
+        log.info("전략 이름: {} strategy.complete()", command.getStrategyName());
+        strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
+                command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
 
+        log.info("전략 이름: {} simulation.updateCnt()", command.getStrategyName());
         simulation.updateCnt();
         log.info("전략 이름: {} 완료 여부: {}", command.getStrategyName(), strategy.isDone());
 
+        log.info("전략 이름: {} simulationStore.store()", command.getStrategyName());
         simulationStore.store(simulation);
     }
 }
