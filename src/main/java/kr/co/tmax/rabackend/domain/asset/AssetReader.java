@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface AssetReader {
 
-    List<Asset> searchByTicker(String ticker);
+    List<Asset> searchByTickerAndIndex(String ticker, String index);
 
     List<Asset> searchByName(String name);
 
