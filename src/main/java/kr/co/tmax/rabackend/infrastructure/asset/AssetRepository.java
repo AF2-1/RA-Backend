@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface AssetRepository extends MongoRepository<Asset, String> {
 
-    @Query("{ 'ticker' : { $regex: ?0, $options: 'i' } } }")
-    List<Asset> searchByTicker(String ticker);
+    @Query("{ 'ticker' : { $regex: ?0, $options: 'i' }, 'index' : ?1 } }")
+    List<Asset> searchByTickerAndIndex(String ticker, String index);
 
     @Query("{ 'name' : { $regex: ?0, $options: 'i' } } }")
     List<Asset> searchByName(String name);

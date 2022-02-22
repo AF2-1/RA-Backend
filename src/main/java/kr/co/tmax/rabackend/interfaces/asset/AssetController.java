@@ -28,7 +28,8 @@ public class AssetController {
     @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
     public CommonResponse findAsset(@RequestParam(required = false) String ticker,
-                                    @RequestParam(required = false) String name) {
+                                    @RequestParam(required = false) String name,
+                                    @RequestParam(required = false) String index) {
         log.info("ticker:{} name:{}", ticker, name);
 
         if (StringUtils.hasText(name)) {
@@ -38,9 +39,9 @@ public class AssetController {
         }
 
         if (StringUtils.hasText(ticker)) {
-            List<AssetDto> result = assetService.searchByTicker(ticker)
+            List<AssetDto> result = assetService.searchByTickerAndIndex(ticker, index)
                     .stream().map(AssetDto::new).collect(Collectors.toList());
-            return CommonResponse.withMessageAndData("티커로 자산 조회 성공", result);
+            return CommonResponse.withMessageAndData("티커와 인덱스로 자산 조회 성공", result);
         }
 
         List<AssetDto> result = assetService.findAll()
