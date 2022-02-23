@@ -22,7 +22,6 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
     public CommonResponse onException(Exception e) {
-        System.out.println("npe = " + e);
         log.error(e.getMessage());
         return CommonResponse.withMessage("시스템 에러");
     }
@@ -30,7 +29,6 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public CommonResponse onBindException(BindException e, Locale locale) {
-        System.out.println("bindException = " + e);
         log.error(e.getMessage());
         return CommonResponse.withMessageAndData("잘못된 요청", ValidationResult.create(e, messageSource, locale));
     }

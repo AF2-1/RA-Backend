@@ -24,7 +24,6 @@ public class Strategy {
         this.done = false;
     }
 
-    // @Async
     public void complete(LocalDate trainedTime,
             EvaluationResults evaluationResults,
             List<Double> recommendedPf,

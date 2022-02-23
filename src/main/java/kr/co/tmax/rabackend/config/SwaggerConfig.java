@@ -64,7 +64,6 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("kr.co.tmax.rabackend.interfaces"))
                 .paths(PathSelectors.ant("/api/v1/**"))
-
                 .build();
     }
 

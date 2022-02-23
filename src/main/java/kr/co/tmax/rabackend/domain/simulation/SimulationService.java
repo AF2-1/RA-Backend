@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-// @Transactional(readOnly = true)
 public class SimulationService {
 
     private final SimulationStore simulationStore;
@@ -131,31 +130,22 @@ public class SimulationService {
     }
 
     public void completeStrategy(CompleteStrategyRequest command) {
-//        log.info("전략 이름: {} simulationReader.findById()", command.getStrategyName());
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
                 () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-//        log.info("전략 이름: {} simulation.getStrategies()", command.getStrategyName());
         Map<String, Strategy> strategies = simulation.getStrategies();
         if (!strategies.containsKey(command.getStrategyName()))
             throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
 
-//        log.info("전략 이름: {} strategies.get()", command.getStrategyName());
         Strategy strategy = strategies.get(command.getStrategyName());
 
         if (strategy.isDone())
             return;
 
-//        log.info("전략 이름: {} strategy.complete()", command.getStrategyName());
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
-
-//        log.info("전략 이름: {} simulation.updateCnt()", command.getStrategyName());
         simulation.updateCnt();
-//        log.info("전략 이름: {} 완료 여부: {}", command.getStrategyName(), strategy.isDone());
-//
-//        log.info("전략 이름: {} simulationStore.store()", command.getStrategyName());
         simulationStore.store(simulation);
     }
 }
