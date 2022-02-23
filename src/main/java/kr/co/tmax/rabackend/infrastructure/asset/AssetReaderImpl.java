@@ -33,11 +33,6 @@ public class AssetReaderImpl implements AssetReader {
     public Asset findByTickerAndIndex(String ticker, String index) { return assetRepository.findByTickerAndIndex(ticker, index); }
 
     @Override
-    public List<Asset> findByTickerIn(List<String> tickers) {
-        return assetRepository.findByTickerIn(tickers);
-    }
-
-    @Override
     public boolean existsByTickerAndIndex(String ticker, String index) {
         return assetRepository.existsByTickerAndIndex(ticker, index);
     }

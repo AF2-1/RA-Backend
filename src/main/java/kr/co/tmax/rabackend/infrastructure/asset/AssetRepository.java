@@ -16,7 +16,5 @@ public interface AssetRepository extends MongoRepository<Asset, String> {
 
     Asset findByTickerAndIndex(String ticker, String index);
 
-    List<Asset> findByTickerIn(List<String> tickers);
-
     boolean existsByTickerAndIndex(String ticker, String index);
 }

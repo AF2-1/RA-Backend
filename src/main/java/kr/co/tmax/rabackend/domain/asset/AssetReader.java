@@ -10,8 +10,6 @@ public interface AssetReader {
 
     List<Asset> findAll();
 
-    List<Asset> findByTickerIn(List<String> tickers);
-
     Asset findByTickerAndIndex(String ticker, String index);
 
     boolean existsByTickerAndIndex(String ticker, String index);
