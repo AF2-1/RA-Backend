@@ -2,6 +2,7 @@ package kr.co.tmax.rabackend.interfaces.simulation;
 
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.asset.Asset;
+import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
@@ -17,6 +18,7 @@ import org.springframework.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -65,16 +67,15 @@ public class SimulationRegisterRequestValidator implements Validator {
         }
     }
 
-    private void checkValidAsset(List<String> assets, Errors errors) {
-        if (assets.stream().anyMatch(Predicate.not(assetReader::existsByTicker))) {
+    private void checkValidAsset(List<AssetCommand> assets, Errors errors) {
+        if (assets.stream().anyMatch(Predicate.not(asset -> assetReader.existsByTickerAndIndex(asset.getTicker(), asset.getIndex())))) {
             errors.rejectValue("assets", "bad.request", null, null);
         }
     }
 
-    private void checkValidDate(LocalDate startDate, LocalDate endDate, List<String> assets, Errors errors) {
-        if (assets.stream().noneMatch(Predicate.not(assetReader::existsByTicker))) {
-            List<Asset> assetList = assets.stream().map(assetReader::findByTicker).collect(Collectors.toList());
-            System.out.println("assetList = " + assetList);
+    private void checkValidDate(LocalDate startDate, LocalDate endDate, List<AssetCommand> assets, Errors errors) {
+        if (assets.stream().noneMatch(Predicate.not(asset -> assetReader.existsByTickerAndIndex(asset.getTicker(), asset.getIndex())))) {
+            List<Asset> assetList = assets.stream().map(asset -> assetReader.findByTickerAndIndex(asset.getTicker(), asset.getIndex())).collect(Collectors.toList());
             LocalDate validStartDate = LocalDate.from(assetList.stream().map(Asset::getStartDate)
                     .max(LocalDateTime::compareTo).orElseThrow(null));
             LocalDate validEndDate = LocalDate.from(assetList.stream().map(Asset::getEndDate)

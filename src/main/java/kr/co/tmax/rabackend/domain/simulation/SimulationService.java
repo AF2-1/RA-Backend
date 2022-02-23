@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +35,9 @@ public class SimulationService {
     private final AppProperties appProperties;
 
     public void registerSimulation(RegisterSimulationRequest request) {
-        List<Asset> assets = assetReader.findByTickerIn(request.getAssets());
+        List<Asset> assets = request.getAssets().stream().map(a ->
+                assetReader.findByTickerAndIndex(a.getTicker(), a.getIndex())).collect(Collectors.toList());
+
         log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()
                 .rebalancingPeriod(request.getRebalancingPeriod())
