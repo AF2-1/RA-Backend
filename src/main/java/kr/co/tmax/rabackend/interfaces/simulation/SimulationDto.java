@@ -2,6 +2,7 @@ package kr.co.tmax.rabackend.interfaces.simulation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.co.tmax.rabackend.domain.asset.Asset;
+import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
@@ -34,7 +35,7 @@ public class SimulationDto {
         private String userId;
         @NotEmpty
         @Size(min = 2, max = 10)
-        private List<String> assets;
+        private List<AssetCommand> assets;
         @Min(1)
         @Max(365)
         private int rebalancingPeriod;

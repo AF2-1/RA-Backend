@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
+import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
@@ -19,7 +20,7 @@ public class SimulationCommand {
     public static class RegisterSimulationRequest {
         private String userId;
         private int cnt;
-        private List<String> assets;
+        private List<AssetCommand> assets;
         private int rebalancingPeriod;
         private LocalDate startDate;
         private LocalDate endDate;

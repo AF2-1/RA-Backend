@@ -30,7 +30,7 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
-    public Asset findByTicker(String ticker) { return assetRepository.findByTicker(ticker); }
+    public Asset findByTickerAndIndex(String ticker, String index) { return assetRepository.findByTickerAndIndex(ticker, index); }
 
     @Override
     public List<Asset> findByTickerIn(List<String> tickers) {
@@ -38,7 +38,7 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
-    public boolean existsByTicker(String ticker) {
-        return assetRepository.existsByTicker(ticker);
+    public boolean existsByTickerAndIndex(String ticker, String index) {
+        return assetRepository.existsByTickerAndIndex(ticker, index);
     }
 }
