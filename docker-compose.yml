@@ -2,7 +2,6 @@ version: '3.1'
 services:
   mongo1:
     image: mongo
-    container_name: mongodb
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: tmaxrobo
@@ -18,7 +17,6 @@ services:
       - mongod --replSet replication
   mongo2:
     image: mongo
-    container_name: mongodb
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: tmaxrobo
@@ -36,7 +34,6 @@ services:
       - mongo1
   mongo3:
     image: mongo
-    container_name: mongodb
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: tmaxrobo
