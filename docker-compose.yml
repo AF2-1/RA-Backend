@@ -11,7 +11,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ./mongo-data:/data/db
+      - ./mongoRepl/mongo1:/data/db
     networks:
       - ra-net
     command:
@@ -27,7 +27,7 @@ services:
     ports:
       - 27018:27017
     volumes:
-      - ./mongo-data:/data/db
+      - ./mongoRepl/mongo2:/data/db
     networks:
       - ra-net
     command:
@@ -45,7 +45,7 @@ services:
     ports:
       - 27019:27017
     volumes:
-      - ./mongo-data:/data/db
+      - ./mongoRepl/mongo3:/data/db
     networks:
       - ra-net
     command:
