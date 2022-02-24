@@ -1,6 +1,8 @@
 package kr.co.tmax.rabackend.exception;
 
 import kr.co.tmax.rabackend.common.CommonResponse;
+import kr.co.tmax.rabackend.interfaces.alert.AlertService;
+import kr.co.tmax.rabackend.interfaces.alert.SlackChannel;
 import kr.co.tmax.rabackend.interfaces.validation.ValidationResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,12 @@ import java.util.Locale;
 public class ControllerAdvice {
 
     private final MessageSource messageSource;
+    private final AlertService alertService;
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
-    public CommonResponse onException(Exception e) {
+    public CommonResponse onException(Exception e, Locale locale) {
+        alertService.sentryWithSlackMessage(SlackChannel.ERROR, e);
         log.error(e.getMessage());
         return CommonResponse.withMessage("시스템 에러");
     }
@@ -30,6 +34,7 @@ public class ControllerAdvice {
     @ExceptionHandler(BindException.class)
     public CommonResponse onBindException(BindException e, Locale locale) {
         log.error(e.getMessage());
+        alertService.sentryWithSlackMessage(SlackChannel.ERROR, e, ValidationResult.create(e, messageSource, locale));
         return CommonResponse.withMessageAndData("잘못된 요청", ValidationResult.create(e, messageSource, locale));
     }
 

@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.interfaces.validation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @AllArgsConstructor
+@ToString
 public class ValidationResult {
     private List<FieldErrorDetail> errors;
 
@@ -41,6 +43,11 @@ public class ValidationResult {
                     fieldError.getField(),
                     fieldError.getCode(),
                     messageSource.getMessage(fieldError, locale));
+        }
+
+        @Override
+        public String toString() {
+            return message;
         }
     }
 }

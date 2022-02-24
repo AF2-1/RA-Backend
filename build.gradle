@@ -31,13 +31,25 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     implementation 'org.modelmapper:modelmapper:3.0.0'
+
+    // [Swagger]
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation "io.springfox:springfox-swagger-ui:3.0.0"
-    // https://mvnrepository.com/artifact/com.google.guava/guava
+
+    // [Guava]
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
+    // [Sentry]
+    implementation group: 'io.sentry', name: 'sentry', version: '6.0.0-alpha.2'
+
+    // [Slack]
+    implementation group: 'com.slack.api', name: 'slack-api-client', version: '1.20.0'
+    implementation group: 'com.slack.api', name: 'bolt', version: '1.20.0'
+
+    // [Lombok]
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
