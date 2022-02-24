@@ -7,6 +7,7 @@ import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.interfaces.alert.AlertService;
 import kr.co.tmax.rabackend.interfaces.asset.AssetDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterSimulationRequest;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,7 @@ import java.util.stream.Collectors;
 public class SimulationRegisterRequestValidator implements Validator {
 
     private final AppProperties appProperties;
-    private final SimulationService simulationService;
     private final AssetReader assetReader;
-    private final AssetService assetService;
 
     @Override
     public boolean supports(Class<?> clazz) {
