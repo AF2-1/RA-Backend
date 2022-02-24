@@ -14,7 +14,6 @@ import java.time.LocalTime;
 @Configuration
 public class SlackScheduler {
     private final AlertService alertService;
-
 //    @Scheduled(cron="0 0/1 * * * *") //1분
 //    public void test() {
 //        alertService.slackSendMessage(SlackChannel.MONITOR, "hi");
