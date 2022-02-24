@@ -68,11 +68,11 @@ public class SimulationService {
                     SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
                     log.debug("AI API Called | simulationId: {} strategyName: {} AI response:{}",
                             simulation.getSimulationId(), strategyName, response.toString());
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-
-                    }
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//
+//                    }
 
                 });
     }
@@ -129,7 +129,10 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
+    @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
+        // Todo: dirty Read
+
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
                 () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
