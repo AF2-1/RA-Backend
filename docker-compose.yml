@@ -11,7 +11,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ./mongoRepl/mongo1:/data/db
+      - ./mongo-data:/data/db
     networks:
       - ra-net
     command:
