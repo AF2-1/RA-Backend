@@ -25,12 +25,12 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         return "ra";
     }
 
-    @Override
-    public MongoClient mongoClient() {
-        final ConnectionString connectionString = new ConnectionString("mongodb://tmaxrobo:tmaxrobo@192.168.153.102:27017");
-        final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString)
-                .build();
-        return MongoClients.create(mongoClientSettings);
-    }
+//    @Override
+//    public MongoClient mongoClient() {
+//        final ConnectionString connectionString = new ConnectionString("mongodb://tmaxrobo:tmaxrobo@192.168.153.102:27017");
+//        final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+//                .applyConnectionString(connectionString)
+//                .build();
+//        return MongoClients.create(mongoClientSettings);
+//    }
 }
