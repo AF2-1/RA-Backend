@@ -7,6 +7,7 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
+import kr.co.tmax.rabackend.interfaces.asset.AssetDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategyRequest;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class SimulationService {
 
     public void registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = request.getAssets().stream().map(a ->
-                assetReader.findByTickerAndIndex(a.getTicker(), a.getIndex())).collect(Collectors.toList());
+                assetReader.searchByTickerAndIndex(a.getTicker(), a.getIndex())).collect(Collectors.toList());
 
         log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()

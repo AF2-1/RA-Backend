@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.asset;
 
+import kr.co.tmax.rabackend.interfaces.asset.AssetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,7 @@ public class AssetService {
         return assetReader.findAll();
     }
 
-    public List<Asset> searchByTickerAndIndex(String ticker, String index) {
+    public Asset searchByTickerAndIndex(String ticker, String index) {
         return assetReader.searchByTickerAndIndex(ticker, index);
-    }
-
-    public List<Asset> searchByName(String name) {
-        return assetReader.searchByName(name);
     }
 }

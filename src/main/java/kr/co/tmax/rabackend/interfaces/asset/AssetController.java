@@ -30,17 +30,12 @@ public class AssetController {
     public CommonResponse findAsset(@RequestParam(required = false) String ticker,
                                     @RequestParam(required = false) String name,
                                     @RequestParam(required = false) String index) {
+
         log.info("ticker:{} name:{}", ticker, name);
 
-        if (StringUtils.hasText(name)) {
-            List<AssetDto> result = assetService.searchByName(name)
-                    .stream().map(AssetDto::new).collect(Collectors.toList());
-            return CommonResponse.withMessageAndData("이름으로 자산 조회 성공", result);
-        }
-
-        if (StringUtils.hasText(ticker)) {
-            List<AssetDto> result = assetService.searchByTickerAndIndex(ticker, index)
-                    .stream().map(AssetDto::new).collect(Collectors.toList());
+        if (StringUtils.hasText(ticker) && StringUtils.hasText(index)) {
+            Asset asset = assetService.searchByTickerAndIndex(ticker, index);
+            AssetDto result = modelMapper.map(asset, AssetDto.class);
             return CommonResponse.withMessageAndData("티커와 인덱스로 자산 조회 성공", result);
         }
 
