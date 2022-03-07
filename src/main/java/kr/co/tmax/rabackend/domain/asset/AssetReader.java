@@ -4,13 +4,9 @@ import java.util.List;
 
 public interface AssetReader {
 
-    List<Asset> searchByTickerAndIndex(String ticker, String index);
-
-    List<Asset> searchByName(String name);
+    Asset searchByTickerAndIndex(String ticker, String index);
 
     List<Asset> findAll();
-
-    Asset findByTickerAndIndex(String ticker, String index);
 
     boolean existsByTickerAndIndex(String ticker, String index);
 }

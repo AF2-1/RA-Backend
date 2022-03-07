@@ -20,17 +20,9 @@ public class AssetReaderImpl implements AssetReader {
     }
 
     @Override
-    public List<Asset> searchByName(String name) {
-        return assetRepository.searchByName(name);
-    }
-
-    @Override
-    public List<Asset> searchByTickerAndIndex(String ticker, String index){
+    public Asset searchByTickerAndIndex(String ticker, String index){
         return assetRepository.searchByTickerAndIndex(ticker, index);
     }
-
-    @Override
-    public Asset findByTickerAndIndex(String ticker, String index) { return assetRepository.findByTickerAndIndex(ticker, index); }
 
     @Override
     public boolean existsByTickerAndIndex(String ticker, String index) {
