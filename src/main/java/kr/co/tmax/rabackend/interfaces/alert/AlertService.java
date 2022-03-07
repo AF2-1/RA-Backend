@@ -28,9 +28,6 @@ public class AlertService {
     @Value(value = "${slack.channel.etc}")
     String etcChannel;
 
-    @Value(value = "${slack.channel.errorPublic}")
-    String errorPublicChannel;
-
     public void slackSendMessage(SlackChannel slackChannel, String message){
         try{
             Slack slack = Slack.getInstance();
@@ -43,9 +40,6 @@ public class AlertService {
             }
             else if (slackChannel.equals(SlackChannel.ETC)) {
                 channel = etcChannel;
-            }
-            else if (slackChannel.equals(SlackChannel.ERRORPUBLIC)) {
-                channel = errorPublicChannel;
             }
             else {
                 channel = testChannel;

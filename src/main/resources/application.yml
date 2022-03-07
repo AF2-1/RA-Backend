@@ -62,7 +62,6 @@ slack:
   token: xoxb-1630331899815-3174643984272-If83e91hT5dGSRUZlPHqjAVy
   channel:
     monitor: C035511GZNU
-    error: C034HHT0ZS8
+    error: C035FGZ3BE3
     test: C034TH2N6HX
     etc: C03555Y23DE
-    errorPublic: C035FGZ3BE3
