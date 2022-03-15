@@ -26,9 +26,9 @@ public class StrategyController {
                                  @RequestParam String strategyName,
                                  @Validated @RequestBody SimulationDto.CompleteStrategyRequest request,
                                  BindingResult bindingResult) throws BindException {
-//        completeStrategyRequestValidator.validate(request, bindingResult);
-//        if (bindingResult.hasErrors())
-//            throw new BindException(bindingResult);
+        completeStrategyRequestValidator.validate(request, bindingResult);
+        if (bindingResult.hasErrors())
+            throw new BindException(bindingResult);
 
         log.debug("callback called | simulationId: {} strategyName: {}", simulationId, strategyName);
         SimulationCommand.CompleteStrategyRequest command = request.toCommand(simulationId, strategyName);
