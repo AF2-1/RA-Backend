@@ -63,7 +63,7 @@ public class SimulationDto {
 
         @Builder
         public RegisterStrategyRequest(String strategy, int rebalancingLen, List<String> assetList, LocalDate startDate,
-                LocalDate endDate, String callbackUrl) {
+                                       LocalDate endDate, String callbackUrl) {
             this.strategy = strategy;
             this.rebalancingLen = rebalancingLen;
             this.assetList = assetList;
@@ -161,9 +161,9 @@ public class SimulationDto {
         private String userId;
         private List<SimpleSimulationResponse> simulations;
 
-        public static SimulationsResponse create(String userId, List<Simulation> simulations) {
+        public static SimulationsResponse create(String userId, List<Simulation> simulations, List<Strategy> strategies) {
             List<SimpleSimulationResponse> getSimulationResponses = simulations.stream()
-                    .map(SimpleSimulationResponse::create)
+                    .map(simulation -> SimpleSimulationResponse.create(simulation, strategies))
                     .collect(Collectors.toList());
 
             return SimulationsResponse.builder()
@@ -189,12 +189,11 @@ public class SimulationDto {
         private boolean isDone;
         private List<SimpleStrategyResponse> strategies;
 
-        public static SimpleSimulationResponse create(Simulation simulation) {
-            List<SimpleStrategyResponse> strategies = simulation.getStrategies()
-                    .entrySet()
+        public static SimpleSimulationResponse create(Simulation simulation, List<Strategy> strategies) {
+            List<SimpleStrategyResponse> simpleStrategyResponses = strategies
+//                    .entrySet()
                     .stream()
-                    .map(strategyEntry -> SimpleStrategyResponse.create(strategyEntry.getKey(),
-                            strategyEntry.getValue().isDone()))
+                    .map(strategy -> SimpleStrategyResponse.create(strategy))
                     .collect(Collectors.toList());
 
             List<String> assets = simulation.getAssets().stream()
@@ -209,7 +208,7 @@ public class SimulationDto {
                     .startDate(simulation.getStartDate())
                     .endDate(simulation.getEndDate())
                     .createdDatetime(simulation.getCreatedDatetime())
-                    .strategies(strategies)
+                    .strategies(simpleStrategyResponses)
                     .build();
         }
     }
@@ -229,11 +228,11 @@ public class SimulationDto {
         private boolean isDone;
         private List<StrategyResponse> strategies;
 
-        public static SimulationResponse create(Simulation simulation) {
-            List<StrategyResponse> strategies = simulation.getStrategies()
-                    .entrySet()
+        public static SimulationResponse create(Simulation simulation, List<Strategy> strategies) {
+            List<StrategyResponse> strategyResponse = strategies
+//                    .entrySet()
                     .stream()
-                    .map(strategyEntry -> StrategyResponse.create(strategyEntry.getKey(), strategyEntry.getValue()))
+                    .map(strategy -> StrategyResponse.create(strategy))
                     .collect(Collectors.toList());
 
             List<AssetResponse> assets = simulation.getAssets().stream()
@@ -248,7 +247,7 @@ public class SimulationDto {
                     .startDate(simulation.getStartDate())
                     .endDate(simulation.getEndDate())
                     .createdDatetime(simulation.getCreatedDatetime())
-                    .strategies(strategies)
+                    .strategies(strategyResponse)
                     .build();
         }
     }
@@ -262,10 +261,10 @@ public class SimulationDto {
         private String name;
         private boolean done;
 
-        public static SimpleStrategyResponse create(String name, boolean isDone) {
+        public static SimpleStrategyResponse create(Strategy strategy) {
             return SimpleStrategyResponse.builder()
-                    .name(name)
-                    .done(isDone)
+                    .name(strategy.getName())
+                    .done(strategy.isDone())
                     .build();
         }
     }
@@ -283,10 +282,10 @@ public class SimulationDto {
         private List<PortfolioWeight> dailyPfWeights;
         private List<PortfolioValue> dailyPfValues;
 
-        public static StrategyResponse create(String strategyName, Strategy strategy) {
+        public static StrategyResponse create(Strategy strategy) {
             return StrategyResponse.builder()
                     .evaluationResults(strategy.getEvaluationResults())
-                    .name(strategyName)
+                    .name(strategy.getName())
                     .recommendedPf(strategy.getRecommendedPf())
                     .dailyPfValues(strategy.getDailyValues())
                     .done(strategy.isDone())
