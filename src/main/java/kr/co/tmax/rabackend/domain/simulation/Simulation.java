@@ -36,13 +36,11 @@ public class Simulation {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDateTime createdDatetime;
-    private int numOfStrategies;
-//    private Map<String, Strategy> strategies = new HashMap<>();
+    private Map<String, Strategy> strategies = new HashMap<>();
 
     @Builder
-    public Simulation(String userId, List<Asset>
-            assets, int rebalancingPeriod, LocalDate startDate,
-                      LocalDate endDate, int numOfStrategies) {
+    public Simulation(String userId, List<Asset> assets, int rebalancingPeriod, LocalDate startDate,
+            LocalDate endDate) {
         this.simulationId = UUID.randomUUID().toString();
         this.userId = userId;
         this.isDone = false;
@@ -52,16 +50,16 @@ public class Simulation {
         this.rebalancingPeriod = rebalancingPeriod;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.numOfStrategies = numOfStrategies;
     }
 
-//    public void addStrategy(String name, Strategy strategy) {
-//        strategies.put(name, strategy);
-//    }
+    public void addStrategy(String name, Strategy strategy) {
+        strategies.put(name, strategy);
+    }
 
+    // @Async
     public void updateCnt() {
         cnt++;
-        if (cnt == numOfStrategies)
+        if (cnt == strategies.size())
             this.isDone = true;
     }
 }

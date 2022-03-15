@@ -5,21 +5,23 @@ import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
-import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
-import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
+import kr.co.tmax.rabackend.interfaces.asset.AssetDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +30,6 @@ public class SimulationService {
 
     private final SimulationStore simulationStore;
     private final SimulationReader simulationReader;
-    private final StrategyStore strategyStore;
-    private final StrategyReader strategyReader;
     private final AssetReader assetReader;
     private final WebClient webClient;
     private final AppProperties appProperties;
@@ -45,16 +45,12 @@ public class SimulationService {
                 .endDate(request.getEndDate())
                 .startDate(request.getStartDate())
                 .assets(assets)
-                .numOfStrategies(request.getStrategies().size())
                 .build();
 
-//        Map<String, Strategy> strategies = simulation.getStrategies();
-//        request.getStrategies().forEach(strategyName -> strategies.put(strategyName, new Strategy(simulationId)));
-        final Simulation storedSimulation = simulationStore.store(simulation);
-
-        request.getStrategies().forEach(strategyName -> strategyStore.store(new Strategy(strategyName, storedSimulation.getSimulationId())));
-
-        requestAA(simulation, request.getStrategies());
+        Map<String, Strategy> strategies = simulation.getStrategies();
+        request.getStrategies().forEach(strategyName -> strategies.put(strategyName, new Strategy()));
+        simulationStore.store(simulation);
+        requestAA(simulation);
         // return simulationStore.store(simulation);
     }
 
@@ -64,9 +60,10 @@ public class SimulationService {
      *
      * @param simulation
      */
-    private void requestAA(Simulation simulation, List<String> strategyNames) {
+    private void requestAA(Simulation simulation) {
         // todo: AI 서버에서 실패 응답이 온 경우 예외를 던져 Simulation이 DB에 저장되는 것을 막아야한다.
-        strategyNames
+        simulation.getStrategies()
+                .keySet()
                 .forEach(strategyName -> {
                     RegisterStrategyRequest requestBody = createRequest(simulation, strategyName);
                     SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
@@ -133,23 +130,20 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    //@Transactional
+    @Transactional
     public void completeStrategy(CompleteStrategyRequest command) {
         // Todo: dirty Read
 
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
                 () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-//        Map<String, Strategy> strategies = simulation.getStrategies();
-//        if (!strategies.containsKey(command.getStrategyName()))
-//            throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
+        Map<String, Strategy> strategies = simulation.getStrategies();
+        if (!strategies.containsKey(command.getStrategyName()))
+            throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
 
-        Strategy strategy = strategyReader.findBySimulationIdAndStrategyName(command.getSimulationId(), command.getStrategyName()).orElseThrow(
-                () -> new ResourceNotFoundException("Strategy", "StrategyName", command.getStrategyName()));
+        Strategy strategy = strategies.get(command.getStrategyName());
 
-//        Strategy strategy = strategies.get(command.getStrategyName());
-
-        if (strategy.isDone()) // 어짜피 done 상태에서 콜백티 올 것
+        if (strategy.isDone())
             return;
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
@@ -157,6 +151,5 @@ public class SimulationService {
                 command.getDailyWeights(), command.getDailyValues());
         simulation.updateCnt();
         simulationStore.store(simulation);
-        strategyStore.store(strategy);
     }
 }
