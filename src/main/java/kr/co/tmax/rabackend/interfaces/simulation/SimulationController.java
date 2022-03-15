@@ -5,6 +5,8 @@ import kr.co.tmax.rabackend.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
+import kr.co.tmax.rabackend.domain.strategy.StrategyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -26,6 +29,7 @@ import java.util.function.Predicate;
 @RestController
 public class SimulationController {
     private final SimulationService simulationService;
+    private final StrategyService strategyService;
     private final ModelMapper modelMapper;
     private final SimulationRegisterRequestValidator simulationRegisterRequestValidator;
 
@@ -36,12 +40,12 @@ public class SimulationController {
                                                              BindingResult bindingResult,
                                                              UriComponentsBuilder uriComponentsBuilder) throws BindException {
 
-        List<Simulation> simulations = simulationService.getSimulations(new SimulationCommand.GetSimulationsRequest(userId));
-        simulationRegisterRequestValidator.checkConcurrentSimulation(simulations, bindingResult);
-        simulationRegisterRequestValidator.validate(request, bindingResult);
-
-        if (bindingResult.hasErrors())
-            throw new BindException(bindingResult);
+//        List<Simulation> simulations = simulationService.getSimulations(new SimulationCommand.GetSimulationsRequest(userId));
+//        simulationRegisterRequestValidator.checkConcurrentSimulation(simulations, bindingResult);
+//        simulationRegisterRequestValidator.validate(request, bindingResult);
+//
+//        if (bindingResult.hasErrors())
+//            throw new BindException(bindingResult);
 
         SimulationCommand.RegisterSimulationRequest command = modelMapper.map(request, SimulationCommand.RegisterSimulationRequest.class);
         simulationService.registerSimulation(command);
@@ -64,7 +68,17 @@ public class SimulationController {
         SimulationCommand.GetSimulationsRequest command = new SimulationCommand.GetSimulationsRequest(userId);
         List<Simulation> simulations = simulationService.getSimulations(command);
 
-        SimulationDto.SimulationsResponse simulationsResponse = SimulationDto.SimulationsResponse.create(userId, simulations);
+        List<SimulationDto.SimpleSimulationResponse> simpleSimulationResponses = new ArrayList<>(simulations.size()); // TODO: stream 으로 변경
+        for(var simulation : simulations) {
+            List<Strategy> strategies = strategyService.findAllBySimulation(simulation.getSimulationId());
+            SimulationDto.SimpleSimulationResponse simpleSimulationResponse = SimulationDto.SimpleSimulationResponse.create(simulation, strategies);
+
+            simpleSimulationResponses.add(simpleSimulationResponse);
+        }
+
+        SimulationDto.SimulationsResponse simulationsResponse = new SimulationDto.SimulationsResponse(userId, simpleSimulationResponses);
+
+//        SimulationDto.SimulationsResponse simulationsResponse = SimulationDto.SimulationsResponse.create(userId, simulations);
 
         if (isSimulationsDone(simulations))
             return ResponseEntity
@@ -88,7 +102,10 @@ public class SimulationController {
                                                         @PathVariable String simulationId) {
         SimulationCommand.GetSimulationRequest command = new SimulationCommand.GetSimulationRequest(userId, simulationId);
         Simulation simulation = simulationService.getSimulation(command);
-        SimulationDto.SimulationResponse simulationResponse = SimulationDto.SimulationResponse.create(simulation);
+
+        List<Strategy> strategies = strategyService.findAllBySimulation(command.getSimulationId());
+
+        SimulationDto.SimulationResponse simulationResponse = SimulationDto.SimulationResponse.create(simulation, strategies);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", simulationResponse));
