@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface AssetRepository extends MongoRepository<Asset, String> {
 
-    @Query("{ 'ticker' : { $regex: ?0, $options: 'i' }, 'index' : ?1 } }")
+    @Query("{ 'ticker' : ?0 , 'index' : ?1 } }")
     Asset searchByTickerAndIndex(String ticker, String index);
 
     boolean existsByTickerAndIndex(String ticker, String index);

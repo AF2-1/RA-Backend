@@ -15,7 +15,6 @@ public class SimulationStoreImpl implements SimulationStore {
     private final SimulationRepository simulationRepository;
 
     @Override
-    // @Transactional
     public Simulation store(Simulation simulation) {
         return simulationRepository.save(simulation);
     }
