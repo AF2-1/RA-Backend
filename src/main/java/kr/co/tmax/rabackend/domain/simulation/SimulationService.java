@@ -148,8 +148,8 @@ public class SimulationService {
 
 //        Strategy strategy = strategies.get(command.getStrategyName());
 
-        if (strategy.isDone())
-            return;
+//        if (strategy.isDone())
+//            return;
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
