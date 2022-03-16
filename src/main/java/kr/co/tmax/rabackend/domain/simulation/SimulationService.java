@@ -157,5 +157,7 @@ public class SimulationService {
         simulation.updateCnt();
         simulationStore.store(simulation);
         strategyStore.store(strategy);
+
+        log.debug("strategy is completed with simulationId: {} | strategyName: {}", command.getSimulationId(), command.getStrategyName());
     }
 }
