@@ -6,7 +6,6 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationService;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +31,6 @@ public class StrategyController {
 
         log.debug("callback called | simulationId: {} strategyName: {}", simulationId, strategyName);
         SimulationCommand.CompleteStrategyRequest command = request.toCommand(simulationId, strategyName);
-        simulationService.completeStrategy(command);
+        simulationService.completeStrategy(command); //TODO: 동기화
     }
 }

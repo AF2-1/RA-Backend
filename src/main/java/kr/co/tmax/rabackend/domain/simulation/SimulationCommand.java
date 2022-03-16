@@ -4,11 +4,9 @@ import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
-import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class SimulationCommand {
