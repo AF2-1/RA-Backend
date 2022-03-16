@@ -1,17 +1,22 @@
 package kr.co.tmax.rabackend.domain.strategy;
 
 import lombok.*;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @ToString
+@Getter
+@Document(collection = "strategies")
+@NoArgsConstructor
 public class Strategy {
+    @Id
+    private String id;
+    private String name;
     private boolean done;
     private LocalDate trainedTime = null;
     private EvaluationResults evaluationResults = new EvaluationResults();
@@ -19,17 +24,20 @@ public class Strategy {
     private List<PortfolioWeight> rebalancingWeights = new ArrayList<>();
     private List<PortfolioWeight> dailyWeights = new ArrayList<>();
     private List<PortfolioValue> dailyValues = new ArrayList<>();
+    private String simulationId;
 
-    public Strategy() {
+    public Strategy(String name, String simulationId) {
+        this.name = name;
+        this.simulationId = simulationId;
         this.done = false;
     }
 
     public void complete(LocalDate trainedTime,
-            EvaluationResults evaluationResults,
-            List<Double> recommendedPf,
-            List<PortfolioWeight> rebalancingWeights,
-            List<PortfolioWeight> dailyWeights,
-            List<PortfolioValue> dailyValues) {
+                         EvaluationResults evaluationResults,
+                         List<Double> recommendedPf,
+                         List<PortfolioWeight> rebalancingWeights,
+                         List<PortfolioWeight> dailyWeights,
+                         List<PortfolioValue> dailyValues) {
         this.done = true;
         this.trainedTime = trainedTime;
         this.evaluationResults = evaluationResults;
