@@ -180,7 +180,7 @@ public class SimulationDto {
     @AllArgsConstructor
     public static class SimpleSimulationResponse {
         private String simulationId;
-        private List<String> assets;
+        private List<AssetResponse> assets;
         private LocalDate startDate;
         private LocalDate endDate;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -195,8 +195,11 @@ public class SimulationDto {
                     .map(strategy -> SimpleStrategyResponse.create(strategy))
                     .collect(Collectors.toList());
 
-            List<String> assets = simulation.getAssets().stream()
-                    .map(Asset::getName)
+//            List<String> assets = simulation.getAssets().stream()
+//                    .map(Asset::getName)
+//                    .collect(Collectors.toList());
+            List<AssetResponse> assets = simulation.getAssets().stream()
+                    .map(AssetResponse::create)
                     .collect(Collectors.toList());
 
             return SimpleSimulationResponse.builder()
