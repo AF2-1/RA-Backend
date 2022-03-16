@@ -59,7 +59,7 @@ public class Simulation {
 //        strategies.put(name, strategy);
 //    }
 
-    public void updateCnt() {
+    public synchronized void updateCnt() {
         cnt++;
         if (cnt == numOfStrategies)
             this.isDone = true;

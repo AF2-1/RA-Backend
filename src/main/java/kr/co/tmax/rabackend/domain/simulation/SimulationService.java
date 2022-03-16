@@ -134,7 +134,7 @@ public class SimulationService {
     }
 
     //@Transactional
-    public void completeStrategy(CompleteStrategyRequest command) {
+    public synchronized void completeStrategy(CompleteStrategyRequest command) {
         // Todo: dirty Read
 
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
@@ -149,7 +149,7 @@ public class SimulationService {
 
 //        Strategy strategy = strategies.get(command.getStrategyName());
 
-        if (strategy.isDone()) // 어짜피 done 상태에서 콜백티 올 것
+        if (strategy.isDone())
             return;
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
