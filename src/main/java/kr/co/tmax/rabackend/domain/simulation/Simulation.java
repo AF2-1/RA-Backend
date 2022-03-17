@@ -1,7 +1,6 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
 import kr.co.tmax.rabackend.domain.asset.Asset;
-import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,15 +8,10 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -37,7 +31,6 @@ public class Simulation {
     private LocalDate endDate;
     private LocalDateTime createdDatetime;
     private int numOfStrategies;
-//    private Map<String, Strategy> strategies = new HashMap<>();
 
     @Builder
     public Simulation(String userId, List<Asset>
@@ -54,10 +47,6 @@ public class Simulation {
         this.endDate = endDate;
         this.numOfStrategies = numOfStrategies;
     }
-
-//    public void addStrategy(String name, Strategy strategy) {
-//        strategies.put(name, strategy);
-//    }
 
     public synchronized void updateCnt() {
         cnt++;
