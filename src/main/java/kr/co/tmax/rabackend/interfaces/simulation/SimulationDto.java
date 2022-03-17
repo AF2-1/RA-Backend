@@ -11,8 +11,6 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -22,7 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 public class SimulationDto {
@@ -195,9 +192,6 @@ public class SimulationDto {
                     .map(strategy -> SimpleStrategyResponse.create(strategy))
                     .collect(Collectors.toList());
 
-//            List<String> assets = simulation.getAssets().stream()
-//                    .map(Asset::getName)
-//                    .collect(Collectors.toList());
             List<AssetResponse> assets = simulation.getAssets().stream()
                     .map(AssetResponse::create)
                     .collect(Collectors.toList());
@@ -232,7 +226,6 @@ public class SimulationDto {
 
         public static SimulationResponse create(Simulation simulation, List<Strategy> strategies) {
             List<StrategyResponse> strategyResponse = strategies
-//                    .entrySet()
                     .stream()
                     .map(strategy -> StrategyResponse.create(strategy))
                     .collect(Collectors.toList());

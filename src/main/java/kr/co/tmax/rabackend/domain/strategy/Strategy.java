@@ -1,7 +1,6 @@
 package kr.co.tmax.rabackend.domain.strategy;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
