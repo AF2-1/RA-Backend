@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @Slf4j
@@ -68,13 +68,9 @@ public class SimulationController {
         SimulationCommand.GetSimulationsRequest command = new SimulationCommand.GetSimulationsRequest(userId);
         List<Simulation> simulations = simulationService.getSimulations(command);
 
-        List<SimulationDto.SimpleSimulationResponse> simpleSimulationResponses = new ArrayList<>(simulations.size()); // TODO: stream 으로 변경
-        for(var simulation : simulations) {
-            List<Strategy> strategies = strategyService.findAllBySimulation(simulation.getSimulationId());
-            SimulationDto.SimpleSimulationResponse simpleSimulationResponse = SimulationDto.SimpleSimulationResponse.create(simulation, strategies);
-
-            simpleSimulationResponses.add(simpleSimulationResponse);
-        }
+        List<SimulationDto.SimpleSimulationResponse> simpleSimulationResponses = simulations.stream()
+                .map(simulation -> SimulationDto.SimpleSimulationResponse.create(simulation, strategyService.findAllBySimulation(simulation.getSimulationId())))
+                .collect(Collectors.toList());
 
         SimulationDto.SimulationsResponse simulationsResponse = new SimulationDto.SimulationsResponse(userId, simpleSimulationResponses);
 
