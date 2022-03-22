@@ -13,6 +13,7 @@ import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,7 +36,7 @@ public class SimulationService {
 
     public void registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = request.getAssets().stream().map(a ->
-                assetReader.searchByTickerAndIndex(a.getTicker(), a.getIndex())).collect(Collectors.toList());
+                assetReader.searchByTickerAndIndex(a.getTicker(), a.getIndex()).orElse(new Asset())).collect(Collectors.toList());
 
         log.debug("registerSimulation called | assets: {}", assets);
         Simulation simulation = Simulation.builder()

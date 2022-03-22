@@ -11,9 +11,4 @@ class RaBackendApplicationTests {
     @Test
     void contextLoads() {
     }
-
-    @Test
-    void 시간계산() {
-        System.out.println(LocalTime.now());
-    }
 }
