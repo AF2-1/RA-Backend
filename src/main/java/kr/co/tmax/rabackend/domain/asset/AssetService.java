@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.asset;
 
+import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.interfaces.asset.AssetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,6 @@ public class AssetService {
     }
 
     public Asset searchByTickerAndIndex(String ticker, String index) {
-        return assetReader.searchByTickerAndIndex(ticker, index);
+        return assetReader.searchByTickerAndIndex(ticker, index).orElseThrow(() -> new ResourceNotFoundException("자산 데이터가 존재하지 않습니다"));
     }
 }

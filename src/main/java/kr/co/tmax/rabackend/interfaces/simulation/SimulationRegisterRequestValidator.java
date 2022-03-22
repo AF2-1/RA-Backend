@@ -74,7 +74,7 @@ public class SimulationRegisterRequestValidator implements Validator {
 
     private void checkValidDate(LocalDate startDate, LocalDate endDate, List<AssetCommand> assets, Errors errors) {
         if (assets.stream().noneMatch(Predicate.not(asset -> assetReader.existsByTickerAndIndex(asset.getTicker(), asset.getIndex())))) {
-            List<Asset> assetList = assets.stream().map(asset -> assetReader.searchByTickerAndIndex(asset.getTicker(), asset.getIndex())).collect(Collectors.toList());
+            List<Asset> assetList = assets.stream().map(asset -> assetReader.searchByTickerAndIndex(asset.getTicker(), asset.getIndex()).orElse(new Asset())).collect(Collectors.toList());
             LocalDate validStartDate = LocalDate.from(assetList.stream().map(Asset::getStartDate)
                     .max(LocalDateTime::compareTo).orElseThrow(null));
             LocalDate validEndDate = LocalDate.from(assetList.stream().map(Asset::getEndDate)

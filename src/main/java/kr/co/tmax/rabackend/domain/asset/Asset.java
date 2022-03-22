@@ -1,7 +1,6 @@
 package kr.co.tmax.rabackend.domain.asset;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -10,6 +9,9 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Document(collection = "assets")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Asset {
     @Id
     private String id;
