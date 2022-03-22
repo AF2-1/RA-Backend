@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class AssetService {
-
     private final AssetReader assetReader;
 
     public List<Asset> findAll() {

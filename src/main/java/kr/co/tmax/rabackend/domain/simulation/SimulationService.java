@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -49,14 +48,11 @@ public class SimulationService {
                 .numOfStrategies(request.getStrategies().size())
                 .build();
 
-//        Map<String, Strategy> strategies = simulation.getStrategies();
-//        request.getStrategies().forEach(strategyName -> strategies.put(strategyName, new Strategy(simulationId)));
         final Simulation storedSimulation = simulationStore.store(simulation);
 
         request.getStrategies().forEach(strategyName -> strategyStore.store(new Strategy(strategyName, storedSimulation.getSimulationId())));
 
         requestAA(simulation, request.getStrategies());
-        // return simulationStore.store(simulation);
     }
 
     /**
@@ -135,22 +131,11 @@ public class SimulationService {
     }
 
     public synchronized void completeStrategy(CompleteStrategyRequest command) {
-        // Todo: dirty Read
-
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
                 () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-//        Map<String, Strategy> strategies = simulation.getStrategies();
-//        if (!strategies.containsKey(command.getStrategyName()))
-//            throw new ResourceNotFoundException("Simulation", "Simulation.Strategies", command.getStrategyName());
-
         Strategy strategy = strategyReader.findBySimulationIdAndStrategyName(command.getSimulationId(), command.getStrategyName()).orElseThrow(
                 () -> new ResourceNotFoundException("Strategy", "StrategyName", command.getStrategyName()));
-
-//        Strategy strategy = strategies.get(command.getStrategyName());
-
-//        if (strategy.isDone())
-//            return;
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),

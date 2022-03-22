@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AssetReader {
-
     Optional<Asset> searchByTickerAndIndex(String ticker, String index);
 
     List<Asset> findAll();
