@@ -44,7 +44,6 @@ public class SimulationService {
                 .endDate(request.getEndDate())
                 .startDate(request.getStartDate())
                 .assets(assets)
-                .numOfStrategies(request.getStrategies().size())
                 .build();
 
         final Simulation storedSimulation = simulationStore.store(simulation);

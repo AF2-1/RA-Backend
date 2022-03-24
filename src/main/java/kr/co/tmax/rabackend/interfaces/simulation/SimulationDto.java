@@ -234,10 +234,14 @@ public class SimulationDto {
                     .map(AssetResponse::create)
                     .collect(Collectors.toList());
 
+            int completedStrategyCnt = (int)strategies.stream().filter(strategy -> strategy.isDone() == true).count();
+
+            if(completedStrategyCnt == strategies.size()) simulation.complete();
+
             return SimulationResponse.builder()
                     .simulationId(simulation.getSimulationId())
                     .assets(assets)
-                    .isDone(simulation.isDone())
+                    .isDone(completedStrategyCnt == strategies.size())
                     .rebalancingPeriod(simulation.getRebalancingPeriod())
                     .startDate(simulation.getStartDate())
                     .endDate(simulation.getEndDate())
