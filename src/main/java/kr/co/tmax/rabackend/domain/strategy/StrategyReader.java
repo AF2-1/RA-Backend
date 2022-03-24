@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface StrategyReader {
 
-    Optional<Strategy> findBySimulationIdAndStrategyName(String simulationId, String strategyName);
+    Optional<Strategy> findBySimulationIdAndName(String simulationId, String name);
 
     List<Strategy> findAllBySimulationId(String simulationId);
 

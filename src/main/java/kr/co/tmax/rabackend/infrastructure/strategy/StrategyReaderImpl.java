@@ -14,7 +14,7 @@ public class StrategyReaderImpl implements StrategyReader {
     private final StrategyRepository strategyRepository;
 
     @Override
-    public Optional<Strategy> findBySimulationIdAndStrategyName(String simulationId, String strategyName) {
+    public Optional<Strategy> findBySimulationIdAndName(String simulationId, String strategyName) {
         return strategyRepository.findBySimulationIdAndName(simulationId, strategyName);
     }
 
