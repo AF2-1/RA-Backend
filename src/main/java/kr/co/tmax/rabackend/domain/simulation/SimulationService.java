@@ -13,7 +13,6 @@ import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterStrategyRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -45,7 +44,6 @@ public class SimulationService {
                 .endDate(request.getEndDate())
                 .startDate(request.getStartDate())
                 .assets(assets)
-                .numOfStrategies(request.getStrategies().size())
                 .build();
 
         final Simulation storedSimulation = simulationStore.store(simulation);
@@ -130,18 +128,19 @@ public class SimulationService {
         simulationStore.delete(simulation);
     }
 
-    public synchronized void completeStrategy(CompleteStrategyRequest command) {
-        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
-                () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
+    public void completeStrategy(CompleteStrategyRequest command) {
+//        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
+//                () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
 
-        Strategy strategy = strategyReader.findBySimulationIdAndStrategyName(command.getSimulationId(), command.getStrategyName()).orElseThrow(
-                () -> new ResourceNotFoundException("Strategy", "StrategyName", command.getStrategyName()));
+        Strategy strategy = strategyReader.findBySimulationIdAndName(command.getSimulationId(), command.getStrategyName()).orElseThrow(
+                () -> new ResourceNotFoundException(command.getStrategyName(), command.getSimulationId(), command.getStrategyName()));
 
         strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
-        simulation.updateCnt();
-        simulationStore.store(simulation);
+
+//        simulation.updateCnt();
+//        simulationStore.store(simulation);
         strategyStore.store(strategy);
 
         log.debug("strategy is completed with simulationId: {} | strategyName: {}", command.getSimulationId(), command.getStrategyName());

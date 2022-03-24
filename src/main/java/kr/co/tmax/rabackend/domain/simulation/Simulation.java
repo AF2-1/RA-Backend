@@ -23,34 +23,38 @@ public class Simulation {
     @Id
     private String simulationId;
     private String userId;
-    private int cnt;
+//    private int cnt;
     private boolean isDone;
     private List<Asset> assets;
     private int rebalancingPeriod;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDateTime createdDatetime;
-    private int numOfStrategies;
+//    private int numOfStrategies;
 
     @Builder
     public Simulation(String userId, List<Asset>
             assets, int rebalancingPeriod, LocalDate startDate,
-                      LocalDate endDate, int numOfStrategies) {
+                      LocalDate endDate) {
         this.simulationId = UUID.randomUUID().toString();
         this.userId = userId;
         this.isDone = false;
-        this.cnt = 0;
+//        this.cnt = 0;
         this.createdDatetime = LocalDateTime.now();
         this.assets = assets;
         this.rebalancingPeriod = rebalancingPeriod;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.numOfStrategies = numOfStrategies;
+//        this.numOfStrategies = numOfStrategies;
     }
 
-    public synchronized void updateCnt() {
-        cnt++;
-        if (cnt == numOfStrategies)
-            this.isDone = true;
+    public void complete() {
+        isDone = true;
     }
+
+//    public synchronized void updateCnt() {
+//        cnt++;
+//        if (cnt == numOfStrategies)
+//            this.isDone = true;
+//    }
 }
