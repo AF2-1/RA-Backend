@@ -196,12 +196,10 @@ public class SimulationDto {
                     .map(AssetResponse::create)
                     .collect(Collectors.toList());
 
-            updateCompletionStatus(simulation, strategies);
-
             return SimpleSimulationResponse.builder()
                     .simulationId(simulation.getSimulationId())
                     .assets(assets)
-                    .isDone(simulation.isDone())
+                    .isDone(simulation.isDone() ? true : updateCompletionStatus(simulation, strategies))
                     .rebalancingPeriod(simulation.getRebalancingPeriod())
                     .startDate(simulation.getStartDate())
                     .endDate(simulation.getEndDate())
@@ -238,12 +236,10 @@ public class SimulationDto {
                     .map(AssetResponse::create)
                     .collect(Collectors.toList());
 
-            updateCompletionStatus(simulation, strategies);
-
             return SimulationResponse.builder()
                     .simulationId(simulation.getSimulationId())
                     .assets(assets)
-                    .isDone(simulation.isDone())
+                    .isDone(simulation.isDone() ? true : updateCompletionStatus(simulation, strategies))
                     .rebalancingPeriod(simulation.getRebalancingPeriod())
                     .startDate(simulation.getStartDate())
                     .endDate(simulation.getEndDate())
@@ -253,10 +249,16 @@ public class SimulationDto {
         }
     }
 
-    private static void updateCompletionStatus(Simulation simulation, List<Strategy> strategies) {
+    private static boolean updateCompletionStatus(Simulation simulation, List<Strategy> strategies) {
         int completedStrategyCnt = (int)strategies.stream().filter(strategy -> strategy.isDone() == true).count();
 
-        if(completedStrategyCnt == strategies.size()) simulation.complete();
+        if(completedStrategyCnt == strategies.size()) {
+            simulation.complete();
+
+            return true;
+        }
+
+        return false;
     }
 
     @Builder
