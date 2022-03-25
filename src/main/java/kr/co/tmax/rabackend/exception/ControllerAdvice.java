@@ -1,6 +1,6 @@
 package kr.co.tmax.rabackend.exception;
 
-import kr.co.tmax.rabackend.common.CommonResponse;
+import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.interfaces.alert.AlertService;
 import kr.co.tmax.rabackend.interfaces.alert.SlackChannel;
 import kr.co.tmax.rabackend.interfaces.validation.ValidationResult;

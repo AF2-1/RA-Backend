@@ -1,14 +1,18 @@
 spring:
   messages:
     basename: errors
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.154.55:3306/RA?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: password
   data:
     mongodb:
-      host: mongo
-      port: 27017
-      database: ra
-      username: tmaxrobo
-      password: tmaxrobo
-      authentication-database: admin
+      uri: mongodb://192.168.154.123:27023/ra?replSet=dbrs?authSource=admin
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
   security:
     oauth2:
       client:

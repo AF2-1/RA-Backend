@@ -1,4 +1,4 @@
-package kr.co.tmax.rabackend.common;
+package kr.co.tmax.rabackend.config.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
