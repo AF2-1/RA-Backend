@@ -8,7 +8,7 @@ spring:
     password: password
   data:
     mongodb:
-      uri: mongodb://192.168.154.123:27023/ra?replSet=dbrs?authSource=admin
+      uri: mongodb://192.168.154.123:27021/ra?replSet=dbrs?authSource=admin
   jpa:
     show-sql: true
     hibernate:
