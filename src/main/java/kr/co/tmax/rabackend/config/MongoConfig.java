@@ -14,8 +14,8 @@
 //import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 //
 //@Configuration
-////@ComponentScan(basePackages = "kr.co.tmax.rabackend.domain")
-////@EnableMongoRepositories(basePackages = "kr.co.tmax.rabackend.domain")
+//@EnableMongoRepositories(basePackages = {"kr.co.tmax.rabackend.infrastructure.asset", "kr.co.tmax.rabackend.infrastructure.simulation",
+//        "kr.co.tmax.rabackend.infrastructure.strategy"})
 //public class MongoConfig extends AbstractMongoClientConfiguration {
 //
 //    @Bean
@@ -30,7 +30,7 @@
 //
 //    @Override
 //    public MongoClient mongoClient() {
-//        final ConnectionString connectionString = new ConnectionString("mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0&retryWrties=true");
+//        final ConnectionString connectionString = new ConnectionString("mongodb://192.168.154.123:27023/ra?replSet=dbrs");
 //        final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
 //                .applyConnectionString(connectionString)
 //                .build();

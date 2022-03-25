@@ -1,7 +1,7 @@
 package kr.co.tmax.rabackend.interfaces.simulation;
 
 import io.swagger.annotations.ApiOperation;
-import kr.co.tmax.rabackend.common.CommonResponse;
+import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;

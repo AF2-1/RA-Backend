@@ -1,7 +1,7 @@
 package kr.co.tmax.rabackend.interfaces.asset;
 
 import io.swagger.annotations.ApiOperation;
-import kr.co.tmax.rabackend.common.CommonResponse;
+import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import lombok.RequiredArgsConstructor;
