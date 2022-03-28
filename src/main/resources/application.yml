@@ -3,7 +3,7 @@ spring:
     basename: errors
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.154.55:3306/RA?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://192.168.154.124:3306/RA?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: password
   data:

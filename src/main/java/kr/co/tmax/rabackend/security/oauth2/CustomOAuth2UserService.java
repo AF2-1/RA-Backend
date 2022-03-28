@@ -25,28 +25,29 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
+        @Override
+        public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
+            OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
-        try {
-            return processOAuth2User(oAuth2UserRequest, oAuth2User);
-        } catch (AuthenticationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            // Throwing an instance of AuthenticationException will trigger the OAuth2AuthenticationFailureHandler
-            throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
-        }
-    }
-
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-
-        if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
-            throw new OAuth2AuthenticationProcessingException("ID not found from OAuth2 provider");
+            try {
+                return processOAuth2User(oAuth2UserRequest, oAuth2User);
+            } catch (AuthenticationException ex) {
+                throw ex;
+            } catch (Exception ex) {
+                // Throwing an instance of AuthenticationException will trigger the OAuth2AuthenticationFailureHandler
+                throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
+            }
         }
 
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
+            OAuth2UserInfo oAuth2UserInfo =
+                    OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
+
+            if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
+                throw new OAuth2AuthenticationProcessingException("ID not found from OAuth2 provider");
+            }
+
+            Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
 
         if (userOptional.isEmpty()) {
             User newUser = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
