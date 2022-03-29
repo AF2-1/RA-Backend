@@ -9,6 +9,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://192.168.154.123:27021/ra?replSet=dbrs?authSource=admin&connectTimeoutMS=3000&readPreference=secondaryPreferred
+  redis:
+    host: 192.168.154.123
+    port: 6379
   jpa:
     show-sql: true
     hibernate:

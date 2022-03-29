@@ -7,6 +7,7 @@ import kr.co.tmax.rabackend.domain.asset.AssetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class AssetController {
     private final AssetService assetService;
     private final ModelMapper modelMapper;
 
+    @Cacheable(value = "assets")
     @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
     public CommonResponse findAsset(@RequestParam(required = false) String ticker,

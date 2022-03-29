@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommonResponse<T> {
+public class CommonResponse<T> implements Serializable {
     private String message;
     private T data;
 

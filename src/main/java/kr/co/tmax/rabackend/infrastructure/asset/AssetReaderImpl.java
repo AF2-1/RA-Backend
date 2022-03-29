@@ -5,11 +5,11 @@ import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class AssetReaderImpl implements AssetReader {
@@ -18,12 +18,12 @@ public class AssetReaderImpl implements AssetReader {
 
     @Override
     public List<Asset> findAll() {
-        return assetRepository.findAll();
+        return (List<Asset>) assetRepository.findAll();
     }
 
     @Override
     public Optional<Asset> searchByTickerAndIndex(String ticker, String index) throws ResourceNotFoundException {
-        return assetRepository.searchByTickerAndIndex(ticker, index);
+        return assetRepository.findByTickerAndIndex(ticker, index);
     }
 
     @Override

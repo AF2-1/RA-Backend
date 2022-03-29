@@ -4,11 +4,12 @@ import kr.co.tmax.rabackend.domain.asset.Asset;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class AssetDto {
+public class AssetDto implements Serializable {
     private String index;
     private String ticker;
     private String name;
