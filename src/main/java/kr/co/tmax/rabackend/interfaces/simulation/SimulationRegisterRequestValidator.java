@@ -7,6 +7,8 @@ import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.domain.strategy.Strategy;
+import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.interfaces.alert.AlertService;
 import kr.co.tmax.rabackend.interfaces.asset.AssetDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterSimulationRequest;
@@ -18,10 +20,7 @@ import org.springframework.validation.Validator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,7 @@ public class SimulationRegisterRequestValidator implements Validator {
 
     private final AppProperties appProperties;
     private final AssetReader assetReader;
+    private final StrategyReader strategyReader;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -60,10 +60,20 @@ public class SimulationRegisterRequestValidator implements Validator {
 //        request.getAssets()
     }
 
-    public void checkConcurrentSimulation(List<Simulation> simulations, Errors errors) {
-        if (simulations.stream().anyMatch(s -> !s.isDone())) {
-            errors.rejectValue("strategies", "simulation.running", null, null);
-        }
+    public void checkConcurrentSimulation(List<Simulation> simulations, final Errors errors) {
+        simulations.stream()
+                .filter(simulation -> !simulation.isDone())
+                .forEach(filteredSimulation -> {
+                    if (strategyReader.findAllBySimulationId(filteredSimulation.getSimulationId()).stream().anyMatch(strategy -> !strategy.isDone())) {
+                        errors.rejectValue("strategies", "simulation.running", null, null);
+                        return;
+                    }
+                    filteredSimulation.complete();
+                });
+
+//        if (simulations.stream().anyMatch(s -> !s.isDone())) {
+//            errors.rejectValue("strategies", "simulation.running", null, null);
+//        }
     }
 
     private void checkValidAsset(List<AssetCommand> assets, Errors errors) {
