@@ -70,10 +70,6 @@ public class SimulationRegisterRequestValidator implements Validator {
                     }
                     filteredSimulation.complete();
                 });
-
-//        if (simulations.stream().anyMatch(s -> !s.isDone())) {
-//            errors.rejectValue("strategies", "simulation.running", null, null);
-//        }
     }
 
     private void checkValidAsset(List<AssetCommand> assets, Errors errors) {

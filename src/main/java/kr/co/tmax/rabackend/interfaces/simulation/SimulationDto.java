@@ -39,7 +39,6 @@ public class SimulationDto {
         private LocalDate startDate;
         private LocalDate endDate;
         @NotEmpty
-        @Size(max = 5)
         private List<String> strategies;
     }
 
