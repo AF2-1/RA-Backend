@@ -13,9 +13,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableConfigurationProperties(AppProperties.class)
 @SpringBootApplication
 @EnableAsync
-@EnableJpaRepositories(basePackages = "kr.co.tmax.rabackend.infrastructure.user")
-@EnableMongoRepositories(basePackages = {"kr.co.tmax.rabackend.infrastructure.simulation",
-        "kr.co.tmax.rabackend.infrastructure.strategy", "kr.co.tmax.rabackend.infrastructure.asset"})
+//@EnableJpaRepositories(basePackages = "kr.co.tmax.rabackend.infrastructure.user")
+//@EnableMongoRepositories(basePackages = {"kr.co.tmax.rabackend.infrastructure.simulation",
+//        "kr.co.tmax.rabackend.infrastructure.strategy", "kr.co.tmax.rabackend.infrastructure.asset"})
 @EnableCaching
 public class RaBackendApplication {
     public static void main(String[] args) {
