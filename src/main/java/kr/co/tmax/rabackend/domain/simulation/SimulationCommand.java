@@ -23,6 +23,17 @@ public class SimulationCommand {
         private LocalDate startDate;
         private LocalDate endDate;
         private List<String> strategies;
+
+        @Builder
+        public RegisterSimulationRequest(String userId, int cnt, List<AssetCommand> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate, List<String> strategies) {
+            this.userId = userId;
+            this.cnt = cnt;
+            this.assets = assets;
+            this.rebalancingPeriod = rebalancingPeriod;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.strategies = strategies;
+        }
     }
 
     @Setter
@@ -62,3 +73,4 @@ public class SimulationCommand {
         List<PortfolioValue> dailyValues;
     }
 }
+
