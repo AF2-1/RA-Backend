@@ -26,6 +26,31 @@ class AssetServiceTest {
     AssetReader assetReader;
 
     @Test
+    void 자산생성_테스트() {
+        // given
+        Asset asset = new Asset();
+
+        // then
+        assertThat(asset.getName()).isNull();
+    }
+
+    @Test
+    void 자산빌더테스트() throws Exception {
+        //given
+        String saveAsset = Asset.builder()
+                .id("1")
+                .ticker("033780.KS")
+                .index("KOSPI")
+                .name("KT & G KT&G")
+                .startDate(LocalDateTime.now())
+                .endDate(LocalDateTime.now())
+                .toString();
+
+        //then
+        assertThat(String.class).isEqualTo(saveAsset.getClass());
+     }
+
+    @Test
     @DisplayName("자산데이터 조회 테스트")
     void 자산데이터_조회_테스트() {
         // given
@@ -46,6 +71,7 @@ class AssetServiceTest {
         assertThat(findAsset.getName()).isEqualTo(saveAsset.getName());
         assertThat(findAsset.getTicker()).isEqualTo(saveAsset.getTicker());
         assertThat(findAsset.getIndex()).isEqualTo(saveAsset.getIndex());
+        assertThat(findAsset.toString()).isEqualTo(saveAsset.toString());
     }
 
     @Test
