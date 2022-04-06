@@ -9,10 +9,7 @@ import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.external.KserveApiClient;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
@@ -146,46 +143,37 @@ class SimulationServiceTest {
         then(simulationReader).should().findByUserIdAndSimulationId(anyString(), anyString());
     }
 
-//    @Test
-//    @DisplayName(value = "simulation 단건조회 중 찾을 수 없으면 예외를 던진다.")
-//    void getSimulationFailTest() {
-//        // given
-//        given(simulationReader.findByUserIdAndSimulationId(anyString(), anyString())).willThrow(new ResourceNotFoundException(anyString(), anyString(), anyString()));
-//
-//        // when
-//        simulationService.getSimulation(new SimulationCommand.GetSimulationRequest(anyString(), anyString()));
-//
-//        // then
-//        then(simulationReader).should().findByUserIdAndSimulationId(anyString(), anyString());
-//    }
+    @Nested
+    @DisplayName(value = "deleteSimulation 메소드는")
+    class SimulationDeletion {
+        @Test
+        @DisplayName(value = "올바른 simulationId가 주어지면 simulation을 삭제할 수 있다.")
+        void deleteSimulationTest() {
+            // given
+            given(simulationReader.findById(anyString())).willReturn(Optional.of(simulation));
+            BDDMockito.doNothing().when(simulationStore).delete(any());
 
-    @Test
-    @DisplayName(value = "simulation을 삭제할 수 있다")
-    void deleteSimulationTest() {
-        // given
-        given(simulationReader.findById(anyString())).willReturn(Optional.of(simulation));
-        BDDMockito.doNothing().when(simulationStore).delete(any());
+            // when
+            simulationService.deleteSimulation(new SimulationCommand.DeleteSimulationRequest(simulation.getUserId(), anyString()));
 
-        // when
-        simulationService.deleteSimulation(new SimulationCommand.DeleteSimulationRequest(simulation.getUserId(), anyString()));
+            // then
+            then(simulationReader).should().findById(anyString());
+            then(simulationStore).should().delete(any());
+        }
 
-        // then
-        then(simulationReader).should().findById(anyString());
-        then(simulationStore).should().delete(any());
-    }
+        @Test
+        @DisplayName(value = "userId가 조회된 simulation의 userId와 다르면 BadRequestException이 발생한다.")
+        void deleteSimulationFailTest() {
+            // given
+            given(simulationReader.findById(anyString())).willThrow(new BadRequestException("simulation의 소유자만 삭제가 가능합니다"));
 
-    @Test
-    @DisplayName(value = "userId가 다르면 BadRequestException가 발생한다.")
-    void deleteSimulationFailTest() {
-        // given
-        given(simulationReader.findById(anyString())).willThrow(new BadRequestException("simulation의 소유자만 삭제가 가능합니다"));
-
-        // when, then
-        Assertions.assertThrows(
-                BadRequestException.class,
-                () -> simulationService.deleteSimulation(new SimulationCommand.DeleteSimulationRequest(UUID.randomUUID().toString(), simulation.getSimulationId()))
-        );
-        then(simulationReader).should().findById(anyString());
-        then(simulationStore).should(BDDMockito.times(0)).delete(any());
+            // when, then
+            Assertions.assertThrows(
+                    BadRequestException.class,
+                    () -> simulationService.deleteSimulation(new SimulationCommand.DeleteSimulationRequest(UUID.randomUUID().toString(), anyString()))
+            );
+            then(simulationReader).should().findById(anyString());
+            then(simulationStore).should(BDDMockito.times(0)).delete(any());
+        }
     }
 }
