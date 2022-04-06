@@ -1,6 +1,5 @@
 package kr.co.tmax.rabackend.domain.simulation;
 
-import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.asset.AssetReader;
@@ -15,7 +14,6 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class SimulationServiceTest {
@@ -44,10 +43,6 @@ class SimulationServiceTest {
     private StrategyReader strategyReader;
     @Mock
     private AssetReader assetReader;
-    @Mock
-    private WebClient webClient;
-    @Mock
-    private AppProperties appProperties;
     @Mock
     private KserveApiClient kserveApiClient;
 
@@ -111,9 +106,9 @@ class SimulationServiceTest {
         simulationService.registerSimulation(registerSimulationRequest);
 
         // then
-        then(assetReader).should(BDDMockito.atLeast(1)).searchByTickerAndIndex(anyString(), anyString());
+        then(assetReader).should(BDDMockito.atLeast(3)).searchByTickerAndIndex(anyString(), anyString());
         then(simulationStore).should().store(any());
-        then(strategyStore).should(BDDMockito.atLeast(1)).store(any(Strategy.class));
+        then(strategyStore).should(BDDMockito.atLeast(3)).store(any(Strategy.class));
         then(kserveApiClient).should().requestAA(any(), any());
     }
 
@@ -145,7 +140,7 @@ class SimulationServiceTest {
 
     @Nested
     @DisplayName(value = "deleteSimulation 메소드는")
-    class SimulationDeletion {
+    class SimulationDeletionTest {
         @Test
         @DisplayName(value = "올바른 simulationId가 주어지면 simulation을 삭제할 수 있다.")
         void deleteSimulationTest() {
@@ -175,5 +170,23 @@ class SimulationServiceTest {
             then(simulationReader).should().findById(anyString());
             then(simulationStore).should(BDDMockito.times(0)).delete(any());
         }
+    }
+
+    @Test
+    @DisplayName(value = "전략 상태를 완료로 바꿀 수 있다.")
+    void completeStrategyTest() {
+        // given
+        final var strategyMock = mock(Strategy.class);
+
+        given(strategyReader.findBySimulationIdAndName(anyString(), anyString())).willReturn(Optional.of(strategyMock));
+        BDDMockito.doNothing().when(strategyMock).complete(any(), any(), any(), any(), any(), any());
+        given(strategyStore.store(strategyMock)).willReturn(strategyMock);
+
+        // when
+        simulationService.completeStrategy(SimulationCommand.CompleteStrategyRequest.builder().simulationId("1").strategyName("ew").build());
+
+        // then
+        then(strategyReader).should(BDDMockito.atLeast(1)).findBySimulationIdAndName(anyString(), anyString());
+        then(strategyStore).should(BDDMockito.atLeast(1)).store(any());
     }
 }
