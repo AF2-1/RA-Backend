@@ -7,6 +7,7 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
 import kr.co.tmax.rabackend.exception.BadRequestException;
+import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.KserveApiClient;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -125,17 +126,36 @@ class SimulationServiceTest {
         then(simulationReader).should().findByUserId(anyString());
     }
 
-    @Test
-    @DisplayName(value = "simulation 단건조회를 할 수 있다.")
-    void getSimulationTest() {
-        // given
-        given(simulationReader.findByUserIdAndSimulationId(anyString(), anyString())).willReturn(Optional.of(new Simulation()));
+    @Nested
+    @DisplayName(value = "getSimulation 메소드는")
+    class FindSimulationTest {
+        @Test
+        @DisplayName(value = "userId와 simulationId로 단건조회를 할 수 있다.")
+        void getSimulationTest() {
+            // given
+            given(simulationReader.findByUserIdAndSimulationId(anyString(), anyString())).willReturn(Optional.of(new Simulation()));
 
-        // when
-        simulationService.getSimulation(new SimulationCommand.GetSimulationRequest(anyString(), anyString()));
+            // when
+            simulationService.getSimulation(new SimulationCommand.GetSimulationRequest(anyString(), anyString()));
 
-        // then
-        then(simulationReader).should().findByUserIdAndSimulationId(anyString(), anyString());
+            // then
+            then(simulationReader).should().findByUserIdAndSimulationId(anyString(), anyString());
+        }
+
+        @Test
+        @DisplayName(value = "userId와 simulationId로 simulation을 찾을 수 없으면 예외가 발생한다.")
+        void getSimulationFailTest() {
+            // given
+            given(simulationReader.findByUserIdAndSimulationId(anyString(), anyString())).willReturn(Optional.empty());
+
+            // when, then
+            Assertions.assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> simulationService.getSimulation(new SimulationCommand.GetSimulationRequest(anyString(), anyString()))
+            );
+
+            then(simulationReader).should().findByUserIdAndSimulationId(anyString(), anyString());
+        }
     }
 
     @Nested
@@ -157,10 +177,26 @@ class SimulationServiceTest {
         }
 
         @Test
+        @DisplayName(value = "userId와 simulationId로 simulation을 찾을 수 없으면 예외가 발생한다.")
+        void getSimulationFailTest() {
+            // given
+            given(simulationReader.findById(anyString())).willReturn(Optional.empty());
+
+            // when, then
+            Assertions.assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> simulationService.deleteSimulation(new SimulationCommand.DeleteSimulationRequest(UUID.randomUUID().toString(), anyString()))
+            );
+
+            then(simulationReader).should().findById(anyString());
+            then(simulationStore).should(BDDMockito.times(0)).delete(any());
+        }
+
+        @Test
         @DisplayName(value = "userId가 조회된 simulation의 userId와 다르면 BadRequestException이 발생한다.")
         void deleteSimulationFailTest() {
             // given
-            given(simulationReader.findById(anyString())).willThrow(new BadRequestException("simulation의 소유자만 삭제가 가능합니다"));
+            given(simulationReader.findById(anyString())).willReturn(Optional.of(simulation));
 
             // when, then
             Assertions.assertThrows(
@@ -172,21 +208,48 @@ class SimulationServiceTest {
         }
     }
 
-    @Test
-    @DisplayName(value = "전략 상태를 완료로 바꿀 수 있다.")
-    void completeStrategyTest() {
-        // given
-        final var strategyMock = mock(Strategy.class);
+    @Nested
+    @DisplayName(value = "completeStrategy 메소드는")
+    class CompleteStrategyTest {
+        @Test
+        @DisplayName(value = "전략 상태를 완료로 바꿀 수 있다.")
+        void completeStrategyTest() {
+            // given
+            final var strategyMock = mock(Strategy.class);
 
-        given(strategyReader.findBySimulationIdAndName(anyString(), anyString())).willReturn(Optional.of(strategyMock));
-        BDDMockito.doNothing().when(strategyMock).complete(any(), any(), any(), any(), any(), any());
-        given(strategyStore.store(strategyMock)).willReturn(strategyMock);
+            given(strategyReader.findBySimulationIdAndName(anyString(), anyString())).willReturn(Optional.of(strategyMock));
+            BDDMockito.doNothing().when(strategyMock).complete(any(), any(), any(), any(), any(), any());
+            given(strategyStore.store(strategyMock)).willReturn(strategyMock);
 
-        // when
-        simulationService.completeStrategy(SimulationCommand.CompleteStrategyRequest.builder().simulationId("1").strategyName("ew").build());
+            // when
+            simulationService.completeStrategy(SimulationCommand.CompleteStrategyRequest.builder().simulationId("1").strategyName("ew").build());
 
-        // then
-        then(strategyReader).should(BDDMockito.atLeast(1)).findBySimulationIdAndName(anyString(), anyString());
-        then(strategyStore).should(BDDMockito.atLeast(1)).store(any());
+            // then
+            then(strategyReader).should(BDDMockito.atLeast(1)).findBySimulationIdAndName(anyString(), anyString());
+            then(strategyStore).should(BDDMockito.atLeast(1)).store(any());
+        }
+
+        @Test
+        @DisplayName(value = "SimulationId와 전략Name으로 전략을 찾을 수 없으면 예외가 발생한다.")
+        void completeStrategyFailTest() {
+            // given
+            final var strategyMock = mock(Strategy.class);
+            given(strategyReader.findBySimulationIdAndName(anyString(), anyString())).willReturn(Optional.empty());
+
+            // when, then
+            Assertions.assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> simulationService.completeStrategy(
+                            SimulationCommand.CompleteStrategyRequest.builder()
+                                    .simulationId(anyString())
+                                    .strategyName(anyString())
+                                    .build()
+                    )
+            );
+
+            then(strategyMock).should(BDDMockito.atLeast(0)).complete(any(), any(), any(), any(), any(), any()); // TODO: strategyMock을 넣는게 맞는지 확인
+            then(strategyStore).should(BDDMockito.atLeast(0)).store(any());
+        }
     }
+
 }
