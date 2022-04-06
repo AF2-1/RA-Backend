@@ -30,10 +30,9 @@ public class AssetController {
     @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
     public CommonResponse findAsset(@RequestParam(required = false) String ticker,
-                                    @RequestParam(required = false) String name,
                                     @RequestParam(required = false) String index) {
 
-        log.info("ticker:{} name:{}", ticker, name);
+        log.info("ticker:{} index:{}", ticker, index);
 
         if (StringUtils.hasText(ticker) && StringUtils.hasText(index)) {
             Asset asset = assetService.searchByTickerAndIndex(ticker, index);
