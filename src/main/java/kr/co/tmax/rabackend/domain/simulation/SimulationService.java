@@ -70,9 +70,6 @@ public class SimulationService {
     }
 
     public void completeStrategy(CompleteStrategyRequest command) {
-//        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(
-//                () -> new ResourceNotFoundException("Simulation", "simulationId", command.getSimulationId()));
-
         Strategy strategy = strategyReader.findBySimulationIdAndName(command.getSimulationId(), command.getStrategyName()).orElseThrow(
                 () -> new ResourceNotFoundException(command.getStrategyName(), command.getSimulationId(), command.getStrategyName()));
 
@@ -80,8 +77,6 @@ public class SimulationService {
                 command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
 
-//        simulation.updateCnt();
-//        simulationStore.store(simulation);
         strategyStore.store(strategy);
 
         log.debug("strategy is completed with simulationId: {} | strategyName: {}", command.getSimulationId(), command.getStrategyName());
