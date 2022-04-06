@@ -82,9 +82,7 @@ public class SimulationDto {
         private Map<String, List<Double>> dailyPfWeights;
         private Map<String, Double> dailyPfValues;
 
-        // @Async
         public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
-
             ModelMapper modelMapper = new ModelMapper();
             Strategy.EvaluationResults result = modelMapper.map(evaluationResults, Strategy.EvaluationResults.class);
 
@@ -180,6 +178,7 @@ public class SimulationDto {
         private List<AssetResponse> assets;
         private LocalDate startDate;
         private LocalDate endDate;
+
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createdDatetime;
         private int rebalancingPeriod;
@@ -207,9 +206,7 @@ public class SimulationDto {
                     .strategies(simpleStrategyResponses)
                     .build();
         }
-
     }
-
 
     @Builder
     @Getter
