@@ -21,17 +21,34 @@ repositories {
     mavenCentral()
 }
 
+test {
+    useJUnitPlatform()
+    // test 태스크 종류 후 jacocoTestReport 태스크 실행
+    finalizedBy jacocoTestReport
+}
+
 jacoco {
-    toolVersion = "0.8.5"
-    reportsDir = file("$buildDir/customJacocoReportDir")
+    toolVersion = "0.8.7"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
 
 jacocoTestReport {
     reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
+        // 원하는 리포트를 켜고 끌 수 있다
+        html.required = true
+        xml.required = false
+        csv.required = false
+
+        //  각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있다
+        html.outputLocation = layout.buildDirectory.dir('test-coverage/jacocoHtml')
     }
+
+    // jacocoTestReport 태스크는 test 태스크에 의존한다
+    // 즉 test 태스크 실행 후 jacocoTestReport가 실행된다
+    dependsOn test
+
+    // jacocoTestReport 태스크 실행 후 jacocoTestCoverageVerification 태스크가 시행된다
+    finalizedBy 'jacocoTestCoverageVerification'
 }
 
 dependencies {
@@ -48,6 +65,11 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:3.0.0'
     implementation group: 'mysql', name: 'mysql-connector-java'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // [Jackson]
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+
 
 
     // [Swagger]
@@ -66,18 +88,13 @@ dependencies {
 
     // [Lombok]
     compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor("org.projectlombok:lombok")
 
     // [Redis]
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
 
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-}
-
-test {
-    useJUnitPlatform()
 }
 
 String dockerHubUsernameProperty = findProperty('dockerHubUsername') ?: 'neptunes032'
@@ -96,4 +113,18 @@ dockerRun {
     clean true
     daemonize true
     arguments '--network=ra-net'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+//                minimum = 0.30
+            }
+        }
+    }
 }
