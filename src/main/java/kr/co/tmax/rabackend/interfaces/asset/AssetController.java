@@ -26,23 +26,18 @@ public class AssetController {
     private final AssetService assetService;
     private final ModelMapper modelMapper;
 
-    @Cacheable(value = "assets")
+    @Cacheable(value = "assets", cacheManager = "assetCacheManager")
     @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
-    public CommonResponse findAsset(@RequestParam(required = false) String ticker,
-                                    @RequestParam(required = false) String index) {
-
-        log.info("ticker:{} index:{}", ticker, index);
-
-        if (StringUtils.hasText(ticker) && StringUtils.hasText(index)) {
-            Asset asset = assetService.searchByTickerAndIndex(ticker, index);
-            AssetDto result = modelMapper.map(asset, AssetDto.class);
-            return CommonResponse.withMessageAndData("티커와 인덱스로 자산 조회 성공", result);
-        }
-
+    public CommonResponse findAsset() {
+//
+//        if (StringUtils.hasText(ticker) && StringUtils.hasText(index)) {
+//            Asset asset = assetService.searchByTickerAndIndex(ticker, index);
+//            AssetDto result = modelMapper.map(asset, AssetDto.class);
+//            return CommonResponse.withMessageAndData("티커와 인덱스로 자산 조회 성공", result);
+//        }
         List<AssetDto> result = assetService.findAll()
                 .stream().map(AssetDto::new).collect(Collectors.toList());
-
         return CommonResponse.withMessageAndData("전체 자산 조회 성공", result);
     }
 }
