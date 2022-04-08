@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommonResponse<T> implements Serializable {
+public class CommonResponse<T> {
     private String message;
     private T data;
 
