@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Simulation 테스트")
+@DisplayName("Simulation에서")
 class SimulationTest {
 
     @Test
-    @DisplayName("Simulation을 완료상태로 바꿀 수 있다.")
+    @DisplayName("Simulation의 상태를 완료로 바꿀 수 있다.")
     void completeTest() {
         Simulation simulation = new Simulation();
 
