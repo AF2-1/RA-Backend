@@ -1,0 +1,69 @@
+spring:
+  messages:
+    basename: errors
+  data:
+    mongodb:
+      uri: mongodb://192.168.158.143:9042,192.168.158.143:9142,192.168.158.143:9242/ra?replicaset=docker-rs&connectTimeoutMS=3000&readPreference=secondaryPreferred
+  redis:
+    host: 192.168.158.143
+    port: 6379
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 195757371436-t9lqvlimk2n6t5fdmamoup2ft0p9cfv9.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpirationMsec: 864000000
+  cors:
+    allowedOrigins: http://robo.tmax.co.kr:8888
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
+  simulation:
+    strategies:
+      - ppo-growth
+      - ppo-neutral
+      - ppo-stable
+      - ew
+      - gmv
+      - mdp
+      - mvo
+      - rp
+      - iv
+      - kospi
+      - snp
+  ai:
+    url: http://192.168.153.44:9001
+    path: /v2/models/triton-mms/infer
+    host: triton-mms.kserve-test.example.com
+    callBackUrl: http://192.168.153.102:8080/api/v1/simulation/callback
+logging:
+  level:
+    kr:
+      co:
+        tmax:
+          rabackend: debug
+slack:
+  token: xoxb-1630331899815-3174643984272-If83e91hT5dGSRUZlPHqjAVy
+  channel:
+    monitor: C035511GZNU
+    error: C035FGZ3BE3
+    test: C034TH2N6HX
+    etc: C03555Y23DE
