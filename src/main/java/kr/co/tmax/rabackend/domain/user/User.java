@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @Document(collection = "users")
 @NoArgsConstructor
 public class User {
+
     @Id
     private String id;
 
