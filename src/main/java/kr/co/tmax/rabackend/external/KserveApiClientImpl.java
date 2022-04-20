@@ -35,12 +35,6 @@ public class KserveApiClientImpl implements KserveApiClient {
                     SimulationDto.RegisterStrategyResponse response = executeRequest(requestBody);
                     log.debug("AI API Called | simulationId: {} strategyName: {} AI response:{}",
                             simulation.getSimulationId(), strategyName, response.toString());
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//
-//                    }
-
                 });
     }
 
