@@ -10,6 +10,7 @@ import kr.co.tmax.rabackend.security.TokenAuthenticationFilter;
 import kr.co.tmax.rabackend.security.TokenProvider;
 import kr.co.tmax.rabackend.security.UserPrincipal;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 class AssetControllerTest {
