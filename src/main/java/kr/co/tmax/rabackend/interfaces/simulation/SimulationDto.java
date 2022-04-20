@@ -27,6 +27,7 @@ public class SimulationDto {
     @Getter
     @Setter
     @ToString
+    @NoArgsConstructor
     public static class RegisterSimulationRequest {
         @NotEmpty
         private String userId;
@@ -40,6 +41,16 @@ public class SimulationDto {
         private LocalDate endDate;
         @NotEmpty
         private List<String> strategies;
+
+        @Builder
+        public RegisterSimulationRequest(String userId, List<AssetCommand> assets, int rebalancingPeriod, LocalDate startDate, LocalDate endDate, List<String> strategies) {
+            this.userId = userId;
+            this.assets = assets;
+            this.rebalancingPeriod = rebalancingPeriod;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.strategies = strategies;
+        }
     }
 
     @Getter

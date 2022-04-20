@@ -7,12 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.UUID;
 
 @SpringBootTest
 @Disabled
@@ -23,8 +18,8 @@ class UserRepositoryTest {
 
     @Test
     void save() {
-        User user = User.builder().
-                id(1L)
+        User user = User.builder()
+                .id(UUID.randomUUID().toString())
                 .name("hottj")
                 .email("jhj13062004@naver.com")
                 .emailVerified(true)
