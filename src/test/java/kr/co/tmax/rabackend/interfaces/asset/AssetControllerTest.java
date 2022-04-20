@@ -38,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 class AssetControllerTest {
