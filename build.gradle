@@ -63,8 +63,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime'
     implementation 'org.modelmapper:modelmapper:3.0.0'
-    implementation group: 'mysql', name: 'mysql-connector-java'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // [Jackson]
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
