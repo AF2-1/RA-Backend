@@ -33,17 +33,17 @@ class SimulationServiceTest {
     private SimulationService simulationService;
 
     @Mock
-    private SimulationStore simulationStore;
+    protected SimulationStore simulationStore;
     @Mock
-    private SimulationReader simulationReader;
+    protected SimulationReader simulationReader;
     @Mock
-    private StrategyStore strategyStore;
+    protected StrategyStore strategyStore;
     @Mock
-    private StrategyReader strategyReader;
+    protected StrategyReader strategyReader;
     @Mock
-    private AssetReader assetReader;
+    protected AssetReader assetReader;
     @Mock
-    private KserveApiClient kserveApiClient;
+    protected KserveApiClient kserveApiClient;
 
     @Test
     @DisplayName(value = "새로운 Simulation을 등록할 수 있다.")
