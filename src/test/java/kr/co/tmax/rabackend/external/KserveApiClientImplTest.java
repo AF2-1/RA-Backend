@@ -6,6 +6,7 @@ import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -23,10 +24,12 @@ import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 @Disabled  //TODO: 구현 중
 @ExtendWith(MockitoExtension.class)
+@DisplayName("KserveApiClient는")
 class KserveApiClientImplTest {
 
     @InjectMocks
@@ -59,11 +62,13 @@ class KserveApiClientImplTest {
     }
 
     @Test
+    @DisplayName("AI서버로 요청을 보낼 수 있다.")
     void requestAASuccessTest() {
         // given
         var requestBodyMock = mock(SimulationDto.RegisterStrategyRequest.class);
         var webClientRequestBodyUriSpecMock = mock(WebClient.RequestBodyUriSpec.class);
         var webClientRequestBodySpecMock = mock(WebClient.RequestBodySpec.class);
+        var webClientRequestBodySpecMock2 = mock(WebClient.RequestBodySpec.class);
         var webClientRequestHeadersSpecMock = mock(WebClient.RequestHeadersSpec.class);
         var webClientResponseSpecMock = mock(WebClient.ResponseSpec.class);
         var monoMock = mock(Mono.class);
@@ -73,8 +78,8 @@ class KserveApiClientImplTest {
 
         given(webClient.post()).willReturn(webClientRequestBodyUriSpecMock);
         given(webClientRequestBodyUriSpecMock.uri(aIproperty.getPath())).willReturn(webClientRequestBodySpecMock);
-        given(webClientRequestBodySpecMock.contentType(MediaType.APPLICATION_JSON)).willReturn(webClientRequestBodySpecMock);
-        given(webClientRequestBodySpecMock.bodyValue(requestBodyMock)).willReturn(webClientRequestHeadersSpecMock);
+        given(webClientRequestBodySpecMock.contentType(MediaType.APPLICATION_JSON)).willReturn(webClientRequestBodySpecMock2);
+        given(webClientRequestBodySpecMock2.bodyValue(requestBodyMock)).willReturn(webClientRequestHeadersSpecMock);
         given(webClientRequestHeadersSpecMock.retrieve()).willReturn(webClientResponseSpecMock);
         given(webClientResponseSpecMock.bodyToMono(SimulationDto.RegisterStrategyResponse.class)).willReturn(monoMock);
         given(monoMock.block()).willReturn(simulationDtoRegisterStrategyResponseMock);
@@ -84,5 +89,11 @@ class KserveApiClientImplTest {
 
         // then
         then(appProperties).should(BDDMockito.times(strategyNames.size())).getAi();
+    }
+
+    @Test
+    @DisplayName("HTTP body가 없으면 예외가 발생한다.")
+    void requestAAFailTest() {
+        // IllegalArgumentException
     }
 }
