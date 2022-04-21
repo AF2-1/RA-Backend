@@ -13,3 +13,8 @@
 ```bash
 ./gradlew dockerStop
 ```
+
+**테스트 커버리지 확인**
+```bash
+./gradlew jacocoTestReport
+```
