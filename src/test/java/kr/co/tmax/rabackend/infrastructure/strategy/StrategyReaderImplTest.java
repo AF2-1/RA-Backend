@@ -26,7 +26,7 @@ class StrategyReaderImplTest {
 
     @Test
     @DisplayName("simulation id와 전략 이름으로 찾을 수 있다.")
-    void findBySimulationIdAndName() {
+    void findBySimulationIdAndNameTest() {
         // given
         var id = UUID.randomUUID().toString();
 
@@ -41,7 +41,7 @@ class StrategyReaderImplTest {
 
     @Test
     @DisplayName("simulation id로 모든 전략을 찾을 수 있다.")
-    void findAllBySimulationId() {
+    void findAllBySimulationIdTest() {
         // given
         var id = UUID.randomUUID().toString();
 
