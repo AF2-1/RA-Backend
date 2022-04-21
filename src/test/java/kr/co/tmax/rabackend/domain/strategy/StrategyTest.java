@@ -3,6 +3,9 @@ package kr.co.tmax.rabackend.domain.strategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,5 +22,17 @@ class StrategyTest {
         strategy.complete(null, null, null, null, null, null);
 
         assertTrue(strategy.isDone());
+    }
+
+    @Test
+    @DisplayName("VO객체를 만들 수 있다.")
+    void vOCreationTest() {
+        var testDateStr = LocalDate.now().toString();
+
+        var portfolioWeight = new Strategy.PortfolioWeight(testDateStr, Arrays.asList(1.1, 0.1));
+        var portfolioValue = new Strategy.PortfolioValue(testDateStr, 1.1);
+
+        assertTrue(portfolioWeight.getDate().toString().equals(testDateStr));
+        assertTrue(portfolioValue.getDate().toString().equals(testDateStr));
     }
 }
