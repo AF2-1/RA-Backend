@@ -1,6 +1,11 @@
 spring:
   messages:
     basename: errors
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.154.143:3306/RA?serverTimezone=UTC&characterEncoding=UTF-8
+#    username: root
+#    password: 0000
   data:
     mongodb:
       uri: mongodb://192.168.158.143:9042,192.168.158.143:9142,192.168.158.143:9242/ra?replicaset=docker-rs&connectTimeoutMS=3000&readPreference=secondaryPreferred

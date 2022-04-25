@@ -5,6 +5,7 @@ import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.domain.simulation.SimulationStore;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 public class SimulationController {
     private final SimulationService simulationService;
     private final StrategyService strategyService;
+    private final SimulationStore simulationStore;
     private final ModelMapper modelMapper;
     private final SimulationRegisterRequestValidator simulationRegisterRequestValidator;
 
@@ -100,6 +102,13 @@ public class SimulationController {
         List<Strategy> strategies = strategyService.findAllBySimulation(command.getSimulationId());
 
         SimulationDto.SimulationResponse simulationResponse = SimulationDto.SimulationResponse.create(simulation, strategies);
+
+        Simulation finishedSimulation = modelMapper.map(simulationResponse, Simulation.class);
+
+        if (simulationResponse.isDone()) {
+            simulationStore.store(finishedSimulation);
+        }
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.withMessageAndData("시뮬레이션 단건 조회 완료", simulationResponse));

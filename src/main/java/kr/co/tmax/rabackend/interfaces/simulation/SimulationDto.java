@@ -234,6 +234,7 @@ public class SimulationDto {
         private List<StrategyResponse> strategies;
 
         public static SimulationResponse create(Simulation simulation, List<Strategy> strategies) {
+            boolean done = false;
             List<StrategyResponse> strategyResponse = strategies
                     .stream()
                     .map(strategy -> StrategyResponse.create(strategy))
@@ -259,6 +260,8 @@ public class SimulationDto {
     private static boolean updateCompletionStatus(Simulation simulation, List<Strategy> strategies) {
         int completedStrategyCnt = (int)strategies.stream().filter(strategy -> strategy.isDone() == true).count();
 
+        System.out.println("completedStrategyCnt = " + completedStrategyCnt);
+        System.out.println("strategies = " + strategies.size());
         if(completedStrategyCnt == strategies.size()) {
             simulation.complete();
 
