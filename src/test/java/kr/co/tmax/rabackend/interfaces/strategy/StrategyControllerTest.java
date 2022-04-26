@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.interfaces.strategy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -71,6 +72,38 @@ class StrategyControllerTest {
         resultActions
                 .andExpectAll(
                         status().isOk()
+                )
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("잘못된 형식의 content를 보내면 500을 응답한다.")
+    void completeStrategyFailTest() throws Exception {
+        // given
+        var requestBody = new SimulationDto.CompleteStrategyRequest();
+
+        BDDMockito.doNothing().when(completeStrategyRequestValidator).validate(any(), any());
+        BDDMockito.doNothing().when(simulationService).completeStrategy(any(SimulationCommand.CompleteStrategyRequest.class));
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("simulationId", UUID.randomUUID().toString());
+        params.add("strategyName", "ew");
+
+        MockHttpServletRequestBuilder requestBuilder = post("/api/v1/simulation/callback")
+                .params(params)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestBody));
+
+        // when
+        ResultActions resultActions = mockMvc.perform(requestBuilder);
+
+        // then
+        then(completeStrategyRequestValidator).should().validate(any(), any());
+        then(simulationService).should(BDDMockito.times(0)).completeStrategy(any(SimulationCommand.CompleteStrategyRequest.class));
+
+        resultActions
+                .andExpectAll(
+                        status().is5xxServerError()
                 )
                 .andDo(print());
     }
