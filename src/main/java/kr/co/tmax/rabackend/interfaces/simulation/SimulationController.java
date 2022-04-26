@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.List;
 import java.util.function.Predicate;
@@ -37,7 +38,7 @@ public class SimulationController {
 
     @ApiOperation(value = "시뮬레이션 생성", notes = "시뮬레이션을 생성합니다")
     @PostMapping("/users/{userId}/simulations")
-    public ResponseEntity<CommonResponse> registerSimulation(@PathVariable String userId,
+    public ResponseEntity<CommonResponse> registerSimulation(@NotBlank @PathVariable String userId,
                                                              @Validated @RequestBody SimulationDto.RegisterSimulationRequest request,
                                                              BindingResult bindingResult,
                                                              UriComponentsBuilder uriComponentsBuilder) throws BindException {
@@ -66,7 +67,7 @@ public class SimulationController {
 
     @ApiOperation(value = "시뮬레이션 목록 조회", notes = "시뮬레이션 목록을 조회합니다")
     @GetMapping("users/{userId}/simulations")
-    public ResponseEntity<CommonResponse> getSimulations(@PathVariable String userId) {
+    public ResponseEntity<CommonResponse> getSimulations(@NotBlank @PathVariable String userId) {
         SimulationCommand.GetSimulationsRequest command = new SimulationCommand.GetSimulationsRequest(userId);
         List<Simulation> simulations = simulationService.getSimulations(command);
 
