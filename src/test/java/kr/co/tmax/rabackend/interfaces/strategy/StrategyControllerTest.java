@@ -77,8 +77,8 @@ class StrategyControllerTest {
     }
 
     @Test
-    @DisplayName("잘못된 형식의 content를 보내면 500을 응답한다.")
-    void completeStrategyFailTest() throws Exception {
+    @DisplayName("BindingResult가 에러를 가질 경우 400을 응답한다.")
+    void completeStrategyFailTest2() throws Exception {
         // given
         var requestBody = new SimulationDto.CompleteStrategyRequest();
 
@@ -103,7 +103,7 @@ class StrategyControllerTest {
 
         resultActions
                 .andExpectAll(
-                        status().is5xxServerError()
+                        status().is4xxClientError()
                 )
                 .andDo(print());
     }
