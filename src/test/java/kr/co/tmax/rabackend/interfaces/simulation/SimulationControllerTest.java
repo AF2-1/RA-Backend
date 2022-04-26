@@ -31,6 +31,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -236,7 +237,8 @@ class SimulationControllerTest {
 
         resultActions
                 .andExpectAll(
-                        status().isOk()
+                        status().isOk(),
+                        jsonPath("$.message").value("시뮬레이션 단건 조회 완료")
                 )
                 .andDo(print());
     }
@@ -268,7 +270,33 @@ class SimulationControllerTest {
 
         resultActions
                 .andExpectAll(
-                        status().isOk()
+                        status().isOk(),
+                        jsonPath("$.message").value("시뮬레이션 단건 조회 완료")
+                )
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("시뮬레이션 삭제 요청 성고시 200을 응답한다.")
+    void deleteSimulationTest1() throws Exception {
+        // given
+        var simulationId = UUID.randomUUID().toString();
+
+        BDDMockito.doNothing().when(simulationService).deleteSimulation(any());
+
+        MockHttpServletRequestBuilder requestBuilder = delete("/api/v1/users/{userId}/simulations/{simulationId}", userId, simulationId)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(requestBuilder);
+
+        // then
+        then(simulationService).should().deleteSimulation(any());
+
+        resultActions
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.message").value("시뮬레이션 삭제 완료")
                 )
                 .andDo(print());
     }
