@@ -12,10 +12,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -88,6 +85,7 @@ public class SimulationDto {
         private Model model;
         private List<Double> recommendedPf;
         private Map<String, List<Double>> inferenceResults;
+        @NotNull
         private EvaluationResults evaluationResults;
         private Map<String, List<Double>> dailyPfWeights;
         private Map<String, Double> dailyPfValues;
