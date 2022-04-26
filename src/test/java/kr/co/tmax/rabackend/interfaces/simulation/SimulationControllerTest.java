@@ -5,6 +5,7 @@ import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.simulation.SimulationService;
+import kr.co.tmax.rabackend.domain.simulation.SimulationStore;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyService;
 import org.junit.jupiter.api.*;
@@ -52,6 +53,9 @@ class SimulationControllerTest {
     protected StrategyService strategyService;
 
     @MockBean
+    protected SimulationStore simulationStore;
+
+    @MockBean
     protected ModelMapper modelMapper;
 
     @MockBean
@@ -68,7 +72,7 @@ class SimulationControllerTest {
     private static List<Simulation> simulations;
 
     @BeforeAll
-    static void setUp(){
+    static void setUp() {
         userId = UUID.randomUUID().toString();
 
         simulations = Arrays.asList(
@@ -79,7 +83,7 @@ class SimulationControllerTest {
     }
 
     @Test
-    @DisplayName(value = "userId로 simulation들을 조회할 수 있다.")
+    @DisplayName(value = "userId로 simulation들을 조회할 수 있으면 201 Created를 응답한다.")
     void registerSimulationSuccessTest() throws Exception {
         // given
         var requestBody = SimulationDto.RegisterSimulationRequest.builder()
@@ -165,9 +169,10 @@ class SimulationControllerTest {
         MockHttpServletRequestBuilder requestBuilder = get("/api/v1/users/{userId}/simulations", userId)
                 .contentType(MediaType.APPLICATION_JSON);
 
-        // then
+        // when
         ResultActions resultActions = mockMvc.perform(requestBuilder);
 
+        // then
         then(simulationService).should().getSimulations(any());
         then(strategyService).should(BDDMockito.times(simulations.size())).findAllBySimulation(any());
 
@@ -184,7 +189,7 @@ class SimulationControllerTest {
         // given
         simulations.stream().forEach(s -> s.complete());
 
-        List<Strategy> strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
 
         given(simulationService.getSimulations(any())).willReturn(simulations);
         given(strategyService.findAllBySimulation(any())).willReturn(strategies);
@@ -192,11 +197,74 @@ class SimulationControllerTest {
         MockHttpServletRequestBuilder requestBuilder = get("/api/v1/users/{userId}/simulations", userId)
                 .contentType(MediaType.APPLICATION_JSON);
 
-        // then
+        // when
         ResultActions resultActions = mockMvc.perform(requestBuilder);
 
+        // then
         then(simulationService).should().getSimulations(any());
         then(strategyService).should(BDDMockito.times(simulations.size())).findAllBySimulation(any());
+
+        resultActions
+                .andExpectAll(
+                        status().isOk()
+                )
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("시뮬레이션 단건조회 성공시 200을 응답한다.")
+    void getSimulationTest1() throws Exception {
+        // given
+        var simulationId = UUID.randomUUID().toString();
+        var foundSimulation = new Simulation(userId, new ArrayList<>(), 0, null, null);
+        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+
+        given(simulationService.getSimulation(any())).willReturn(foundSimulation);
+        given(strategyService.findAllBySimulation(simulationId)).willReturn(strategies);
+        given(simulationStore.store(any())).willReturn(any());
+
+        MockHttpServletRequestBuilder requestBuilder = get("/api/v1/users/{userId}/simulations/{simulationId}", userId, simulationId)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(requestBuilder);
+
+        // then
+        then(simulationService).should().getSimulation(any());
+        then(strategyService).should().findAllBySimulation(simulationId);
+        then(simulationStore).should(BDDMockito.times(0)).store(any());
+
+        resultActions
+                .andExpectAll(
+                        status().isOk()
+                )
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("시뮬레이션 단건조회시 simulation이 완료되었다면 완료상태를 DB에 저장하고 200을 응답한다.")
+    void getSimulationTest2() throws Exception {
+        // given
+        var simulationId = UUID.randomUUID().toString();
+        var foundSimulation = new Simulation(userId, new ArrayList<>(), 0, null, null);
+        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+
+        foundSimulation.complete();
+
+        given(simulationService.getSimulation(any())).willReturn(foundSimulation);
+        given(strategyService.findAllBySimulation(simulationId)).willReturn(strategies);
+        given(simulationStore.store(any())).willReturn(any());
+
+        MockHttpServletRequestBuilder requestBuilder = get("/api/v1/users/{userId}/simulations/{simulationId}", userId, simulationId)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(requestBuilder);
+
+        // then
+        then(simulationService).should().getSimulation(any());
+        then(strategyService).should().findAllBySimulation(simulationId);
+        then(simulationStore).should().store(any());
 
         resultActions
                 .andExpectAll(
