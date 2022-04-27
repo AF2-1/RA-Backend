@@ -9,7 +9,6 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationStore;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class SimulationController {
