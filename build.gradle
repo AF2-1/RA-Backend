@@ -56,6 +56,7 @@ jacocoTestReport {
                     "kr/co/tmax/rabackend/interfaces/strategy/CompleteStrategyRequestValidator.class",
                     "kr/co/tmax/rabackend/security/*",
                     "kr/co/tmax/rabackend/interfaces/alert/*",
+                    "kr/co/tmax/rabackend/util/*"
             ])
         }))
     }
