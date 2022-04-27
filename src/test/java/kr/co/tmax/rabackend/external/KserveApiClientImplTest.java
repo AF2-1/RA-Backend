@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 @Disabled  //TODO: 구현 중

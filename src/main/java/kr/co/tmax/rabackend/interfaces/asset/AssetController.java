@@ -5,7 +5,6 @@ import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.StringUtils;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/")
 @RestController

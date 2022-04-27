@@ -6,7 +6,6 @@ import io.sentry.Sentry;
 import kr.co.tmax.rabackend.interfaces.validation.ValidationResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 
