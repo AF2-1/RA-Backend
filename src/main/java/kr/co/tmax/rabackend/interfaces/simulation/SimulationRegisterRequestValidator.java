@@ -5,6 +5,7 @@ import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.asset.AssetCommand;
 import kr.co.tmax.rabackend.domain.asset.AssetReader;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
+import kr.co.tmax.rabackend.domain.simulation.SimulationStore;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.RegisterSimulationRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class SimulationRegisterRequestValidator implements Validator {
     private final AppProperties appProperties;
     private final AssetReader assetReader;
     private final StrategyReader strategyReader;
+    private final SimulationStore simulationStore;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -64,6 +66,7 @@ public class SimulationRegisterRequestValidator implements Validator {
                         return;
                     }
                     filteredSimulation.complete();
+                    simulationStore.store(filteredSimulation);
                 });
     }
 
