@@ -83,11 +83,15 @@ public class SimulationDto {
     @NoArgsConstructor
     public static class CompleteStrategyRequest {
         private Model model;
+        @NotNull
         private List<Double> recommendedPf;
+        @NotNull
         private Map<String, List<Double>> inferenceResults;
         @NotNull
         private EvaluationResults evaluationResults;
+        @NotNull
         private Map<String, List<Double>> dailyPfWeights;
+        @NotNull
         private Map<String, Double> dailyPfValues;
 
         public SimulationCommand.CompleteStrategyRequest toCommand(String simulationId, String strategyName) {
