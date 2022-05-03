@@ -1,14 +1,9 @@
 spring:
   messages:
     basename: errors
-#  data:
-#    mongodb:
-#      data:
-#        mongodb:
-#          host: localhost
-#          port: 27017
-#          database: ra
-#      uri: mongodb://192.168.158.143:9042,192.168.158.143:9142,192.168.158.143:9242/ra?replicaset=docker-rs&connectTimeoutMS=3000&readPreference=secondaryPreferred
+  data:
+    mongodb:
+      uri: mongodb://192.168.158.143:9042,192.168.158.143:9142,192.168.158.143:9242/ra?replicaset=docker-rs&connectTimeoutMS=3000&readPreference=secondaryPreferred
   redis:
     host: 192.168.158.143
     port: 6379

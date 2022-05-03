@@ -11,5 +11,4 @@ public interface StrategyRepository extends MongoRepository<Strategy, String> {
     Optional<Strategy> findBySimulationIdAndName(String simulationId, String name);
 
     List<Strategy> findAllBySimulationId(String simulationId);
-
 }
