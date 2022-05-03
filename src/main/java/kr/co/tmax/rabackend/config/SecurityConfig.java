@@ -89,8 +89,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint());
 
         http.authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/api/v1/assets/**").authenticated()
+                .antMatchers("/api/v1/simulations/**").authenticated()
+//                .antMatchers(AUTH_WHITELIST).permitAll()
+//                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         http.oauth2Login()
                 .authorizationEndpoint()
