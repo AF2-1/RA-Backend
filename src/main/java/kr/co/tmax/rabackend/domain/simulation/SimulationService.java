@@ -6,14 +6,18 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
+import kr.co.tmax.rabackend.domain.user.User;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.KserveApiClient;
+import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +31,7 @@ public class SimulationService {
     private final StrategyReader strategyReader;
     private final AssetReader assetReader;
     private final KserveApiClient kserveApiClient;
+    private final UserRepository userRepository;
 
     public void registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = request.getAssets().stream().map(a ->
@@ -80,5 +85,33 @@ public class SimulationService {
         strategyStore.store(strategy);
 
         log.debug("strategy is completed with simulationId: {} | strategyName: {}", command.getSimulationId(), command.getStrategyName());
+    }
+
+    public SimulationDto.DashBoardResponse getDashBoard() {
+        Set<String> userset = new HashSet();
+        List<Double> cagrset = new ArrayList<>();
+        List<Strategy> all = strategyReader.findAll(Sort.by(Sort.Direction.DESC, "evaluationResults.cagr"));
+        for (int i = 0; i < all.size(); i++) {
+            Simulation simulation = simulationReader.findById(all.get(i).getSimulationId()).orElseThrow(null);
+            if (all.get(i).getEvaluationResults().getCagr() != null && simulation.getUserId() != null) {
+                userset.add(simulation.getUserId());
+                if (userset.size() > 4) {
+                    break;
+                }
+            }
+        }
+
+        Iterator<String> iter = userset.iterator();
+        List<SimulationDto.Ranker> rankers = new ArrayList<>();
+        SimulationDto.DashBoardResponse dashBoardResponse = new SimulationDto.DashBoardResponse();
+        while (iter.hasNext()) {
+            SimulationDto.Ranker ranker = new SimulationDto.Ranker();
+            User user = userRepository.findById(iter.next()).orElseThrow(null);
+            ranker.setEmail(user.getEmail());
+            ranker.setName(user.getName());
+            rankers.add(ranker);
+            dashBoardResponse.setRankers(rankers);
+        }
+        return dashBoardResponse;
     }
 }

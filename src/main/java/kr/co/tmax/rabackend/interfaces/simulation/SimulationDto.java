@@ -8,6 +8,7 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationCommand;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
+import kr.co.tmax.rabackend.domain.user.User;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -326,5 +327,30 @@ public class SimulationDto {
                     .ticker(asset.getTicker())
                     .build();
         }
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DashBoardResponse {
+        private List<Ranker> rankers;
+
+        public static DashBoardResponse create(List<Ranker> rankers) {
+            return DashBoardResponse.builder()
+                    .rankers(rankers)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @ToString
+    public static class Ranker {
+        private String name;
+        private String email;
     }
 }

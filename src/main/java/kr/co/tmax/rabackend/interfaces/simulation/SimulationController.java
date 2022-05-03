@@ -123,4 +123,12 @@ public class SimulationController {
                 .status(HttpStatus.OK)
                 .body(CommonResponse.withMessage("시뮬레이션 삭제 완료"));
     }
+
+    @ApiOperation(value = "대시보드 조회", notes = "대시보드를 조회합니다")
+    @GetMapping("simulations/dashboard")
+    public ResponseEntity<CommonResponse> getDashBoard() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessageAndData("대시보드 조회 완료", simulationService.getDashBoard()));
+    }
 }
