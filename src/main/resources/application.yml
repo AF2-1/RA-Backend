@@ -35,7 +35,7 @@ app:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     tokenExpirationMsec: 864000000
   cors:
-    allowedOrigins: http://robo.tmax.co.kr:8888
+    allowedOrigins: http://192.168.158.141:80
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
@@ -58,7 +58,7 @@ app:
     url: http://192.168.153.44:9001
     path: /v2/models/triton-mms/infer
     host: triton-mms.kserve-test.example.com
-    callBackUrl: http://192.168.153.102:8080/api/v1/simulation/callback
+    callBackUrl: http://192.168.158.141:8080/api/v1/simulation/callback
 logging:
   level:
     kr:
