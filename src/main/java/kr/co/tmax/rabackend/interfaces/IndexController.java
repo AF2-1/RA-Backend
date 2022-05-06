@@ -1,21 +1,20 @@
-package com.tmax.security1.controller;
+package kr.co.tmax.rabackend.interfaces;
 
-import com.tmax.security1.config.auth.PrincipalDetails;
-import com.tmax.security1.model.User;
-import com.tmax.security1.repository.UserRepository;
+import kr.co.tmax.rabackend.domain.user.User;
+import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
+import kr.co.tmax.rabackend.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Controller // view 를 리턴하겠다
 public class IndexController {
@@ -23,17 +22,12 @@ public class IndexController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication,  // DI(의존성 주입)
-                                          @AuthenticationPrincipal PrincipalDetails userDetails) { // @AuthenticationPrincipal을 통해서 세션 정보 접근
+                                          @AuthenticationPrincipal UserPrincipal userDetails) { // @AuthenticationPrincipal을 통해서 세션 정보 접근
         System.out.println("/test/login ===============");
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal(); // down casting
+        UserPrincipal principalDetails = (UserPrincipal) authentication.getPrincipal(); // down casting
 
-        System.out.println("authentication: " + principalDetails.getUser()); // 아래와 같음
-       System.out.println("userDetails.getUser() = " + userDetails.getUser());
         return "세션 정보 확인하기";
     }
 
@@ -58,8 +52,7 @@ public class IndexController {
     // OAuth 로그인을 해도 PrincipalDetails
     // 일반 로그인을 해도 PrincipalDetails
     @GetMapping("/user")
-    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principalDetails.getUser() = " + principalDetails.getUser());
+    public @ResponseBody String user(@AuthenticationPrincipal UserPrincipal principalDetails) {
         return "user";
     }
 
@@ -87,10 +80,8 @@ public class IndexController {
     @PostMapping("/join")
     public @ResponseBody String join(User user) {
         System.out.println("user = " + user);
-        user.setRole("ROLE_USER");
         String rawPassword = user.getPassword();
-        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        user.setPassword(encPassword);
+        user.setPassword(rawPassword);
 
         userRepository.save(user); // 회원가입 잘됨. 비밀번호: 1234 => 시큐리티로 로그인을 할 수 없음. 이유는 패스워드가 암호화가 안되었기 때문!!
         return "redirect:/loginForm";
