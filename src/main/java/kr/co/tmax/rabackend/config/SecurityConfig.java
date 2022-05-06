@@ -96,15 +96,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll();
 
         http.oauth2Login()
-                .authorizationEndpoint()
-                    .baseUri("/oauth2/authorize")
-                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository).and()
-                .redirectionEndpoint()
-                    .baseUri("/oauth2/callback/*").and()
+                .loginPage("/loginForm")
+//                .authorizationEndpoint()
+//                    .baseUri("/oauth2/authorize")
+//                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository).and()
+//                .redirectionEndpoint()
+//                    .baseUri("/oauth2/callback/*").and()
                 .userInfoEndpoint()
-                    .userService(customOAuth2UserService).and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler);
+                .userService(customOAuth2UserService)
+//                .successHandler(oAuth2AuthenticationSuccessHandler)
+//                .failureHandler(oAuth2AuthenticationFailureHandler)
+                ;
 
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

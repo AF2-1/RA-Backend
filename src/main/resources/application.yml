@@ -21,9 +21,8 @@ spring:
       client:
         registration:
           google:
-            clientId: 195757371436-t9lqvlimk2n6t5fdmamoup2ft0p9cfv9.apps.googleusercontent.com
-            clientSecret: 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
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            clientId: 420615974321-2m32k4ln8avlbgtgvd9js3a918g0amo6.apps.googleusercontent.com
+            clientSecret: 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
             scope:
               - email
               - profile
@@ -36,11 +35,6 @@ app:
     tokenExpirationMsec: 864000000
   cors:
     allowedOrigins: http://192.168.158.141:80
-  oauth2:
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
-      - myandroidapp://oauth2/redirect
-      - myiosapp://oauth2/redirect
   simulation:
     strategies:
       - ppo-growth
