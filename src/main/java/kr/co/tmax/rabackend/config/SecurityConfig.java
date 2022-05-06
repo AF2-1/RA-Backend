@@ -103,10 +103,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .redirectionEndpoint()
 //                    .baseUri("/oauth2/callback/*").and()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-//                .successHandler(oAuth2AuthenticationSuccessHandler)
-//                .failureHandler(oAuth2AuthenticationFailureHandler)
-                ;
+                .userService(customOAuth2UserService).and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
 
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
