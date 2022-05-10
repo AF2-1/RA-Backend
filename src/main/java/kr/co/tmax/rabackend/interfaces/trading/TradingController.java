@@ -47,5 +47,7 @@ public class TradingController {
     @PostMapping("/portfolios/{portfolioId}/callback")
     public ResponseEntity<CommonResponse> completePortfolio() {
         //TODO: aynch response implements
+
+        return null;
     }
 }
