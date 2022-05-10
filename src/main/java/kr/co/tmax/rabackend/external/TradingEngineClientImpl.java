@@ -19,11 +19,13 @@ public class TradingEngineClientImpl implements TradingEngineClient{
     private final AppProperties appProperties;
 
     @Override
-    public void requestPortfolioCreation(Portfolio portfolio, String userId) {
+    public void requestPortfolioCreation(Portfolio portfolio) {
         String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getPortfolioId());
-        String requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), userId);
+        String requestUrl = appProperties.getTrading().getEngineAddress() + appProperties.getTrading().getPath();
 
-        TradingDto.RegisterPortfolioResponse response = webClient.post()
+        log.debug("ready for send request to Trading engine");
+
+        var response = webClient.post()
                 .uri(requestUrl)
                 .header("callbackUrl", callbackUrl)
                 .contentType(MediaType.APPLICATION_JSON)
