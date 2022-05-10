@@ -82,7 +82,9 @@ public class SimulationService {
         Strategy strategy = strategyReader.findBySimulationIdAndName(command.getSimulationId(), command.getStrategyName()).orElseThrow(
                 () -> new ResourceNotFoundException(command.getStrategyName(), command.getSimulationId(), command.getStrategyName()));
 
-        strategy.complete(command.getTrainedTime(), command.getEvaluationResults(), command.getRecommendedPf(),
+        Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(null);
+
+        strategy.complete(command.getTrainedTime(), simulation.getUserId(),  command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
 

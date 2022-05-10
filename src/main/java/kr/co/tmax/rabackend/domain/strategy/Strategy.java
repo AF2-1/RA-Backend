@@ -24,20 +24,24 @@ public class Strategy {
     private List<PortfolioWeight> dailyWeights = new ArrayList<>();
     private List<PortfolioValue> dailyValues = new ArrayList<>();
     private String simulationId;
+    private String userId;
 
-    public Strategy(String name, String simulationId) {
+    public Strategy(String name, String simulationId, String userId) {
         this.name = name;
         this.simulationId = simulationId;
+        this.userId = userId;
         this.done = false;
     }
 
     public void complete(LocalDate trainedTime,
+                         String userId,
                          EvaluationResults evaluationResults,
                          List<Double> recommendedPf,
                          List<PortfolioWeight> rebalancingWeights,
                          List<PortfolioWeight> dailyWeights,
                          List<PortfolioValue> dailyValues) {
         this.done = true;
+        this.userId = userId;
         this.trainedTime = trainedTime;
         this.evaluationResults = evaluationResults;
         this.recommendedPf = recommendedPf;
