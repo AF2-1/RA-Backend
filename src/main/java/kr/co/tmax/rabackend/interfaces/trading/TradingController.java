@@ -6,6 +6,7 @@ import kr.co.tmax.rabackend.domain.trading.Portfolio;
 import kr.co.tmax.rabackend.domain.trading.PortfolioService;
 import kr.co.tmax.rabackend.external.TradingEngineClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
 
+@Slf4j
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
 @RestController
@@ -33,7 +35,8 @@ public class TradingController {
         Portfolio savedPortfolio = portfolioService.save(portfolio);
         tradingEngineClient.requestPortfolioCreation(savedPortfolio);
 
-        System.out.println("portfolio = " + portfolio);
+        log.debug("portfolio = {}", portfolio);
+        
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .location(getLocation(userId, uriComponentsBuilder))
