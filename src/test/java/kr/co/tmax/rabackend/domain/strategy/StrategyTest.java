@@ -15,11 +15,11 @@ class StrategyTest {
     @Test
     @DisplayName("전략 상태를 완료로 바꿀 수 있다.")
     void completeTest() {
-        Strategy strategy = new Strategy(null, null);
+        Strategy strategy = new Strategy(null, null, null);
 
         assertFalse(strategy.isDone());
 
-        strategy.complete(null, null, null, null, null, null);
+        strategy.complete(null, null, null, null, null, null, null);
 
         assertTrue(strategy.isDone());
     }

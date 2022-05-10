@@ -64,6 +64,7 @@ public class SimulationCommand {
     @AllArgsConstructor
     public static class CompleteStrategyRequest {
         private String simulationId;
+        private String userId;
         private String strategyName;
         LocalDate trainedTime;
         List<Double> recommendedPf;
