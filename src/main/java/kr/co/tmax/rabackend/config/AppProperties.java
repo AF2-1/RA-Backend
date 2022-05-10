@@ -12,6 +12,7 @@ public class AppProperties {
     private final Auth auth = new Auth();
     private final Simulation simulation = new Simulation();
     private final Ai ai = new Ai();
+    private final Trading trading = new Trading();
 
     @Setter
     @Getter
@@ -32,6 +33,14 @@ public class AppProperties {
         private String url;
         private String path;
         private String host;
+        private String callBackUrl;
+    }
+
+    @Getter
+    @Setter
+    public static class Trading {
+        private String engineAddress;
+        private String path;
         private String callBackUrl;
     }
 }
