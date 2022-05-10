@@ -53,7 +53,7 @@ public class ControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(ExternalException.class)
     public CommonResponse onExternalException(ExternalException e) {
         log.error(e.getMessage());
         return CommonResponse.withMessage("외부 모듈 에러");

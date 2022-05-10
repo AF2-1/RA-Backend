@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.trading;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Portfolio {
     @Id
+    @JsonIgnore
     private ObjectId id;
 
     private Agent agent;

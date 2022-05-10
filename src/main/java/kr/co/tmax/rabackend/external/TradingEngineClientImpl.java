@@ -24,7 +24,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
         String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getId().toString());
         String requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), portfolio.getId().toString());
 
-        log.debug("ready for send request to Trading engine");
+        log.info("ready for send request to Trading engine");
 
         var response = webClient.post()
                 .uri(requestUrl)
@@ -38,6 +38,6 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 })
                 .block();
 
-        log.debug("Success for send request to Trading engine {}", response);
+        log.info("Success for send request to Trading engine {}", response);
     }
 }
