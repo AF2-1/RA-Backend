@@ -119,7 +119,7 @@ public class Portfolio {
     @NoArgsConstructor
     @ToString
     public static class Sell {
-        private Condition condition;
+        private List<Condition> conditions;
         private String logic;
         private List<Integer> timeCuts;
     }
