@@ -55,7 +55,7 @@ app:
     callBackUrl: http://192.168.158.141:8080/api/v1/simulation/callback
   trading:
     engineAddress: http://192.168.154.105:35000
-    path: /api/v1/simulator/{0}/portfolio
+    path: /simulate
     callBackUrl: http://192.168.158.141:8080/api/v1/portfolios/{0}/callback
 logging:
   level:
