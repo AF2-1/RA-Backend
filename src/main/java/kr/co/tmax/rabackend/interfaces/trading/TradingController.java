@@ -3,9 +3,11 @@ package kr.co.tmax.rabackend.interfaces.trading;
 import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
+import kr.co.tmax.rabackend.external.TradingEngineClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -15,13 +17,19 @@ import java.net.URI;
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
 @RestController
+@Validated
 public class TradingController {
+
+    private final TradingEngineClient tradingEngineClient;
 
     @ApiOperation(value = "포트폴리오 생성", notes = "포트폴리오를 생성합니다")
     @PostMapping("/users/{userId}/portfolios")
     public ResponseEntity<CommonResponse> registerPortfolio(@NotBlank @PathVariable String userId,
                                                             @RequestBody Portfolio portfolio,
                                                             UriComponentsBuilder uriComponentsBuilder) {
+
+        tradingEngineClient.requestPortfolioCreation(portfolio, userId);
+
         System.out.println("portfolio = " + portfolio);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -33,5 +41,11 @@ public class TradingController {
         return uriComponentsBuilder
                 .path(String.format("/users/%s/simulations", userId))
                 .build().toUri();
+    }
+
+    @ApiOperation(value = "포트폴리오 생성완료", notes = "포트폴리오를 생성완료에 대한 콜백 요청입니다.")
+    @PostMapping("/portfolios/{portfolioId}/callback")
+    public ResponseEntity<CommonResponse> completePortfolio() {
+
     }
 }
