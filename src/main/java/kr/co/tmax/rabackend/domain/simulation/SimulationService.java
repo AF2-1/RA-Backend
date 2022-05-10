@@ -48,7 +48,8 @@ public class SimulationService {
 
         final Simulation storedSimulation = simulationStore.store(simulation);
 
-        request.getStrategies().forEach(strategyName -> strategyStore.store(new Strategy(strategyName, storedSimulation.getSimulationId())));
+        request.getStrategies().forEach(strategyName -> strategyStore.store(
+                new Strategy(strategyName, storedSimulation.getSimulationId(), storedSimulation.getUserId())));
 
         kserveApiClient.requestAA(simulation, request.getStrategies());
     }
@@ -70,7 +71,10 @@ public class SimulationService {
 
         if (!simulation.getUserId().equals(command.getUserId()))
             throw new BadRequestException("simulation의 소유자만 삭제가 가능합니다");
-
+        List<Strategy> allBySimulationId = strategyReader.findAllBySimulationId(command.getSimulationId());
+        for (int i = 0; i < allBySimulationId.size(); i++) {
+            strategyStore.delete(allBySimulationId.get(i));
+        }
         simulationStore.delete(simulation);
     }
 
