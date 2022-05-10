@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.interfaces.trading;
 import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
+import kr.co.tmax.rabackend.domain.trading.PortfolioService;
 import kr.co.tmax.rabackend.external.TradingEngineClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.net.URI;
 public class TradingController {
 
     private final TradingEngineClient tradingEngineClient;
+    private final PortfolioService portfolioService;
 
     @ApiOperation(value = "포트폴리오 생성", notes = "포트폴리오를 생성합니다")
     @PostMapping("/users/{userId}/portfolios")
@@ -28,8 +30,8 @@ public class TradingController {
                                                             @RequestBody Portfolio portfolio,
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
-        //TODO: 포트폴리오 DB 저장 로직 추가
-        tradingEngineClient.requestPortfolioCreation(portfolio);
+        Portfolio savedPortfolio = portfolioService.save(portfolio);
+        tradingEngineClient.requestPortfolioCreation(savedPortfolio);
 
         System.out.println("portfolio = " + portfolio);
         return ResponseEntity

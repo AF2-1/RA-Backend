@@ -20,7 +20,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
 
     @Override
     public void requestPortfolioCreation(Portfolio portfolio) {
-        String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getPortfolioId());
+        String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getId().toString());
         String requestUrl = appProperties.getTrading().getEngineAddress() + appProperties.getTrading().getPath();
 
         log.debug("ready for send request to Trading engine");
