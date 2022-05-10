@@ -28,7 +28,8 @@ public class TradingController {
                                                             @RequestBody Portfolio portfolio,
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
-        tradingEngineClient.requestPortfolioCreation(portfolio, userId);
+        //TODO: 포트폴리오 DB 저장 로직 추가
+        tradingEngineClient.requestPortfolioCreation(portfolio);
 
         System.out.println("portfolio = " + portfolio);
         return ResponseEntity
