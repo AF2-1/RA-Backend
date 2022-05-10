@@ -21,9 +21,10 @@ public class TradingEngineClientImpl implements TradingEngineClient{
     @Override
     public void requestPortfolioCreation(Portfolio portfolio, String userId) {
         String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getPortfolioId());
+        String requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), userId);
 
-        webClient.post()
-                .uri(MessageFormat.format(appProperties.getTrading().getPath(), userId))
+        TradingDto.RegisterPortfolioResponse response = webClient.post()
+                .uri(requestUrl)
                 .header("callbackUrl", callbackUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(portfolio)
@@ -31,6 +32,6 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 .bodyToMono(TradingDto.RegisterPortfolioResponse.class)
                 .block();
 
-        log.debug("Success for send request to Trading engine");
+        log.debug("Success for send request to Trading engine {}", response);
     }
 }
