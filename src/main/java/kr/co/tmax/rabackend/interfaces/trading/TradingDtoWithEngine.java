@@ -1,11 +1,8 @@
 package kr.co.tmax.rabackend.interfaces.trading;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-public class TradingDto {
+public class TradingDtoWithEngine {
 
     @Getter
     @Setter
