@@ -36,7 +36,7 @@ public class TradingController {
         tradingEngineClient.requestPortfolioCreation(savedPortfolio);
 
         log.debug("portfolio = {}", portfolio);
-        
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .location(getLocation(userId, uriComponentsBuilder))
@@ -51,9 +51,11 @@ public class TradingController {
 
     @ApiOperation(value = "포트폴리오 생성완료", notes = "포트폴리오를 생성완료에 대한 콜백 요청입니다.")
     @PostMapping("/portfolios/{portfolioId}/callback")
-    public ResponseEntity<CommonResponse> completePortfolio() {
+    public ResponseEntity<CommonResponse> completePortfolio(@NotBlank @PathVariable String portfolioId) {
         //TODO: aynch response implements
 
-        return null;
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessage("Temporal Response"));
     }
 }
