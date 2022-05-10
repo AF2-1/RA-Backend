@@ -18,8 +18,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins, "http://192.168.158.141:3000", "http://localhost:3000",
-                        "http://192.168.158.141:80", "http://localhost:80", "http://robo.tmax.co.kr:8080")
+//                .allowedOrigins(allowedOrigins, "http://192.168.158.141:3000", "http://localhost:3000",
+//                        "http://192.168.158.141:80", "http://localhost:80", "http://robo.tmax.co.kr:8080")
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
