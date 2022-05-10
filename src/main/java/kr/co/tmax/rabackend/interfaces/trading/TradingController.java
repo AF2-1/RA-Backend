@@ -46,6 +46,6 @@ public class TradingController {
     @ApiOperation(value = "포트폴리오 생성완료", notes = "포트폴리오를 생성완료에 대한 콜백 요청입니다.")
     @PostMapping("/portfolios/{portfolioId}/callback")
     public ResponseEntity<CommonResponse> completePortfolio() {
-
+        //TODO: aynch response implements
     }
 }
