@@ -185,7 +185,7 @@ class SimulationServiceTest {
             final var strategyMock = mock(Strategy.class);
 
             given(strategyReader.findBySimulationIdAndName(anyString(), anyString())).willReturn(Optional.of(strategyMock));
-            BDDMockito.doNothing().when(strategyMock).complete(any(), any(), any(), any(), any(), any());
+            BDDMockito.doNothing().when(strategyMock).complete(any(), any(), any(), any(), any(), any(), any());
             given(strategyStore.store(strategyMock)).willReturn(strategyMock);
 
             // when
@@ -214,7 +214,7 @@ class SimulationServiceTest {
                     )
             );
 
-            then(strategyMock).should(BDDMockito.atLeast(0)).complete(any(), any(), any(), any(), any(), any()); // TODO: strategyMock을 넣는게 맞는지 확인
+            then(strategyMock).should(BDDMockito.atLeast(0)).complete(any(), any(), any(), any(), any(), any(), any()); // TODO: strategyMock을 넣는게 맞는지 확인
             then(strategyStore).should(BDDMockito.atLeast(0)).store(any());
         }
     }
