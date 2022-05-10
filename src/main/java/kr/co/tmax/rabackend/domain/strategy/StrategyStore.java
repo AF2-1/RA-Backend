@@ -4,4 +4,5 @@ public interface StrategyStore {
 
     Strategy store(Strategy strategy);
 
+    void delete(Strategy strategy);
 }
