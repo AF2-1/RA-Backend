@@ -5,7 +5,6 @@ import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
 import kr.co.tmax.rabackend.domain.trading.PortfolioService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
