@@ -1,6 +1,7 @@
 package kr.co.tmax.rabackend.domain.trading;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Portfolio {
     @Id
-    private String portfolioId;
+    private ObjectId id;
 
     private Agent agent;
     private Info info;

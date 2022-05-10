@@ -105,3 +105,6 @@ mongo-data
 src/main/resources/application-local.yml
 
 **.http
+
+### local 프로파일 설정파일
+application-local.yml

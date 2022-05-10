@@ -2,7 +2,7 @@ package kr.co.tmax.rabackend.external;
 
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
-import kr.co.tmax.rabackend.interfaces.trading.TradingDto;
+import kr.co.tmax.rabackend.interfaces.trading.TradingDtoWithEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,8 +20,8 @@ public class TradingEngineClientImpl implements TradingEngineClient{
 
     @Override
     public void requestPortfolioCreation(Portfolio portfolio) {
-        String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getPortfolioId());
-        String requestUrl = appProperties.getTrading().getEngineAddress() + appProperties.getTrading().getPath();
+        String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getId().toString());
+        String requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), portfolio.getId().toString());
 
         log.debug("ready for send request to Trading engine");
 
@@ -31,7 +31,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(portfolio)
                 .retrieve()
-                .bodyToMono(TradingDto.RegisterPortfolioResponse.class)
+                .bodyToMono(TradingDtoWithEngine.RegisterPortfolioResponse.class)
                 .block();
 
         log.debug("Success for send request to Trading engine {}", response);

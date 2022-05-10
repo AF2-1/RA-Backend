@@ -12,10 +12,6 @@ spring:
   redis:
     host: 192.168.158.143
     port: 6379
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create
   security:
     oauth2:
       client:
@@ -56,7 +52,7 @@ app:
     callBackUrl: http://192.168.158.141:8080/api/v1/simulation/callback
   trading:
     engineAddress: http://192.168.154.105:35000
-    path: /simulate
+    path: /portfolios/{0}
     callBackUrl: http://192.168.158.141:8080/api/v1/portfolios/{0}/callback
 logging:
   level:
