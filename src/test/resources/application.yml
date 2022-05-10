@@ -30,7 +30,7 @@ app:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     tokenExpirationMsec: 864000000
   cors:
-    allowedOrigins: http://robo.tmax.co.kr:8888
+    allowedOrigins: http://robo.tmax.co.kr
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
