@@ -2,6 +2,7 @@ package kr.co.tmax.rabackend.external;
 
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
+import kr.co.tmax.rabackend.exception.ExternalException;
 import kr.co.tmax.rabackend.interfaces.trading.TradingDtoWithEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 .bodyValue(portfolio)
                 .retrieve()
                 .bodyToMono(TradingDtoWithEngine.RegisterPortfolioResponse.class)
+                .onErrorMap(e -> {
+                    throw new ExternalException(e.getMessage());
+                })
                 .block();
 
         log.debug("Success for send request to Trading engine {}", response);

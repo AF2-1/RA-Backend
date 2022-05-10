@@ -51,4 +51,11 @@ public class ControllerAdvice {
         log.error(e.getMessage());
         return CommonResponse.withMessage("잘못된 요청: " + e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public CommonResponse onExternalException(ExternalException e) {
+        log.error(e.getMessage());
+        return CommonResponse.withMessage("외부 모듈 에러");
+    }
 }
