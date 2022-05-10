@@ -87,10 +87,10 @@ public class SimulationService {
         strategy.complete(command.getTrainedTime(), simulation.getUserId(),  command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
-
         strategyStore.store(strategy);
 
-        log.debug("strategy is completed with simulationId: {} | strategyName: {}", command.getSimulationId(), command.getStrategyName());
+        log.debug("strategy is completed with simulationId: {} | strategyName: {} | userId: {}" ,
+                command.getSimulationId(), command.getStrategyName(), simulation.getUserId());
     }
 
     public SimulationDto.DashBoardResponse getDashBoard() {
