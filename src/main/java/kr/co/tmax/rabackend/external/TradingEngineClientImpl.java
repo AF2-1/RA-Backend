@@ -30,5 +30,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 .retrieve()
                 .bodyToMono(TradingDto.RegisterPortfolioResponse.class)
                 .block();
+
+        log.debug("Success for send request to Trading engine");
     }
 }
