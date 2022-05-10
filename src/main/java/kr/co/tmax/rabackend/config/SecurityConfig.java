@@ -96,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll();
 
         http.oauth2Login()
-                .loginPage("/loginForm")
+//                .loginPage("/loginForm")
 //                .authorizationEndpoint()
 //                    .baseUri("/oauth2/authorize")
 //                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository).and()
