@@ -25,7 +25,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
 
         log.info("ready for send request to Trading engine");
 
-        var response = webClient.post()
+        webClient.post()
                 .uri(requestUrl)
                 .header("callbackUrl", callbackUrl)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -38,6 +38,6 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 })
                 .block();
 
-        log.info("Success for send request to Trading engine {}", response);
+        log.info("Success for send request to Trading engine with portfolioId = {}", portfolio.getId().toString());
     }
 }
