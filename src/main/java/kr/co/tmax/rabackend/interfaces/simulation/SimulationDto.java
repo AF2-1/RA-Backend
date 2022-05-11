@@ -333,7 +333,6 @@ public class SimulationDto {
         }
     }
 
-    @Builder
     @Getter
     @Setter
     @ToString
@@ -343,18 +342,28 @@ public class SimulationDto {
         private List<Ranker> rankers;
 
         public static DashBoardResponse create(List<Ranker> rankers) {
-            return DashBoardResponse.builder()
-                    .rankers(rankers)
-                    .build();
+            return new DashBoardResponse(rankers);
         }
     }
 
     @Getter
-    @Setter
-    @NoArgsConstructor
     @ToString
     public static class Ranker {
+        private int ranking;
         private String name;
         private String email;
+        private String simulationId;
+        private String strategyName;
+        private Double cagr;
+
+        @Builder
+        public Ranker(int ranking, String name, String email, String simulationId, String strategyName, Double cagr) {
+            this.ranking = ranking;
+            this.name = name;
+            this.email = email;
+            this.simulationId = simulationId;
+            this.strategyName = strategyName;
+            this.cagr = cagr;
+        }
     }
 }
