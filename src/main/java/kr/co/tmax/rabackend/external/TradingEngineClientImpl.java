@@ -33,6 +33,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 .retrieve()
                 .bodyToMono(Void.class)
                 .onErrorMap(e -> {
+                    log.error("Request Fail from Engine with portfolioId = {}", portfolio.getId().toString());
                     throw new ExternalException(e.getMessage());
                 })
                 .block();
