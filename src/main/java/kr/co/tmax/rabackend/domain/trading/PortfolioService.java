@@ -20,9 +20,9 @@ public class PortfolioService {
         return savedPortfolio;
     }
 
-    public void update(String portfolioId) {
-        Portfolio portfolio = portfolioReader.findById(portfolioId).orElseThrow(
-                () -> new ResourceNotFoundException("Portfolio", "portfolioId", portfolioId));
+    public void update(PortfolioCommand.RegisterPortfolioCallbackRequest command) {
+        Portfolio portfolio = portfolioReader.findById(command.getPortfolioId()).orElseThrow(
+                () -> new ResourceNotFoundException("Portfolio", "portfolioId", command.getPortfolioId()));
 
         portfolio.complete();
 
