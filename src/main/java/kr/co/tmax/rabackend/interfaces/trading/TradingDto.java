@@ -9,8 +9,6 @@ public class TradingDto {
     @ToString
     @NoArgsConstructor
     public static class RegisterPortfolioCallbackRequest {
-        private String status;
-        private String person_id;
-        private String portfolio_id;
+        private int status;
     }
 }

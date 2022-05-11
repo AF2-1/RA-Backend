@@ -26,6 +26,10 @@ public class Portfolio {
     private Order order;
     private Trade trade;
 
+    public void complete() {
+        this.isExcuted = true;
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor

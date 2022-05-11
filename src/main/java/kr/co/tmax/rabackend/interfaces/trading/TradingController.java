@@ -42,13 +42,19 @@ public class TradingController {
                 .build().toUri();
     }
 
-    @ApiOperation(value = "포트폴리오 생성완료", notes = "포트폴리오를 생성완료에 대한 콜백 요청입니다.")
+    @ApiOperation(value = "포트폴리오 생성완료", notes = "엔진으로부터 포트폴리오 생성완료에 대한 콜백 요청입니다.")
     @PostMapping("/portfolios/{portfolioId}/callback")
-    public ResponseEntity<CommonResponse> completePortfolio(@NotBlank @PathVariable String portfolioId) {
-        //TODO: aynch response implements
+    public ResponseEntity<CommonResponse> completePortfolio(
+            @NotBlank @PathVariable String portfolioId,
+            @RequestBody TradingDto.RegisterPortfolioCallbackRequest request) {
+
+        if(request.getStatus() == 200)
+            portfolioService.update(portfolioId);
+
+        // TODO: 예외처리
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.withMessage("Temporal Response"));
+                .body(CommonResponse.withMessage("Success"));
     }
 }
