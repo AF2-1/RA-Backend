@@ -18,10 +18,17 @@ public class Portfolio {
     @JsonIgnore
     private ObjectId id;
 
+    @JsonIgnore
+    private Boolean isExcuted;
+
     private Agent agent;
     private Info info;
     private Order order;
     private Trade trade;
+
+    public void complete() {
+        this.isExcuted = true;
+    }
 
     @Getter
     @Setter

@@ -3,7 +3,6 @@ package kr.co.tmax.rabackend.external;
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
 import kr.co.tmax.rabackend.exception.ExternalException;
-import kr.co.tmax.rabackend.interfaces.trading.TradingDtoWithEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -26,18 +25,19 @@ public class TradingEngineClientImpl implements TradingEngineClient{
 
         log.info("ready for send request to Trading engine");
 
-        var response = webClient.post()
+        webClient.post()
                 .uri(requestUrl)
                 .header("callbackUrl", callbackUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(portfolio)
                 .retrieve()
-                .bodyToMono(TradingDtoWithEngine.RegisterPortfolioResponse.class)
+                .bodyToMono(Void.class)
                 .onErrorMap(e -> {
+                    log.error("Request Fail from Engine with portfolioId = {}", portfolio.getId().toString());
                     throw new ExternalException(e.getMessage());
                 })
                 .block();
 
-        log.info("Success for send request to Trading engine {}", response);
+        log.info("Success for send request to Trading engine with portfolioId = {}", portfolio.getId().toString());
     }
 }
