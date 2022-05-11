@@ -25,5 +25,7 @@ public class PortfolioService {
                 () -> new ResourceNotFoundException("Portfolio", "portfolioId", portfolioId));
 
         portfolio.complete();
+
+        portfolioStore.save(portfolio);
     }
 }
