@@ -3,7 +3,6 @@ package kr.co.tmax.rabackend.external;
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
 import kr.co.tmax.rabackend.exception.ExternalException;
-import kr.co.tmax.rabackend.interfaces.trading.TradingDtoWithEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -32,7 +31,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(portfolio)
                 .retrieve()
-                .bodyToMono(TradingDtoWithEngine.RegisterPortfolioResponse.class)
+                .bodyToMono(Void.class)
                 .onErrorMap(e -> {
                     throw new ExternalException(e.getMessage());
                 })
