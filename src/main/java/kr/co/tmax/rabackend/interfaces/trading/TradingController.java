@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.interfaces.trading;
 import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
+import kr.co.tmax.rabackend.domain.trading.PortfolioCommand;
 import kr.co.tmax.rabackend.domain.trading.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,7 @@ public class TradingController {
             @RequestBody TradingDto.RegisterPortfolioCallbackRequest request) {
 
         if(request.getStatus() == 200)
-            portfolioService.update(portfolioId);
+            portfolioService.update(new PortfolioCommand.RegisterPortfolioCallbackRequest(portfolioId));
 
         // TODO: 예외처리
 
