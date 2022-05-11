@@ -19,7 +19,7 @@ public class Portfolio {
     private ObjectId id;
 
     @JsonIgnore
-    private Boolean isExcuted;
+    private Boolean isExcuted = false;
 
     private Agent agent;
     private Info info;
