@@ -3,6 +3,7 @@ package kr.co.tmax.rabackend.external;
 import kr.co.tmax.rabackend.config.AppProperties;
 import kr.co.tmax.rabackend.domain.asset.Asset;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
+import kr.co.tmax.rabackend.exception.ExternalException;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,9 @@ public class KserveApiClientImpl implements KserveApiClient {
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(SimulationDto.RegisterStrategyResponse.class)
+                .onErrorMap(e -> {
+                    throw new ExternalException(e.getMessage());
+                })
                 .block();
     }
 }
