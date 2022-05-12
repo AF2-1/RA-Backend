@@ -4,7 +4,6 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,5 +27,9 @@ public class StrategyReaderImpl implements StrategyReader {
     @Override
     public List<Strategy> findAllBySimulationId(String simulationId) {
         return strategyRepository.findAllBySimulationId(simulationId);
+    }
+
+    public List findFiveRanksAboutCagr() {
+        return strategyRepository.findFiveRanksAboutCagr().getMappedResults();
     }
 }

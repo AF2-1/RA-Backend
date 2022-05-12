@@ -6,15 +6,14 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
-import kr.co.tmax.rabackend.domain.user.User;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.KserveApiClient;
+import kr.co.tmax.rabackend.domain.strategy.StrategyRank;
 import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -84,40 +83,64 @@ public class SimulationService {
 
         Simulation simulation = simulationReader.findById(command.getSimulationId()).orElseThrow(null);
 
-        strategy.complete(command.getTrainedTime(), simulation.getUserId(),  command.getEvaluationResults(), command.getRecommendedPf(),
+        strategy.complete(command.getTrainedTime(), simulation.getUserId(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
                 command.getDailyWeights(), command.getDailyValues());
         strategyStore.store(strategy);
 
-        log.debug("strategy is completed with simulationId: {} | strategyName: {} | userId: {}" ,
+        log.debug("strategy is completed with simulationId: {} | strategyName: {} | userId: {}",
                 command.getSimulationId(), command.getStrategyName(), simulation.getUserId());
     }
 
     public SimulationDto.DashBoardResponse getDashBoard() {
-        Set<String> userset = new HashSet();
-        List<Double> cagrset = new ArrayList<>();
-        List<Strategy> all = strategyReader.findAll(Sort.by(Sort.Direction.DESC, "evaluationResults.cagr"));
-        for (int i = 0; i < all.size(); i++) {
-            Simulation simulation = simulationReader.findById(all.get(i).getSimulationId()).orElseThrow(null);
-            if (all.get(i).getEvaluationResults().getCagr() != null && simulation.getUserId() != null) {
-                userset.add(simulation.getUserId());
-                if (userset.size() > 4) {
-                    break;
-                }
-            }
+        List<StrategyRank> rankingsAboutCagr = strategyReader.findFiveRanksAboutCagr();
+
+        List<SimulationDto.Ranker> rankers = new ArrayList<>(rankingsAboutCagr.size());
+
+        int ranking = 1;
+        for (var rankingAboutCagr : rankingsAboutCagr) {
+            var ranker = userRepository.findById(rankingAboutCagr.getUserId()).get();
+
+            rankers.add(
+                    SimulationDto.Ranker.builder()
+                            .ranking(ranking)
+                            .cagr(rankingAboutCagr.getEvaluationResults().getCagr())
+                            .simulationId(rankingAboutCagr.getSimulation().get(0).get_id())
+                            .strategyName(rankingAboutCagr.getStrategyName())
+                            .email(ranker.getEmail())
+                            .name(ranker.getName())
+                            .build()
+            );
+
+            ranking++;
         }
 
-        Iterator<String> iter = userset.iterator();
-        List<SimulationDto.Ranker> rankers = new ArrayList<>();
-        SimulationDto.DashBoardResponse dashBoardResponse = new SimulationDto.DashBoardResponse();
-        while (iter.hasNext()) {
-            SimulationDto.Ranker ranker = new SimulationDto.Ranker();
-            User user = userRepository.findById(iter.next()).orElseThrow(null);
-            ranker.setEmail(user.getEmail());
-            ranker.setName(user.getName());
-            rankers.add(ranker);
-            dashBoardResponse.setRankers(rankers);
-        }
-        return dashBoardResponse;
+        return SimulationDto.DashBoardResponse.create(rankers);
+
+//        Set<String> userset = new HashSet();
+//        List<Double> cagrset = new ArrayList<>();
+//        List<Strategy> all = strategyReader.findAll(Sort.by(Sort.Direction.DESC, "evaluationResults.cagr"));
+//        for (int i = 0; i < all.size(); i++) {
+//            Simulation simulation = simulationReader.findById(all.get(i).getSimulationId()).orElseThrow(null);
+//            if (all.get(i).getEvaluationResults().getCagr() != null && simulation.getUserId() != null) {
+//                userset.add(simulation.getUserId());
+//                if (userset.size() > 4) {
+//                    break;
+//                }
+//            }
+//        }
+//
+//        Iterator<String> iter = userset.iterator();
+//        List<SimulationDto.Ranker> rankers = new ArrayList<>();
+//        SimulationDto.DashBoardResponse dashBoardResponse = new SimulationDto.DashBoardResponse();
+//        while (iter.hasNext()) {
+//            SimulationDto.Ranker ranker = new SimulationDto.Ranker();
+//            User user = userRepository.findById(iter.next()).orElseThrow(null);
+//            ranker.setEmail(user.getEmail());
+//            ranker.setName(user.getName());
+//            rankers.add(ranker);
+//            dashBoardResponse.setRankers(rankers);
+//        }
+//        return dashBoardResponse;
     }
 }

@@ -13,4 +13,6 @@ public interface StrategyReader {
 
     List<Strategy> findAllBySimulationId(String simulationId);
 
+    List<StrategyRank> findFiveRanksAboutCagr();
+
 }
