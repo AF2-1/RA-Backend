@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.strategy;
 
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface StrategyReader {
 
     List<Strategy> findAllBySimulationId(String simulationId);
 
-    List<StrategyRank> findFiveRanksAboutCagr();
+    List<SimulationDto.Ranker> findRankersByCagr();
 
 }
