@@ -340,9 +340,9 @@ public class SimulationDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DashBoardResponse {
-        private List<Ranker> rankers;
+        private List<Object> rankers;
 
-        public static DashBoardResponse create(List<Ranker> rankers) {
+        public static DashBoardResponse create(List<Object> rankers) {
             return DashBoardResponse.builder()
                     .rankers(rankers)
                     .build();
@@ -354,7 +354,9 @@ public class SimulationDto {
     @NoArgsConstructor
     @ToString
     public static class Ranker {
-        private String name;
-        private String email;
+        private String userId;
+        private Double cagr;
+        private String strategyName;
+        private List<Asset> assets;
     }
 }

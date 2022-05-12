@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.infrastructure.strategy;
 
+import com.mongodb.BasicDBObject;
 import kr.co.tmax.rabackend.domain.simulation.Simulation;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.user.User;
@@ -13,7 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.*;
@@ -36,54 +39,20 @@ public class test {
     MongoTemplate mongoTemplate;
 
     @Test
-    void test() {
-        Set<String> userset = new HashSet();
-        List<Double> cagrset = new ArrayList<>();
-        Sort sort = Sort.by(Sort.Direction.DESC, "evaluationResults.cagr");
-        List<Strategy> all = strategyRepository.findAll(sort);
-        for (int i = 0; i < all.size(); i++) {
-            Simulation simulation = simulationRepository.findBySimulationId(all.get(i).getSimulationId()).orElseThrow(null);
-            if(all.get(i).getEvaluationResults().getCagr() != null && simulation.getUserId() != null) {
-//                System.out.println("userset = " + userset);
-//                System.out.println("userId = " + simulation.getUserId());
-//                System.out.println("cagr = " + all.get(i).getEvaluationResults().getCagr());
-                userset.add(simulation.getUserId());
-                if (userset.size() > 4) {
-                    break;
-                }
-            }
-        }
-
-        Iterator<String> iter = userset.iterator();
-        List<SimulationDto.Ranker> rankers = new ArrayList<>();
-        SimulationDto.DashBoardResponse dashBoardResponse = new SimulationDto.DashBoardResponse();
-        while (iter.hasNext()) {
-            SimulationDto.Ranker ranker = new SimulationDto.Ranker();
-            User user = userRepository.findById(iter.next()).orElseThrow(null);
-            ranker.setEmail(user.getEmail());
-            ranker.setName(user.getName());
-            System.out.println("ranker = " + ranker);
-            rankers.add(ranker);
-            dashBoardResponse.setRankers(rankers);
-        }
-        System.out.println("dashBoardResponse = " + dashBoardResponse);
-    }
-
-    @Test
     void test1() {
         Aggregation aggregation = newAggregation(
                 match(Criteria.where("done").is(true)
-                ),
-                group("evaluationResults", "name"
+                        .and("userId").exists(true)
                 ),
                 sort(Sort.Direction.DESC, "evaluationResults.cagr"
                 ),
                 project()
-                        .and("evaluationResults.cagr").as("evaluationResults.cagr")
+                        .and("name").as("strategyName")
+                        .and("evaluationResults.cagr").as("cagr")
+                        .and("userId").as("userId")
         );
-        AggregationResults<Strategy> strategies = mongoTemplate.aggregate(aggregation, "strategies", Strategy.class);
-        List<Strategy> mappedResults = strategies.getMappedResults();
+        AggregationResults<SimulationDto.Ranker> strategies = mongoTemplate.aggregate(aggregation, "strategies", SimulationDto.Ranker.class);
+        List<SimulationDto.Ranker> mappedResults = strategies.getMappedResults();
         System.out.println("mappedResults = " + mappedResults);
-
     }
 }

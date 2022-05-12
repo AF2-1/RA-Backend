@@ -113,10 +113,10 @@ public class SimulationService {
         while (iter.hasNext()) {
             SimulationDto.Ranker ranker = new SimulationDto.Ranker();
             User user = userRepository.findById(iter.next()).orElseThrow(null);
-            ranker.setEmail(user.getEmail());
-            ranker.setName(user.getName());
+//            ranker.setEmail(user.getEmail());
+//            ranker.setName(user.getName());
             rankers.add(ranker);
-            dashBoardResponse.setRankers(rankers);
+//            dashBoardResponse.setRankers(rankers);
         }
         return dashBoardResponse;
     }
