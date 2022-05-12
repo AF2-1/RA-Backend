@@ -162,7 +162,8 @@ class SimulationControllerTest {
     @DisplayName("진행중인 시뮬레이션이 있으면 202 Accepted를 응답한다.")
     void getSimulationsTest1() throws Exception {
         // given
-        List<Strategy> strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+        List<Strategy> strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()
+        , simulations.get(0).getUserId()), new Strategy("ew", simulations.get(0).getSimulationId(), simulations.get(0).getUserId()));
 
         given(simulationService.getSimulations(any())).willReturn(simulations);
         given(strategyService.findAllBySimulation(any())).willReturn(strategies);
@@ -190,7 +191,8 @@ class SimulationControllerTest {
         // given
         simulations.stream().forEach(s -> s.complete());
 
-        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId(),
+                simulations.get(0).getUserId()), new Strategy("ew", simulations.get(0).getSimulationId(), simulations.get(0).getUserId()));
 
         given(simulationService.getSimulations(any())).willReturn(simulations);
         given(strategyService.findAllBySimulation(any())).willReturn(strategies);
@@ -218,7 +220,8 @@ class SimulationControllerTest {
         // given
         var simulationId = UUID.randomUUID().toString();
         var foundSimulation = new Simulation(userId, new ArrayList<>(), 0, null, null);
-        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId(),
+                simulations.get(0).getUserId()), new Strategy("ew", simulations.get(0).getSimulationId(), simulations.get(0).getUserId()));
 
         given(simulationService.getSimulation(any())).willReturn(foundSimulation);
         given(strategyService.findAllBySimulation(simulationId)).willReturn(strategies);
@@ -249,7 +252,8 @@ class SimulationControllerTest {
         // given
         var simulationId = UUID.randomUUID().toString();
         var foundSimulation = new Simulation(userId, new ArrayList<>(), 0, null, null);
-        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId()), new Strategy("ew", simulations.get(0).getSimulationId()));
+        var strategies = Arrays.asList(new Strategy("ew", simulations.get(0).getSimulationId(),
+                simulations.get(0).getUserId()), new Strategy("ew", simulations.get(0).getSimulationId(), simulations.get(0).getUserId()));
 
         foundSimulation.complete();
 
