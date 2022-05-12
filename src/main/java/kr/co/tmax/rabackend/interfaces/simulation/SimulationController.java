@@ -102,11 +102,12 @@ public class SimulationController {
 
         SimulationDto.SimulationResponse simulationResponse = SimulationDto.SimulationResponse.create(simulation, strategies);
 
-        Simulation finishedSimulation = modelMapper.map(simulationResponse, Simulation.class);
+//        Simulation finishedSimulation = modelMapper.map(simulationResponse, Simulation.class);
+//        System.out.println("finishedSimulation = " + finishedSimulation);
 
-        if (simulationResponse.isDone()) {
-            simulationStore.store(finishedSimulation);
-        }
+//        if (simulationResponse.isDone()) {
+//            simulationStore.store(finishedSimulation);
+//        }
 
         return ResponseEntity
                 .status(HttpStatus.OK)
