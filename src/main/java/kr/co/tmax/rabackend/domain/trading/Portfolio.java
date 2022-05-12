@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.trading;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -14,12 +15,20 @@ import java.util.List;
 @AllArgsConstructor
 public class Portfolio {
     @Id
+    @JsonIgnore
     private ObjectId id;
+
+    @JsonIgnore
+    private Boolean isExcuted = false;
 
     private Agent agent;
     private Info info;
     private Order order;
     private Trade trade;
+
+    public void complete() {
+        this.isExcuted = true;
+    }
 
     @Getter
     @Setter
@@ -117,7 +126,7 @@ public class Portfolio {
     @NoArgsConstructor
     @ToString
     public static class Sell {
-        private Condition condition;
+        private List<Condition> conditions;
         private String logic;
         private List<Integer> timeCuts;
     }
