@@ -1,5 +1,6 @@
 package kr.co.tmax.rabackend.domain.strategy;
 
+import kr.co.tmax.rabackend.domain.asset.Asset;
 import lombok.*;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,6 +26,7 @@ public class Strategy {
     private List<PortfolioValue> dailyValues = new ArrayList<>();
     private String simulationId;
     private String userId;
+    private List<Asset> assets;
 
     public Strategy(String name, String simulationId, String userId) {
         this.name = name;
@@ -39,7 +41,8 @@ public class Strategy {
                          List<Double> recommendedPf,
                          List<PortfolioWeight> rebalancingWeights,
                          List<PortfolioWeight> dailyWeights,
-                         List<PortfolioValue> dailyValues) {
+                         List<PortfolioValue> dailyValues,
+                         List<Asset> assets) {
         this.done = true;
         this.userId = userId;
         this.trainedTime = trainedTime;
@@ -48,6 +51,7 @@ public class Strategy {
         this.rebalancingWeights = rebalancingWeights;
         this.dailyWeights = dailyWeights;
         this.dailyValues = dailyValues;
+        this.assets = assets;
     }
 
     @Getter

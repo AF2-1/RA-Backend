@@ -46,6 +46,7 @@ public class StrategyReaderImpl implements StrategyReader {
                 project()
                         .and("simulationId").as("simulationId")
                         .and("userId").as("userId")
+                        .and("assets").as("assets")
                         .and("name").as("strategyName")
                         .and("evaluationResults.cagr").as("cagr"),
                 limit(5L)

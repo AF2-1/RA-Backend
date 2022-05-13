@@ -87,7 +87,7 @@ public class SimulationService {
 
         strategy.complete(command.getTrainedTime(), simulation.getUserId(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
-                command.getDailyWeights(), command.getDailyValues());
+                command.getDailyWeights(), command.getDailyValues(), simulation.getAssets());
         strategyStore.store(strategy);
 
         log.debug("strategy is completed with simulationId: {} | strategyName: {} | userId: {}",
@@ -100,14 +100,13 @@ public class SimulationService {
 
         int ranking = 1;
         for (Ranker ranker : rankersByCagr) {
-            Simulation simulation = simulationReader.findById(ranker.getSimulationId()).orElseThrow(null);
             rankers.add(Ranker.builder()
                     .ranking(ranking)
                     .userId(ranker.getUserId())
                     .cagr(ranker.getCagr())
                     .strategyName(ranker.getStrategyName())
                     .simulationId(ranker.getSimulationId())
-                    .assets(simulation.getAssets())
+                    .assets(ranker.getAssets())
                     .build());
             ranking++;
         }
