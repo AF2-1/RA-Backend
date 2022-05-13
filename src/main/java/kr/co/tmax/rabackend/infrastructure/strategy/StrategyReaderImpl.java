@@ -40,8 +40,13 @@ public class StrategyReaderImpl implements StrategyReader {
 
     public List<Ranker> findRankersByCagr() {
         Aggregation aggregation = newAggregation(
-                match(Criteria.where("done").is(true)
-                        .and("userId").exists(true)),
+                match(Criteria
+                        .where("done").is(true)
+                        .and("userId").exists(true)
+                        .and("simulationId").exists(true)
+                        .and("assets").exists(true)
+                        .and("name").exists(true)
+                        .and("evaluationResults.cagr").exists(true)),
                 sort(Sort.Direction.DESC, "evaluationResults.cagr"),
                 project()
                         .and("simulationId").as("simulationId")
