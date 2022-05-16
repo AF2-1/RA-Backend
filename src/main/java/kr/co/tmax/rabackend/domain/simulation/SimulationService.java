@@ -6,12 +6,14 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
+import kr.co.tmax.rabackend.domain.user.User;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.KserveApiClient;
 import kr.co.tmax.rabackend.domain.strategy.StrategyRank;
 import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.Ranker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -85,33 +87,29 @@ public class SimulationService {
 
         strategy.complete(command.getTrainedTime(), simulation.getUserId(), command.getEvaluationResults(), command.getRecommendedPf(),
                 command.getRebalancingWeights(),
-                command.getDailyWeights(), command.getDailyValues());
+                command.getDailyWeights(), command.getDailyValues(), simulation.getAssets());
         strategyStore.store(strategy);
 
         log.debug("strategy is completed with simulationId: {} | strategyName: {} | userId: {}",
                 command.getSimulationId(), command.getStrategyName(), simulation.getUserId());
     }
 
-    public SimulationDto.DashBoardResponse getDashBoard() {
-        List<StrategyRank> rankingsAboutCagr = strategyReader.findFiveRanksAboutCagr();
-
-        List<SimulationDto.Ranker> rankers = new ArrayList<>(rankingsAboutCagr.size());
+    public List<Ranker> getDashBoard() {
+        List<Ranker> rankersByCagr = strategyReader.findRankersByCagr();
+        List<Ranker> rankers = new ArrayList<>(rankersByCagr.size());
 
         int ranking = 1;
-        for (var rankingAboutCagr : rankingsAboutCagr) {
-            var ranker = userRepository.findById(rankingAboutCagr.getUserId()).get();
-
-            rankers.add(
-                    SimulationDto.Ranker.builder()
-                            .ranking(ranking)
-                            .cagr(rankingAboutCagr.getEvaluationResults().getCagr())
-                            .simulationId(rankingAboutCagr.getSimulation().get(0).get_id())
-                            .strategyName(rankingAboutCagr.getStrategyName())
-                            .email(ranker.getEmail())
-                            .name(ranker.getName())
-                            .build()
-            );
-
+        for (Ranker ranker : rankersByCagr) {
+            rankers.add(Ranker.builder()
+                    .ranking(ranking)
+                    .userId(ranker.getUserId())
+                    .cagr(ranker.getCagr())
+                    .strategyName(ranker.getStrategyName())
+                    .simulationId(ranker.getSimulationId())
+                    .assets(ranker.getAssets())
+                    .build());
             ranking++;
         }
+        return rankers;
+    }
 }

@@ -335,6 +335,7 @@ public class SimulationDto {
 
     @Getter
     @ToString
+    @NoArgsConstructor
     public static class Ranker {
         private int ranking;
         private String simulationId;
