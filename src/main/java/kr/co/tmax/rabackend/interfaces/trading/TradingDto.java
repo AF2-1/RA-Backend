@@ -5,10 +5,9 @@ import lombok.*;
 public class TradingDto {
 
     @Getter
-    @Setter
-    @ToString
     @NoArgsConstructor
     public static class RegisterPortfolioCallbackRequest {
-        private int status;
+        private Boolean isSuccess;
+        private String resultUrl;
     }
 }
