@@ -49,10 +49,15 @@ public class TradingController {
             @NotBlank @PathVariable String portfolioId,
             @RequestBody TradingDto.RegisterPortfolioCallbackRequest request) {
 
-        if(request.getStatus() == 200)
-            portfolioService.update(new PortfolioCommand.RegisterPortfolioCallbackRequest(portfolioId));
+        if(!request.getIsSuccess())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(CommonResponse.withMessage("포트폴리오 생성 중 문제발생 확인"));
+
+        portfolioService.update(new PortfolioCommand.RegisterPortfolioCallbackRequest(portfolioId));
 
         // TODO: 예외처리
+        // TODO: resultUrl 프론트에 전달
 
         return ResponseEntity
                 .status(HttpStatus.OK)
