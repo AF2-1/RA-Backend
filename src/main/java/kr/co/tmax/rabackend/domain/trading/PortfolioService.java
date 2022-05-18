@@ -15,7 +15,7 @@ public class PortfolioService {
 
     public Portfolio save(Portfolio portfolio) {
         Portfolio savedPortfolio = portfolioStore.save(portfolio);
-        tradingEngineClient.requestPortfolioCreation(savedPortfolio);
+        tradingEngineClient.doPostPortfolio(savedPortfolio);
 
         return savedPortfolio;
     }

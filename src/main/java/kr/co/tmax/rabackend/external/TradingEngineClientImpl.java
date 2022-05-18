@@ -19,7 +19,7 @@ public class TradingEngineClientImpl implements TradingEngineClient{
     private final AppProperties appProperties;
 
     @Override
-    public void requestPortfolioCreation(Portfolio portfolio) {
+    public void doPostPortfolio(Portfolio portfolio) {
         final var callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getId().toString());
         final var requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), portfolio.getId().toString());
 
