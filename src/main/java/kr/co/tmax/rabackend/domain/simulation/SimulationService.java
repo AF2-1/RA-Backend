@@ -13,6 +13,7 @@ import kr.co.tmax.rabackend.external.KserveApiClient;
 import kr.co.tmax.rabackend.domain.strategy.StrategyRank;
 import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
+import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.DashBoardDetailResponse;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.Ranker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,5 +112,20 @@ public class SimulationService {
             ranking++;
         }
         return rankers;
+    }
+
+    public DashBoardDetailResponse getDashBoardDetail(String simulationId, String strategyName) {
+        Simulation simulation = simulationReader.findById(simulationId).orElseThrow(null);
+        Strategy strategy = strategyReader.findBySimulationIdAndName(simulationId, strategyName).orElseThrow(null);
+        return DashBoardDetailResponse.builder()
+                .simulationId(simulationId)
+                .assets(simulation.getAssets())
+                .startDate(simulation.getStartDate())
+                .endDate(simulation.getEndDate())
+                .createdDate(simulation.getCreatedDatetime())
+                .rebalancingPeriod(simulation.getRebalancingPeriod())
+                .isDone(simulation.isDone())
+                .strategy(strategy)
+                .build();
     }
 }

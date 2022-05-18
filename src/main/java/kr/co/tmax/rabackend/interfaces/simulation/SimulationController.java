@@ -126,10 +126,20 @@ public class SimulationController {
     }
 
     @ApiOperation(value = "대시보드 조회", notes = "대시보드를 조회합니다")
-    @GetMapping("simulations/dashboard")
+    @GetMapping("dashboards")
     public ResponseEntity<CommonResponse> getDashBoard() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.withMessageAndData("대시보드 조회 완료", simulationService.getDashBoard()));
+    }
+
+    @ApiOperation(value = "대시보드 상세 조회", notes = "대시보드를 상세 조회합니다")
+    @GetMapping("dashboards/{simulationId}/strategies/{strategyName}")
+    public ResponseEntity<CommonResponse> getDashBoardDetail(@PathVariable String simulationId,
+                                                             @PathVariable String strategyName) {
+        System.out.println("simulationId = " + simulationId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessageAndData("대시보드 상세 조회 완료", simulationService.getDashBoardDetail(simulationId, strategyName)));
     }
 }

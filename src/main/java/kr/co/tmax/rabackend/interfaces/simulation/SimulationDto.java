@@ -11,6 +11,7 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import kr.co.tmax.rabackend.domain.user.User;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Local;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.*;
@@ -352,6 +353,34 @@ public class SimulationDto {
             this.cagr = cagr;
             this.userId = userId;
             this.assets = assets;
+        }
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    public static class DashBoardDetailResponse {
+        private String simulationId;
+        private List<Asset> assets;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private LocalDateTime createdDate;
+        private int rebalancingPeriod;
+        private boolean isDone;
+        private Strategy strategy;
+
+        @Builder
+        public DashBoardDetailResponse(String simulationId, List<Asset> assets, LocalDate startDate, LocalDate endDate, LocalDateTime createdDate,
+                                       int rebalancingPeriod, boolean isDone, Strategy strategy) {
+            this.simulationId = simulationId;
+            this.assets = assets;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.createdDate = createdDate;
+            this.rebalancingPeriod = rebalancingPeriod;
+            this.isDone = isDone;
+            this.strategy = strategy;
         }
     }
 }
