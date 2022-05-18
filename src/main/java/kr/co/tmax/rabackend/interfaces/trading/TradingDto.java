@@ -8,6 +8,5 @@ public class TradingDto {
     @NoArgsConstructor
     public static class RegisterPortfolioCallbackRequest {
         private Boolean isSuccess;
-        private String resultUrl;
     }
 }

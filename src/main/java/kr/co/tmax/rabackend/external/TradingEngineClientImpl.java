@@ -19,25 +19,28 @@ public class TradingEngineClientImpl implements TradingEngineClient{
     private final AppProperties appProperties;
 
     @Override
-    public void requestPortfolioCreation(Portfolio portfolio) {
-        String callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getId().toString());
-        String requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), portfolio.getId().toString());
+    public void doPostPortfolio(Portfolio portfolio) {
+        final var callbackUrl = MessageFormat.format(appProperties.getTrading().getCallBackUrl(), portfolio.getId().toString());
+        final var requestUrl = appProperties.getTrading().getEngineAddress() + MessageFormat.format(appProperties.getTrading().getPath(), portfolio.getId().toString());
 
-        log.info("ready for send request to Trading engine");
-
-        webClient.post()
+        final var responseEntity = webClient.post()
                 .uri(requestUrl)
                 .header("callbackUrl", callbackUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(portfolio)
                 .retrieve()
-                .bodyToMono(Void.class)
+                .toEntity(Void.class)
                 .onErrorMap(e -> {
-                    log.error("Request Fail from Engine with portfolioId = {}", portfolio.getId().toString());
+                    log.error("Exception occur while Requesting to Engine with portfolioId = {}", portfolio.getId().toString());
                     throw new ExternalException(e.getMessage());
                 })
                 .block();
 
-        log.info("Success for send request to Trading engine with portfolioId = {}", portfolio.getId().toString());
+        if(!responseEntity.getStatusCode().is2xxSuccessful()) {
+            log.warn("The networking with TS engine is not complete");
+            return;
+        }
+
+        log.info("Success for send request to TS engine with portfolioId = {}", portfolio.getId().toString());
     }
 }
