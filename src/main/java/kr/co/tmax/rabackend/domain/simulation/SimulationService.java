@@ -6,19 +6,15 @@ import kr.co.tmax.rabackend.domain.simulation.SimulationCommand.*;
 import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.StrategyReader;
 import kr.co.tmax.rabackend.domain.strategy.StrategyStore;
-import kr.co.tmax.rabackend.domain.user.User;
 import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.KserveApiClient;
-import kr.co.tmax.rabackend.domain.strategy.StrategyRank;
-import kr.co.tmax.rabackend.infrastructure.user.UserRepository;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.DashBoardDetailResponse;
 import kr.co.tmax.rabackend.interfaces.simulation.SimulationDto.Ranker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,7 +29,6 @@ public class SimulationService {
     private final StrategyReader strategyReader;
     private final AssetReader assetReader;
     private final KserveApiClient kserveApiClient;
-    private final UserRepository userRepository;
 
     public void registerSimulation(RegisterSimulationRequest request) {
         List<Asset> assets = request.getAssets().stream().map(a ->
@@ -125,7 +120,7 @@ public class SimulationService {
                 .createdDate(simulation.getCreatedDatetime())
                 .rebalancingPeriod(simulation.getRebalancingPeriod())
                 .isDone(simulation.isDone())
-                .strategy(strategy)
+                .strategy(SimulationDto.StrategyResponse.create(strategy))
                 .build();
     }
 }
