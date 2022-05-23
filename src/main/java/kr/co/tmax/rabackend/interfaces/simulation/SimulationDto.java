@@ -297,6 +297,7 @@ public class SimulationDto {
     @Setter
     @ToString
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class StrategyResponse {
         private String name;
         private boolean done;
@@ -368,11 +369,11 @@ public class SimulationDto {
         private LocalDateTime createdDate;
         private int rebalancingPeriod;
         private boolean isDone;
-        private Strategy strategy;
+        private StrategyResponse strategy;
 
         @Builder
         public DashBoardDetailResponse(String simulationId, List<Asset> assets, LocalDate startDate, LocalDate endDate, LocalDateTime createdDate,
-                                       int rebalancingPeriod, boolean isDone, Strategy strategy) {
+                                       int rebalancingPeriod, boolean isDone, StrategyResponse strategy) {
             this.simulationId = simulationId;
             this.assets = assets;
             this.startDate = startDate;
