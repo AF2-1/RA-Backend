@@ -49,5 +49,8 @@ public class AppProperties {
     @Setter
     public static class Info {
         private String url;
+        private String keywordsPath;
+        private String sentencesPath;
+
     }
 }
