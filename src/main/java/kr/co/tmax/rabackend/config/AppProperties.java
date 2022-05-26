@@ -13,6 +13,7 @@ public class AppProperties {
     private final Simulation simulation = new Simulation();
     private final Ai ai = new Ai();
     private final Trading trading = new Trading();
+    private final Info info = new Info();
 
     @Setter
     @Getter
@@ -42,5 +43,11 @@ public class AppProperties {
         private String engineAddress;
         private String path;
         private String callBackUrl;
+    }
+
+    @Getter
+    @Setter
+    public static class Info {
+        private String url;
     }
 }
