@@ -24,7 +24,7 @@ public class AssetController {
     private final AssetService assetService;
     private final ModelMapper modelMapper;
 
-    @Cacheable(value = "assets", cacheManager = "assetCacheManager")
+    @Cacheable(value = "assets", cacheManager = "cacheManager")
     @ApiOperation(value = "자산군 목록 조회", notes = "자산군 목록을 조회합니다")
     @GetMapping("/assets")
     public CommonResponse findAsset() {
