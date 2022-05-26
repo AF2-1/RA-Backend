@@ -55,7 +55,10 @@ app:
     path: /api/v1/simulator/{0}/execution
     callBackUrl: http://192.168.158.141:8080/api/v1/portfolios/{0}/callback
   info:
-    url: http://192.168.153.102:8000/en_keyword/
+    url: http://192.168.153.102:8000/
+    keywordsPath: en_keyword/
+    sentencesPath: en_sentence/
+
 logging:
   level:
     kr:
