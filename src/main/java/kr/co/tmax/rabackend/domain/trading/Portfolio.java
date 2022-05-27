@@ -16,7 +16,7 @@ public class Portfolio {
     private ObjectId id;
 
     @JsonIgnore
-    private Boolean isExcuted = false;
+    private Boolean isExecuted = false;
 
     private Agent agent;
     private Info info;
@@ -24,7 +24,7 @@ public class Portfolio {
     private Trade trade;
 
     public void complete() {
-        this.isExcuted = true;
+        this.isExecuted = true;
     }
 
     @Getter
