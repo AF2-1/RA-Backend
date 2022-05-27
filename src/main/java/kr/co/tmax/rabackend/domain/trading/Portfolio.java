@@ -7,12 +7,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
-@ToString
 @Getter
-@Setter
 @Document(collection = "portfolios")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Portfolio {
     @Id
     @JsonIgnore
@@ -31,10 +28,7 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Agent {
         private String userId;
         private Float fee;
@@ -45,20 +39,14 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Info {
         private List<String> periods;
         private String universe;
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Order {
         private OrderType buyOrder;
         private OrderType sellOrder;
@@ -66,10 +54,7 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class OrderType {
         private Float lookback;
         private String ptype;
@@ -77,10 +62,7 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Trade {
         private Buy buy;
         private Sell sell;
@@ -88,20 +70,14 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Buy {
         private List<Condition> conditions;
         private String logic;
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Condition {
         private String name;
         private String factor;
@@ -110,10 +86,7 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class DetailConditions {
         private String factor;
         private Float upper;
@@ -121,10 +94,7 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Sell {
         private List<Condition> conditions;
         private String logic;
@@ -132,10 +102,7 @@ public class Portfolio {
     }
 
     @Getter
-    @Setter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
     public static class Priority {
         private String condition;
         private String order;
