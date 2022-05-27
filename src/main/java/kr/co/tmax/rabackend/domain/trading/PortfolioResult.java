@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@Document(collection = "portfolios")
+@Document(collection = "portfolio_results")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PortfolioResult {
     @Id
@@ -36,7 +36,7 @@ public class PortfolioResult {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class AccountHistory {
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime timestamp;
         private String level;
         private String loggerName;
@@ -66,7 +66,7 @@ public class PortfolioResult {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class OrderHistory {
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime timestamp;
         private String level;
         private String loggerName;
