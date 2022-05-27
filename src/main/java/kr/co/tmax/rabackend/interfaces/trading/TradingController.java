@@ -3,7 +3,7 @@ package kr.co.tmax.rabackend.interfaces.trading;
 import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.config.common.CommonResponse;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
-import kr.co.tmax.rabackend.domain.trading.PortfolioCommand;
+import kr.co.tmax.rabackend.domain.trading.PortfolioResult;
 import kr.co.tmax.rabackend.domain.trading.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,17 +47,14 @@ public class TradingController {
     @PostMapping("/portfolios/{portfolioId}/callback")
     public ResponseEntity<CommonResponse> completePortfolio(
             @NotBlank @PathVariable String portfolioId,
-            @RequestBody TradingDto.RegisterPortfolioResultRequest request) {
+            @RequestBody PortfolioResult request) {
 
         if(Boolean.FALSE.equals(request.getIsSuccess()))
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(CommonResponse.withMessage("포트폴리오 생성 중 문제발생 확인"));
 
-        portfolioService.save(new PortfolioCommand.RegisterPortfolioCallbackRequest(portfolioId));
-
-        // TODO: 예외처리
-        // TODO: resultUrl 프론트에 전달
+        portfolioService.save(request);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

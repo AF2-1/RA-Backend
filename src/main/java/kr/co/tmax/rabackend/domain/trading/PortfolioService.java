@@ -12,6 +12,7 @@ public class PortfolioService {
     private final PortfolioStore portfolioStore;
     private final PortfolioReader portfolioReader;
     private final TradingEngineClient tradingEngineClient;
+    private final PortfolioResultStore portfolioResultStore;
 
     public Portfolio save(Portfolio portfolio) {
         Portfolio savedPortfolio = portfolioStore.save(portfolio);
@@ -20,9 +21,15 @@ public class PortfolioService {
         return savedPortfolio;
     }
 
-    public void save(PortfolioCommand.RegisterPortfolioCallbackRequest command) {
-        Portfolio portfolio = portfolioReader.findById(command.getPortfolioId()).orElseThrow(
-                () -> new ResourceNotFoundException("Portfolio", "portfolioId", command.getPortfolioId()));
+    public void save(PortfolioResult portfolioResult) {
+        updateExecutedStatus(portfolioResult.getPortfolioId());
+
+        portfolioResultStore.save(portfolioResult);
+    }
+
+    private void updateExecutedStatus(final String portfolioId) {
+        Portfolio portfolio = portfolioReader.findById(portfolioId).orElseThrow(
+                () -> new ResourceNotFoundException("Portfolio", "portfolioId", portfolioId));
 
         portfolio.complete();
 
