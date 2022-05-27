@@ -20,7 +20,7 @@ public class PortfolioService {
         return savedPortfolio;
     }
 
-    public void update(PortfolioCommand.RegisterPortfolioCallbackRequest command) {
+    public void save(PortfolioCommand.RegisterPortfolioCallbackRequest command) {
         Portfolio portfolio = portfolioReader.findById(command.getPortfolioId()).orElseThrow(
                 () -> new ResourceNotFoundException("Portfolio", "portfolioId", command.getPortfolioId()));
 
