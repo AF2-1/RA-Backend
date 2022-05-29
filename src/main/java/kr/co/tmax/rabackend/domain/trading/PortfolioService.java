@@ -40,9 +40,9 @@ public class PortfolioService {
         portfolioStore.save(portfolio);
     }
 
-    public List<Portfolio> getAllByUserId(String userId, Pageable pageable) {
+    public Page<Portfolio> getAllByUserId(String userId, Pageable pageable) {
         Page<Portfolio> allByUserId = portfolioReader.findAllByUserId(userId, pageable);
 
-        return allByUserId.getContent();
+        return allByUserId;
     }
 }

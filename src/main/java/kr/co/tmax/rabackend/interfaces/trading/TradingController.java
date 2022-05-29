@@ -2,10 +2,12 @@ package kr.co.tmax.rabackend.interfaces.trading;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.tmax.rabackend.config.common.CommonResponse;
+import kr.co.tmax.rabackend.config.common.PageResponseDate;
 import kr.co.tmax.rabackend.domain.trading.Portfolio;
 import kr.co.tmax.rabackend.domain.trading.PortfolioResult;
 import kr.co.tmax.rabackend.domain.trading.PortfolioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -71,10 +73,12 @@ public class TradingController {
             @NotBlank @PathVariable String userId,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
 
-        List<Portfolio> portfoliosByUser = portfolioService.getAllByUserId(userId, pageable);
+        Page<Portfolio> portfoliosPage = portfolioService.getAllByUserId(userId, pageable);
+
+        var response = PageResponseDate.of(portfoliosPage.getContent(), PageResponseDate.PageInfo.of(portfoliosPage));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.withMessageAndData("포트폴리오 생성 성공", portfoliosByUser));
+                .body(CommonResponse.withMessageAndData("포트폴리오 생성 성공", response));
     }
 }
