@@ -3,7 +3,11 @@ package kr.co.tmax.rabackend.domain.trading;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.TradingEngineClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +38,11 @@ public class PortfolioService {
         portfolio.complete();
 
         portfolioStore.save(portfolio);
+    }
+
+    public List<Portfolio> getAllByUserId(String userId, Pageable pageable) {
+        Page<Portfolio> allByUserId = portfolioReader.findAllByUserId(userId, pageable);
+
+        return allByUserId.getContent();
     }
 }
