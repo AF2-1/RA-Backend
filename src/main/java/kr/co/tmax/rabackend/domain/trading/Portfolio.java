@@ -5,11 +5,12 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Document(collection = "portfolios")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Portfolio {
     @Id
     @JsonIgnore
@@ -17,6 +18,13 @@ public class Portfolio {
 
     @JsonIgnore
     private Boolean isExecuted = false;
+
+    @JsonIgnore
+    private LocalDateTime createdDate;
+
+    protected Portfolio() {
+        this.createdDate = LocalDateTime.now();
+    }
 
     private Agent agent;
     private Info info;
