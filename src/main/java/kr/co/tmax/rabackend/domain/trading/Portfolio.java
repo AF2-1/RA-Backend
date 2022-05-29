@@ -28,6 +28,10 @@ public class Portfolio {
         this.createdDate = LocalDateTime.now();
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     private Agent agent;
     private Info info;
     private Order order;

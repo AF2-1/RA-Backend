@@ -35,6 +35,7 @@ public class TradingController {
                                                             @RequestBody Portfolio portfolio,
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
+        portfolio.setUserId(userId);
         portfolioService.save(portfolio);
 
         return ResponseEntity
