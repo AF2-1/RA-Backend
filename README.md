@@ -16,5 +16,5 @@
 
 **테스트 커버리지 확인**
 ```bash
-./gradlew jacocoTestReport
+./gradlew --console verbose test jacocoTestReport jacocoTestCoverageVerification
 ```
