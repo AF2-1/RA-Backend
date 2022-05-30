@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +106,8 @@ public class PortfolioResult {
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class Info {
-            @DateTimeFormat(pattern = "yyyyMMdd")
-            private List<LocalDate> periods;
+//            @DateTimeFormat(pattern = "yyyyMMdd")
+//            private List<LocalDateTime> periods;
             private String universe;
         }
 
