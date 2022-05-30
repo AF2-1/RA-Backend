@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class PortfolioResult {
     private String portfolioId;
     private List<AccountHistory> accountHistory;
     private List<OrderHistory> orderHistory;
-    private Summary1 summary;
+    private Summary summary;
     private Summary1 summary1;
     private Summary2 summary2;
     private Summary3 summary3;
@@ -36,7 +37,7 @@ public class PortfolioResult {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class AccountHistory {
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime timestamp;
         private String level;
         private String loggerName;
@@ -44,7 +45,7 @@ public class PortfolioResult {
         private String method;
         private String portfolioId;
         private Long personId;
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime simDate;
         private Double initBalance;
         private Double totalAsset;
@@ -52,9 +53,9 @@ public class PortfolioResult {
         private Map<String, Investment> investments;
 
         @Getter
-        @NoArgsConstructor
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class Investment {
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
             private LocalDateTime orderDate;
             private Long orderPrice;
             private Long quantity;
@@ -66,7 +67,7 @@ public class PortfolioResult {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class OrderHistory {
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime timestamp;
         private String level;
         private String loggerName;
@@ -76,7 +77,7 @@ public class PortfolioResult {
         private String portfolioId;
         private String tactics;
         private String ticker;
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime simDate;
         private Long price;
         private Long quantity;
@@ -85,11 +86,11 @@ public class PortfolioResult {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Summary1 {
+    public static class Summary {
         private Agent agent;
         private Info info;
         private Order order;
-        private Trace trace;
+        private Trade trade;
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -106,8 +107,8 @@ public class PortfolioResult {
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class Info {
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            private List<LocalDateTime> periods;
+            @DateTimeFormat(pattern = "yyyyMMdd")
+            private List<LocalDate> periods;
             private String universe;
         }
 
@@ -129,7 +130,7 @@ public class PortfolioResult {
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class Trace {
+        public static class Trade {
             private Buy buy;
             private Sell sell;
             private Priority priority;
@@ -164,6 +165,23 @@ public class PortfolioResult {
                 private Double upper;
                 private Double lower;
             }
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class Summary1 {
+        private Double totalValue;
+        private Map<String, Double> ratio;
+        private Map<String, Double> perValue;
+        private DailyNav dailyNav;
+
+        @Getter
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class DailyNav {
+            @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+            private List<LocalDateTime> period;
+            private List<Double> nav;
         }
     }
 
