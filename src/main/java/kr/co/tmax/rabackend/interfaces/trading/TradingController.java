@@ -80,6 +80,6 @@ public class TradingController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.withMessageAndData("포트폴리오 생성 성공", response));
+                .body(CommonResponse.withMessageAndData("포트폴리오 목록 조회 성공", response));
     }
 }
