@@ -178,8 +178,7 @@ public class PortfolioResult {
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class DailyNav {
-            @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-            private List<LocalDateTime> period;
+            private List<String> period;  // TODO: List<LocalDateTime>을 메시지컨버터를 통해 deserialize
             private List<Double> nav;
         }
     }
@@ -187,17 +186,20 @@ public class PortfolioResult {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Summary2 {
-        private SummaryInfo mySimulation;
-        private SummaryInfo benchmark;
+//        private SummaryInfo mySimulation;
+//        private SummaryInfo benchmark;
 
-        @Getter
-        @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class SummaryInfo {
-            private Double CR;
-            private Double CAGR;
-            private Double MDD;
-            private Double sharpeRatio;
-        }
+        private Map<String, Double> mySimulation;
+        private Map<String, Double> benchmark;
+
+//        @Getter
+//        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+//        public static class SummaryInfo {   // TODO: CR, CAGR, MDD 이 null로 들어오는 문제로 인해 임시로 Map으로 구현
+//            private Double CR;
+//            private Double CAGR;
+//            private Double MDD;
+//            private Double sharpeRatio;
+//        }
     }
 
     @Getter
