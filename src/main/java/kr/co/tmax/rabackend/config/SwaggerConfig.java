@@ -1,12 +1,18 @@
 package kr.co.tmax.rabackend.config;
 
+import com.fasterxml.classmate.TypeResolver;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -29,7 +35,12 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
+        TypeResolver typeResolver = new TypeResolver();
+
         return new Docket(DocumentationType.SWAGGER_2)
+                .alternateTypeRules(
+                        AlternateTypeRules.newRule(typeResolver.resolve(Pageable.class), typeResolver.resolve(Page.class))
+                )
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, newArrayList(
                         new ResponseBuilder().code("200")
@@ -99,5 +110,15 @@ public class SwaggerConfig {
                 .version(API_VERSION)
                 .description(API_DESCRIPTION)
                 .build();
+    }
+
+    @Getter
+    @ApiModel
+    static class Page {
+        @ApiModelProperty(value = "페이지 번호(1부터 시작)", example = "1")
+        private Integer page;
+
+        @ApiModelProperty(value = "페이지 당 요소 개수(최대 100, 기본 20)", allowableValues = "range[0, 100]", example = "20")
+        private Integer size;
     }
 }
