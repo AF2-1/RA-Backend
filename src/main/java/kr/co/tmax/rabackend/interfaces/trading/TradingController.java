@@ -65,7 +65,7 @@ public class TradingController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.withMessage("포트폴리오 생성 성공"));
+                .body(CommonResponse.withMessage("포트폴리오 생성/갱신 성공"));
     }
 
     @ApiOperation(value = "유저별 포트폴리오 목록조회")
