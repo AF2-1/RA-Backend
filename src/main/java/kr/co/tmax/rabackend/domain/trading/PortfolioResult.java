@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +26,7 @@ public class PortfolioResult {
     @NotNull
     private Boolean isSuccess;
     @NotNull
+    @Indexed(unique = true)
     private String portfolioId;
     private List<AccountHistory> accountHistory;
     private List<OrderHistory> orderHistory;
