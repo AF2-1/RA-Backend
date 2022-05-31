@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -16,6 +17,11 @@ public class PortfolioResultReaderImpl implements PortfolioResultReader {
     @Override
     public List<PortfolioResult> findAllByPortfolioId(@NotNull final String portfolioId) {
         return portfolioResultRepository.findAllByPortfolioId(portfolioId);
+    }
+
+    @Override
+    public Optional<PortfolioResult> findByPortfolioId(@NotNull final String portfolioId) {
+        return portfolioResultRepository.findByPortfolioId(portfolioId);
     }
 
 }

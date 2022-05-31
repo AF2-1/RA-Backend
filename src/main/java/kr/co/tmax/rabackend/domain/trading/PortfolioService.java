@@ -17,14 +17,14 @@ public class PortfolioService {
     private final PortfolioResultStore portfolioResultStore;
     private final PortfolioResultReader portfolioResultReader;
 
-    public Portfolio save(Portfolio portfolio) {
+    public Portfolio save(final Portfolio portfolio) {
         Portfolio savedPortfolio = portfolioStore.save(portfolio);
         tradingEngineClient.doPostPortfolio(savedPortfolio);
 
         return savedPortfolio;
     }
 
-    public void save(PortfolioResult portfolioResult) {
+    public void save(final PortfolioResult portfolioResult) {
         updateExecutedStatus(portfolioResult.getPortfolioId());
 
         var portfolioResults = portfolioResultReader.findAllByPortfolioId(portfolioResult.getPortfolioId());
@@ -46,9 +46,15 @@ public class PortfolioService {
         portfolioStore.save(portfolio);
     }
 
-    public Page<Portfolio> getAllByUserId(String userId, Pageable pageable) {
+    public Page<Portfolio> getAllByUserId(final String userId, Pageable pageable) {
         Page<Portfolio> allByUserId = portfolioReader.findAllByUserId(userId, pageable);
 
         return allByUserId;
+    }
+
+    public PortfolioResult getPortfolioResult(final String portfolioId) {
+        return portfolioResultReader.findByPortfolioId(portfolioId).orElseThrow(
+                () -> new ResourceNotFoundException("Portfolio Result", "portfolioId", portfolioId)
+        );
     }
 }
