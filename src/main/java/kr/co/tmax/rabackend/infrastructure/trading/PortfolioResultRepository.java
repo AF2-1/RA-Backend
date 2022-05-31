@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PortfolioResultRepository extends MongoRepository<PortfolioResult, ObjectId> {
     @Override
@@ -14,5 +15,7 @@ public interface PortfolioResultRepository extends MongoRepository<PortfolioResu
 
     @Override
     void delete(PortfolioResult entity);
+
+    Optional<PortfolioResult> findByPortfolioId(String portfolioId);
 
 }

@@ -50,24 +50,6 @@ public class TradingController {
                 .build().toUri();
     }
 
-    @ApiOperation(value = "포트폴리오 생성완료", notes = "엔진으로부터 포트폴리오 생성완료에 대한 콜백 요청입니다. \n 포트폴리오 분석 결과 데이터가 Body에 포함됩니다.")
-    @PostMapping("/portfolios/{portfolioId}/callback")
-    public ResponseEntity<CommonResponse> completePortfolio(
-            @NotBlank @PathVariable String portfolioId,
-            @Valid @RequestBody PortfolioResult request) {
-
-        if(Boolean.FALSE.equals(request.getIsSuccess()))
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(CommonResponse.withMessage("포트폴리오 생성 중 문제발생 확인"));
-
-        portfolioService.save(request);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(CommonResponse.withMessage("포트폴리오 생성/갱신 성공"));
-    }
-
     @ApiOperation(value = "유저별 포트폴리오 목록조회")
     @GetMapping("/users/{userId}/portfolios")
     public ResponseEntity<CommonResponse> getPortfoliosByUser(
@@ -81,5 +63,36 @@ public class TradingController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.withMessageAndData("포트폴리오 목록 조회 성공", response));
+    }
+
+    @ApiOperation(value = "포트폴리오 생성완료", notes = "엔진으로부터 포트폴리오 생성완료에 대한 콜백 요청입니다. \n 포트폴리오 분석 결과 데이터가 Body에 포함됩니다.")
+    @PostMapping("/portfolios/{portfolioId}/callback")
+    public ResponseEntity<CommonResponse> completePortfolio(
+            @NotBlank @PathVariable String portfolioId,
+            @Valid @RequestBody PortfolioResult request) {
+
+        if (Boolean.FALSE.equals(request.getIsSuccess()))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(CommonResponse.withMessage("포트폴리오 생성 중 문제발생 확인"));
+
+        portfolioService.save(request);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessage("포트폴리오 생성/갱신 성공"));
+    }
+
+    @ApiOperation(value = "포트폴리오 분석 결과 조회")
+    @GetMapping("/users/{userId}/portfolios/{portfolioId}/portfolio-results")
+    public ResponseEntity<CommonResponse> getPortfolioResult(
+            @NotBlank @PathVariable String userId,
+            @NotBlank @PathVariable String portfolioId) {
+
+        var portfolioResult = portfolioService.getPortfolioResult(portfolioId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.withMessageAndData("포트폴리오 분석 결과 조회 성공", portfolioResult));
     }
 }
