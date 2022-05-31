@@ -17,9 +17,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
-import java.util.List;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class TradingController {
     @ApiOperation(value = "포트폴리오 생성", notes = "포트폴리오를 생성합니다")
     @PostMapping("/users/{userId}/portfolios")
     public ResponseEntity<CommonResponse> registerPortfolio(@NotBlank @PathVariable String userId,
-                                                            @RequestBody Portfolio portfolio,
+                                                            @Valid @RequestBody Portfolio portfolio,
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
         portfolio.setUserId(userId);
@@ -54,7 +54,7 @@ public class TradingController {
     @PostMapping("/portfolios/{portfolioId}/callback")
     public ResponseEntity<CommonResponse> completePortfolio(
             @NotBlank @PathVariable String portfolioId,
-            @RequestBody PortfolioResult request) {
+            @Valid @RequestBody PortfolioResult request) {
 
         if(Boolean.FALSE.equals(request.getIsSuccess()))
             return ResponseEntity
