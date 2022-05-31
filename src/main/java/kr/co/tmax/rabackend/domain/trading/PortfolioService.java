@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class PortfolioService {
@@ -17,6 +15,7 @@ public class PortfolioService {
     private final PortfolioReader portfolioReader;
     private final TradingEngineClient tradingEngineClient;
     private final PortfolioResultStore portfolioResultStore;
+    private final PortfolioResultReader portfolioResultReader;
 
     public Portfolio save(Portfolio portfolio) {
         Portfolio savedPortfolio = portfolioStore.save(portfolio);
@@ -27,6 +26,13 @@ public class PortfolioService {
 
     public void save(PortfolioResult portfolioResult) {
         updateExecutedStatus(portfolioResult.getPortfolioId());
+
+        var portfolioResults = portfolioResultReader.findAllByPortfolioId(portfolioResult.getPortfolioId());
+
+        if (!portfolioResults.isEmpty()) {
+            var prevPR = portfolioResults.get(0);
+            portfolioResultStore.delete(prevPR);
+        }
 
         portfolioResultStore.save(portfolioResult);
     }

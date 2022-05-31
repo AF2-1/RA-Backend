@@ -4,4 +4,6 @@ public interface PortfolioResultStore {
 
     PortfolioResult save(PortfolioResult portfolioResult);
 
+    void delete(PortfolioResult entity);
+
 }

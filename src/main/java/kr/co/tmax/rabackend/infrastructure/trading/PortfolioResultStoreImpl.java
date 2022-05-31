@@ -14,4 +14,9 @@ public class PortfolioResultStoreImpl implements PortfolioResultStore {
     public PortfolioResult save(PortfolioResult portfolioResult) {
         return portfolioResultRepository.save(portfolioResult);
     }
+
+    @Override
+    public void delete(PortfolioResult entity) {
+        portfolioResultRepository.delete(entity);
+    }
 }
