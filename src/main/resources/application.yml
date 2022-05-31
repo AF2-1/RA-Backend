@@ -9,6 +9,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://192.168.158.143:9042,192.168.158.143:9142,192.168.158.143:9242/ra?replicaset=docker-rs&connectTimeoutMS=3000&readPreference=secondaryPreferred
+    web:
+      pageable:
+        default-page-size: 20
+        one-indexed-parameters: true
   redis:
     host: 192.168.158.143
     port: 6379
