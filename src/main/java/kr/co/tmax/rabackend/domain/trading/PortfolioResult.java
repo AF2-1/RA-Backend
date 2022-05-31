@@ -108,8 +108,7 @@ public class PortfolioResult {
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class Info {
-//            @DateTimeFormat(pattern = "yyyyMMdd")
-//            private List<LocalDateTime> periods;
+            private List<String> periods;
             private String universe;
         }
 
