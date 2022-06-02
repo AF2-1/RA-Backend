@@ -112,6 +112,7 @@ public class SimulationService {
     public DashBoardDetailResponse getDashBoardDetail(String simulationId, String strategyName) {
         Simulation simulation = simulationReader.findById(simulationId).orElseThrow(null);
         Strategy strategy = strategyReader.findBySimulationIdAndName(simulationId, strategyName).orElseThrow(null);
+
         return DashBoardDetailResponse.builder()
                 .simulationId(simulationId)
                 .assets(simulation.getAssets())

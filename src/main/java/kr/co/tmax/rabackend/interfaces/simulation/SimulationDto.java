@@ -9,6 +9,7 @@ import kr.co.tmax.rabackend.domain.strategy.Strategy;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioValue;
 import kr.co.tmax.rabackend.domain.strategy.Strategy.PortfolioWeight;
 import kr.co.tmax.rabackend.domain.user.User;
+import kr.co.tmax.rabackend.infrastructure.asset.AssetRepository;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jni.Local;
@@ -335,6 +336,25 @@ public class SimulationDto {
         }
     }
 
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    public static class SimpleAssetResponse {
+        private String name;
+        private String index;
+        private String ticker;
+
+        public static SimpleAssetResponse create(Asset asset, AssetRepository assetRepository) {
+            return SimpleAssetResponse.builder()
+                    .name(assetRepository.findByTickerAndIndex(asset.getTicker(), asset.getIndex()).orElseThrow(null).getName())
+                    .index(asset.getIndex())
+                    .ticker(asset.getTicker())
+                    .build();
+        }
+    }
+
     @Getter
     @ToString
     @NoArgsConstructor
@@ -344,10 +364,10 @@ public class SimulationDto {
         private String strategyName;
         private Double cagr;
         private String userId;
-        private List<Asset> assets;
+        private List<SimpleAssetResponse> assets;
 
         @Builder
-        public Ranker(int ranking, String simulationId, String strategyName, Double cagr, String userId, List<Asset> assets) {
+        public Ranker(int ranking, String simulationId, String strategyName, Double cagr, String userId, List<SimpleAssetResponse> assets) {
             this.ranking = ranking;
             this.simulationId = simulationId;
             this.strategyName = strategyName;
