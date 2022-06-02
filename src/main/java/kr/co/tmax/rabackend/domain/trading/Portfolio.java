@@ -16,12 +16,10 @@ public class Portfolio {
     @JsonIgnore
     private ObjectId id;
 
-    @JsonIgnore
     private Boolean isExecuted = false;
 
     private String userId;
 
-    @JsonIgnore
     private LocalDateTime createdDate;
 
     protected Portfolio() {
