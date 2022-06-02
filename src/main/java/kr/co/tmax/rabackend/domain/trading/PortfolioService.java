@@ -39,7 +39,8 @@ public class PortfolioService {
 
     private void updateExecutedStatus(final String portfolioId) {
         Portfolio portfolio = portfolioReader.findById(portfolioId).orElseThrow(
-                () -> new ResourceNotFoundException("Portfolio", "portfolioId", portfolioId));
+                () -> new ResourceNotFoundException("Portfolio", "portfolioId", portfolioId)
+        );
 
         portfolio.complete();
 
