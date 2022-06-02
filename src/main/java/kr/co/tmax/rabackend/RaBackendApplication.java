@@ -8,6 +8,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 @EnableConfigurationProperties(AppProperties.class)
 @SpringBootApplication
 @EnableAsync
@@ -16,6 +19,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 //        "kr.co.tmax.rabackend.infrastructure.strategy", "kr.co.tmax.rabackend.infrastructure.asset"})
 @EnableCaching
 public class RaBackendApplication {
+    @PostConstruct
+    public void started() {
+        // timezone UTC 셋팅
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(RaBackendApplication.class, args);
     }
