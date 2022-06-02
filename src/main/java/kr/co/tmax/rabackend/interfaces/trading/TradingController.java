@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
+import java.time.LocalDateTime;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class TradingController {
                                                             @Valid @RequestBody Portfolio portfolio,
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
-        portfolio.setUserId(userId);
+        portfolio.setInitialValue(LocalDateTime.now(), false, userId);
         portfolioService.save(portfolio);
 
         return ResponseEntity

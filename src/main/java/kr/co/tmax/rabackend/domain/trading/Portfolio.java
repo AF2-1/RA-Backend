@@ -11,22 +11,21 @@ import java.util.List;
 
 @Getter
 @Document(collection = "portfolios")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Portfolio {
     @Id
     @JsonIgnore
     private ObjectId id;
 
-    private Boolean isExecuted = false;
+    private Boolean isExecuted;
 
     private String userId;
 
     private LocalDateTime createdDate;
 
-    protected Portfolio() {
-        this.createdDate = LocalDateTime.now();
-    }
-
-    public void setUserId(String userId) {
+    public void setInitialValue(LocalDateTime createdDate, boolean isExecuted, String userId) {
+        this.createdDate = createdDate;
+        this.isExecuted = isExecuted;
         this.userId = userId;
     }
 
