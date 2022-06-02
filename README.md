@@ -3,6 +3,7 @@
 ## Pre-requisites
 * JDK 8+
 * docker
+* Jenkins
 
 **애플리케이션 실행**
 ```bash
