@@ -50,6 +50,10 @@ public class PortfolioService {
     public Page<Portfolio> getAllByUserId(final String userId, Pageable pageable) {
         Page<Portfolio> allByUserId = portfolioReader.findAllByUserId(userId, pageable);
 
+        allByUserId.getContent().stream()
+                .parallel()
+                .forEach(Portfolio::putPortfolioId);
+
         return allByUserId;
     }
 
