@@ -17,6 +17,8 @@ public class Portfolio {
     @JsonIgnore
     private ObjectId id;
 
+    private String portfolioId;
+
     private Boolean isExecuted;
 
     private String userId;
@@ -27,6 +29,10 @@ public class Portfolio {
         this.createdDate = createdDate;
         this.isExecuted = isExecuted;
         this.userId = userId;
+    }
+
+    public void putPortfolioId() {
+        this.portfolioId = id.toHexString();
     }
 
     private Agent agent;
