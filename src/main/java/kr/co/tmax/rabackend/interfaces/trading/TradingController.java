@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
@@ -37,12 +38,16 @@ public class TradingController {
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
         portfolio.setInitialValue(LocalDateTime.now(), false, userId);
-        portfolioService.save(portfolio);
+        var savedPortfolio = portfolioService.save(portfolio);
+
+        Map<String, String> response = Map.ofEntries(
+                Map.entry("portfolioId", savedPortfolio.getId().toHexString())
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .location(getLocation(userId, uriComponentsBuilder))
-                .body(CommonResponse.withMessage("포트폴리오 생성 요청 확인"));
+                .body(CommonResponse.withMessageAndData("포트폴리오 생성 요청 확인", response));
     }
 
     private URI getLocation(String userId, UriComponentsBuilder uriComponentsBuilder) {
