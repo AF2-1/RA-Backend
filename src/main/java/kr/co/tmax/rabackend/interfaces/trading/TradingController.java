@@ -37,12 +37,12 @@ public class TradingController {
                                                             UriComponentsBuilder uriComponentsBuilder) {
 
         portfolio.setInitialValue(LocalDateTime.now(), false, userId);
-        portfolioService.save(portfolio);
+        var savedPortfolio = portfolioService.save(portfolio);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .location(getLocation(userId, uriComponentsBuilder))
-                .body(CommonResponse.withMessage("포트폴리오 생성 요청 확인"));
+                .body(CommonResponse.withMessageAndData("포트폴리오 생성 요청 확인", savedPortfolio.getId().toHexString()));
     }
 
     private URI getLocation(String userId, UriComponentsBuilder uriComponentsBuilder) {
