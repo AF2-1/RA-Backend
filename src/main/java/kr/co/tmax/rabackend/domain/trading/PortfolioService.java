@@ -1,11 +1,14 @@
 package kr.co.tmax.rabackend.domain.trading;
 
+import kr.co.tmax.rabackend.exception.BadRequestException;
 import kr.co.tmax.rabackend.exception.ResourceNotFoundException;
 import kr.co.tmax.rabackend.external.TradingEngineClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.text.MessageFormat;
 
 @Service
 @RequiredArgsConstructor
@@ -57,9 +60,20 @@ public class PortfolioService {
         return allByUserId;
     }
 
-    public PortfolioResult getPortfolioResult(final String portfolioId) {
-        return portfolioResultReader.findByPortfolioId(portfolioId).orElseThrow(
+    public Object getPortfolioResult(final String portfolioId, final int summaryNum) {
+        var portfolioResult = portfolioResultReader.findByPortfolioId(portfolioId).orElseThrow(
                 () -> new ResourceNotFoundException("Portfolio Result", "portfolioId", portfolioId)
         );
+
+        switch (summaryNum){
+            case 0:
+                return portfolioResult.getSummary();
+            case 1:
+                return portfolioResult.getSummary1();
+            case 2:
+                return portfolioResult.getSummary2();
+            default:
+                throw new BadRequestException(MessageFormat.format("summary number {0} is not exists", summaryNum));
+        }
     }
 }
