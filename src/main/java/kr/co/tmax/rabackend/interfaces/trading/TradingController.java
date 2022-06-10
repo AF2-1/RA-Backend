@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.HashMap;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
@@ -40,9 +42,8 @@ public class TradingController {
         portfolio.setInitialValue(LocalDateTime.now(), false, userId);
         var savedPortfolio = portfolioService.save(portfolio);
 
-        Map<String, String> response = Map.ofEntries(
-                Map.entry("portfolioId", savedPortfolio.getId().toHexString())
-        );
+        var response = new HashMap<String, String>();
+        response.put("portfolioId", savedPortfolio.getId().toHexString());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -89,13 +90,14 @@ public class TradingController {
                 .body(CommonResponse.withMessage("포트폴리오 생성/갱신 성공"));
     }
 
-    @ApiOperation(value = "포트폴리오 분석 결과 조회")
-    @GetMapping("/users/{userId}/portfolios/{portfolioId}/portfolio-results")
+    @ApiOperation(value = "포트폴리오 분석 결과 조회 (Summary 0, 1, 2를 지원합니다)")
+    @GetMapping("/portfolios/{portfolioId}/results")
     public ResponseEntity<CommonResponse> getPortfolioResult(
-            @NotBlank @PathVariable String userId,
-            @NotBlank @PathVariable String portfolioId) {
+            @RequestParam(value = "summary") @Min(0) @Max(2) int summaryNum,
+            @NotBlank @PathVariable String portfolioId
+    ) {
 
-        var portfolioResult = portfolioService.getPortfolioResult(portfolioId);
+        var portfolioResult = portfolioService.getPortfolioResult(portfolioId, summaryNum);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
