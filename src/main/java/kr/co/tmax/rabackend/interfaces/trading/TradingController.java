@@ -23,7 +23,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.HashMap;
 
 @RequestMapping(value = "/api/v1/", produces = "application/json; charset=utf8")
 @RequiredArgsConstructor
@@ -42,9 +42,8 @@ public class TradingController {
         portfolio.setInitialValue(LocalDateTime.now(), false, userId);
         var savedPortfolio = portfolioService.save(portfolio);
 
-        Map<String, String> response = Map.ofEntries(
-                Map.entry("portfolioId", savedPortfolio.getId().toHexString())
-        );
+        var response = new HashMap<String, String>();
+        response.put("portfolioId", savedPortfolio.getId().toHexString());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
