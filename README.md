@@ -19,3 +19,4 @@
 ```bash
 ./gradlew --console verbose test jacocoTestReport jacocoTestCoverageVerification
 ```
+
