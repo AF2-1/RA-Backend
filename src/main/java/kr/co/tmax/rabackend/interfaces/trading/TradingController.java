@@ -61,7 +61,7 @@ public class TradingController {
     @GetMapping("/users/{userId}/portfolios")
     public ResponseEntity<CommonResponse> getPortfoliosByUser(
             @NotBlank @PathVariable String userId,
-            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 10) Pageable pageable) {
 
         Page<Portfolio> portfoliosPage = portfolioService.getAllByUserId(userId, pageable);
 
